@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - TechMart Online</title>
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="font-['Urbanist'] text-slate-800 bg-slate-50 antialiased min-h-screen flex flex-col justify-between">
+
+<!-- Header Navigation -->
+<nav class="bg-white border-b border-slate-100 sticky top-0 z-50 py-4 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+        <a href="../index.html" class="flex items-center gap-2 font-black text-2xl text-slate-900">
+            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl text-lg font-bold">🛒</span>
+            TechMart
+        </a>
+        <div class="flex items-center gap-6 font-semibold text-sm">
+            <a href="products.html" class="text-slate-600 hover:text-slate-900 transition-colors">Products</a>
+            <a href="cart.html" class="text-amber-500 font-bold">Cart</a>
+            <a href="orders.html" class="text-slate-600 hover:text-slate-900 transition-colors">Orders</a>
+        </div>
+        <div class="flex items-center gap-3">
+            <button onclick="logout()" class="px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all cursor-pointer">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Container -->
+<main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full">
+    <div class="flex items-center gap-3 mb-8">
+        <h1 class="text-3xl font-black tracking-tight text-slate-900">Your Shopping Cart</h1>
+        <span id="cartCountBadge" class="bg-amber-100 text-amber-800 text-xs font-black px-2.5 py-1 rounded-full">0 Items</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Cart Items -->
+        <div class="lg:col-span-2 space-y-4">
+            <div id="cartItemsList" class="space-y-4">
+                <!-- Cart items dynamically rendered here -->
+            </div>
+            
+            <div id="emptyCartMessage" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                <span class="text-6xl block mb-4">🛒</span>
+                <h3 class="text-xl font-bold text-slate-700 mb-2">Your Cart is Empty</h3>
+                <p class="text-slate-400 mb-6 text-sm">Looks like you haven't added anything to your cart yet.</p>
+                <a href="products.html" class="inline-flex px-6 py-3 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-xl shadow-md transition-all text-sm">
+                    Browse Products
+                </a>
+            </div>
+        </div>
+
+        <!-- Summary Card -->
+        <div class="lg:col-span-1">
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm sticky top-24 space-y-6">
+                <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Order Summary</h2>
+                
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between text-slate-500 font-semibold">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500 font-semibold">
+                        <span>Shipping Cost</span>
+                        <span id="summaryShipping">$10.00</span>
+                    </div>
+                    <div class="border-t border-slate-100 pt-3 flex justify-between font-black text-slate-900 text-lg">
+                        <span>Total</span>
+                        <span id="summaryTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <button id="checkoutBtn" onclick="proceedToCheckout()" class="w-full py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-xl hover:shadow-slate-900/10 transition-all cursor-pointer">
+                    Proceed to Checkout →
+                </button>
+
+                <div class="flex items-center justify-center gap-2 text-slate-400 text-xs font-semibold">
+                    <span>🔒 Secured Checkout</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 w-full mt-auto">
+    <div class="max-w-6xl mx-auto px-6 text-center text-xs font-semibold">
+        © 2026 TechMart Online. All rights reserved.
+    </div>
+</footer>
+
+<script>
+    // Load and render cart
+    function loadCart() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const list = document.getElementById('cartItemsList');
+        const emptyMsg = document.getElementById('emptyCartMessage');
+        const countBadge = document.getElementById('cartCountBadge');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Update count badge
+        const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        countBadge.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}`;
+
+        if (cart.length === 0) {
+            list.innerHTML = '';
+            emptyMsg.classList.remove('hidden');
+            checkoutBtn.disabled = true;
+            checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            updateSummary(0);
+            return;
+        }
+
+        emptyMsg.classList.add('hidden');
+        checkoutBtn.disabled = false;
+        checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+        let subtotal = 0;
+
+        list.innerHTML = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            return `
+                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between gap-4 transition-all hover:border-slate-200">
+                    <div class="flex items-center gap-4">
+                        <span class="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-3xl border border-slate-100 flex-shrink-0">${item.image || '📦'}</span>
+                        <div>
+                            <h3 class="font-bold text-slate-900 leading-tight">${item.name}</h3>
+                            <span class="text-sm font-black text-amber-500 block mt-1">$${item.price.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-6">
+                        <!-- Quantity Control -->
+                        <div class="flex items-center border border-slate-100 bg-slate-50/50 rounded-xl p-1">
+                            <button onclick="changeQty(${item.id}, -1)" class="w-8 h-8 flex items-center justify-center font-bold text-slate-500 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer">-</button>
+                            <span class="w-8 text-center font-black text-sm text-slate-800">${item.quantity}</span>
+                            <button onclick="changeQty(${item.id}, 1)" class="w-8 h-8 flex items-center justify-center font-bold text-slate-500 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer">+</button>
+                        </div>
+
+                        <!-- Price Total & Delete -->
+                        <div class="flex items-center gap-4 text-right">
+                            <div class="w-24">
+                                <span class="text-xs text-slate-400 font-semibold block">Total</span>
+                                <span class="font-black text-slate-900">$${itemTotal.toFixed(2)}</span>
+                            </div>
+                            <button onclick="removeItem(${item.id})" class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-all cursor-pointer">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        updateSummary(subtotal);
+    }
+
+    function changeQty(id, diff) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const item = cart.find(x => x.id === id);
+        if (item) {
+            item.quantity += diff;
+            if (item.quantity <= 0) {
+                cart = cart.filter(x => x.id !== id);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+    }
+
+    function removeItem(id) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        cart = cart.filter(x => x.id !== id);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        loadCart();
+    }
+
+    function updateSummary(subtotal) {
+        const shipping = subtotal > 0 ? 10.00 : 0;
+        const total = subtotal + shipping;
+
+        document.getElementById('summarySubtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('summaryShipping').textContent = `$${shipping.toFixed(2)}`;
+        document.getElementById('summaryTotal').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function proceedToCheckout() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (cart.length === 0) return;
+
+        // Redirect to checkout.html
+        window.location.href = 'checkout.html';
+    }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '../auth/login.html';
+    }
+
+    // Auto-load on content ready
+    document.addEventListener('DOMContentLoaded', loadCart);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechMart Online - Shop Smart</title>
+    <link rel="stylesheet" href="css/tailwind.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- NAVIGATION                                                   -->
+<!-- ============================================================ -->
+<nav class="navbar">
+    <div class="container">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">🛒</span>
+            TechMart
+        </a>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="user/products.html">Products</a>
+            <a href="user/cart.html">Cart</a>
+            <a href="user/orders.html">Orders</a>
+        </div>
+        <div class="nav-actions">
+            <a href="auth/login.html" class="btn-primary">Login</a>
+            <a href="auth/signup.html" class="btn-outline">Sign Up</a>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="user/products.html">Products</a>
+        <a href="user/cart.html">Cart</a>
+        <a href="user/orders.html">Orders</a>
+        <div class="nav-actions-mobile">
+            <a href="auth/login.html" class="btn-primary">Login</a>
+            <a href="auth/signup.html" class="btn-outline">Sign Up</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- CATEGORY BUTTONS - Logo එකට යටින්                           -->
+<!-- ============================================================ -->
+<div class="container">
+    <div class="category-buttons">
+        <a href="user/products.html?category=all" class="category-btn active">
+            <span class="icon">📦</span> All
+        </a>
+        <a href="user/products.html?category=electronics" class="category-btn">
+            <span class="icon">📱</span> Electronics
+        </a>
+        <a href="user/products.html?category=audio" class="category-btn">
+            <span class="icon">🎧</span> Audio
+        </a>
+        <a href="user/products.html?category=accessories" class="category-btn">
+            <span class="icon">⌨️</span> Accessories
+        </a>
+        <a href="user/products.html?category=furniture" class="category-btn">
+            <span class="icon">🪑</span> Furniture
+        </a>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- HERO SECTION                                                 -->
+<!-- ============================================================ -->
+<section class="hero">
+    <div class="container">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="hero-badge">🔥 New Season Sale</span>
+                <h1>
+                    Shop Smart.<br />
+                    <span>Live Better.</span>
+                </h1>
+                <p>
+                    Discover the latest tech gadgets, electronics, and accessories at unbeatable prices. Free shipping on orders over $50.
+                </p>
+                <div class="hero-actions">
+                    <a href="user/products.html" class="btn-primary">
+                        Explore Products →
+                    </a>
+                    <a href="auth/signup.html" class="btn-dark">
+                        Join Now
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Happy Customers</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Products</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">4.9★</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-image-box">
+                    <span class="emoji">🛍️</span>
+                    <h3>TechMart Online</h3>
+                    <p>Your Tech Destination</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FEATURES SECTION                                              -->
+<!-- ============================================================ -->
+<section class="section bg-white">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="heading-lg">Why Choose TechMart?</h2>
+            <p class="subtitle">We make online shopping easy, secure, and enjoyable.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="card-feature">
+                <span class="icon">🚀</span>
+                <h4 class="heading-xs">Fast Delivery</h4>
+                <p class="body-sm text-gray">Get your products within 24 hours</p>
+            </div>
+            <div class="card-feature">
+                <span class="icon">🔒</span>
+                <h4 class="heading-xs">Secure Payments</h4>
+                <p class="body-sm text-gray">100% secure transactions</p>
+            </div>
+            <div class="card-feature">
+                <span class="icon">💎</span>
+                <h4 class="heading-xs">Quality Products</h4>
+                <p class="body-sm text-gray">Premium brands guaranteed</p>
+            </div>
+            <div class="card-feature">
+                <span class="icon">🎧</span>
+                <h4 class="heading-xs">24/7 Support</h4>
+                <p class="body-sm text-gray">Always here to help you</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SHOP BY CATEGORY                                              -->
+<!-- ============================================================ -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="section-header-with-link">
+            <div>
+                <h2>📂 Shop by Category</h2>
+                <p class="subtitle">Find what you're looking for</p>
+            </div>
+            <a href="user/products.html" class="view-all">View All →</a>
+        </div>
+        <div class="category-grid">
+            <a href="user/products.html?category=electronics" class="category-item">
+                <span class="icon">📱</span>
+                <span class="name">Electronics</span>
+                <span class="count">120+ Products</span>
+            </a>
+            <a href="user/products.html?category=audio" class="category-item">
+                <span class="icon">🎧</span>
+                <span class="name">Audio</span>
+                <span class="count">85+ Products</span>
+            </a>
+            <a href="user/products.html?category=accessories" class="category-item">
+                <span class="icon">⌨️</span>
+                <span class="name">Accessories</span>
+                <span class="count">200+ Products</span>
+            </a>
+            <a href="user/products.html?category=furniture" class="category-item">
+                <span class="icon">🪑</span>
+                <span class="name">Furniture</span>
+                <span class="count">45+ Products</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NEW ARRIVALS - PRODUCT CARDS                                 -->
+<!-- ============================================================ -->
+<section class="section bg-white">
+    <div class="container">
+        <div class="section-header-with-link">
+            <div>
+                <h2>✨ New Arrivals</h2>
+                <p class="subtitle">Fresh products just added to our store</p>
+            </div>
+            <a href="user/products.html" class="view-all">View All →</a>
+        </div>
+        <div class="product-grid" id="newArrivalsGrid">
+            <!-- Rendered by JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TRENDING NOW - PRODUCT CARDS                                 -->
+<!-- ============================================================ -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="section-header-with-link">
+            <div>
+                <h2>🔥 Trending Now</h2>
+                <p class="subtitle">Most popular products this week</p>
+            </div>
+            <a href="user/products.html" class="view-all">View All →</a>
+        </div>
+        <div class="product-grid" id="trendingGrid">
+            <!-- Rendered by JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TESTIMONIALS SECTION                                          -->
+<!-- ============================================================ -->
+<section class="section bg-white">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="heading-lg">What Our Customers Say</h2>
+            <p class="subtitle">Real reviews from real people</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="card-testimonial">
+                <div class="text-primary" style="font-size:20px; letter-spacing:2px;">★★★★★</div>
+                <p class="body-md" style="margin-top:12px; color:#4a4a5a;">
+                    "Amazing products and super fast delivery! TechMart is my go-to for all tech needs."
+                </p>
+                <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
+                    <div style="width:40px; height:40px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--dark);">JD</div>
+                    <div>
+                        <p style="font-weight:700; font-size:14px; color:var(--dark);">John Doe</p>
+                        <p style="color:var(--gray); font-size:12px;">Verified Buyer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-testimonial">
+                <div class="text-primary" style="font-size:20px; letter-spacing:2px;">★★★★★</div>
+                <p class="body-md" style="margin-top:12px; color:#4a4a5a;">
+                    "Best prices I've found online. The quality is excellent and customer service is top-notch."
+                </p>
+                <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
+                    <div style="width:40px; height:40px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; font-weight:700; color:white;">JS</div>
+                    <div>
+                        <p style="font-weight:700; font-size:14px; color:var(--dark);">Jane Smith</p>
+                        <p style="color:var(--gray); font-size:12px;">Verified Buyer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-testimonial">
+                <div class="text-primary" style="font-size:20px; letter-spacing:2px;">★★★★★</div>
+                <p class="body-md" style="margin-top:12px; color:#4a4a5a;">
+                    "The shopping experience was seamless. Got my laptop within 2 days. Highly recommend!"
+                </p>
+                <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
+                    <div style="width:40px; height:40px; border-radius:50%; background:var(--success); display:flex; align-items:center; justify-content:center; font-weight:700; color:white;">MW</div>
+                    <div>
+                        <p style="font-weight:700; font-size:14px; color:var(--dark);">Mike Wilson</p>
+                        <p style="color:var(--gray); font-size:12px;">Verified Buyer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CTA SECTION                                                   -->
+<!-- ============================================================ -->
+<section class="section" style="background: linear-gradient(135deg, var(--primary) 0%, #f5c800 100%); padding:72px 0;">
+    <div class="container text-center">
+        <h2 class="heading-lg" style="color:var(--dark); margin-bottom:12px;">
+            Ready to Shop?
+        </h2>
+        <p class="body-lg" style="color:rgba(39,40,49,0.7); max-width:500px; margin:0 auto 32px;">
+            Join thousands of happy customers. Start shopping today!
+        </p>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+            <a href="auth/signup.html" class="btn-dark">
+                Create Account
+            </a>
+            <a href="user/products.html" class="btn-outline" style="border-color:var(--dark); color:var(--dark);">
+                Browse Products
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FOOTER                                                       -->
+<!-- ============================================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>🛒 TechMart</h3>
+                <p>Your one-stop shop for all things tech. Quality products, fast delivery, and excellent service.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="user/products.html">Products</a></li>
+                    <li><a href="user/cart.html">Cart</a></li>
+                    <li><a href="user/orders.html">Orders</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Follow Us</h4>
+                <div class="footer-social">
+                    <a href="#">📘</a>
+                    <a href="#">🐦</a>
+                    <a href="#">📸</a>
+                    <a href="#">▶️</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 TechMart Online. All rights reserved. Built with ❤️
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- EXTERNAL JAVASCRIPT                                          -->
+<!-- ============================================================ -->
+<script src="js/utils/auth.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

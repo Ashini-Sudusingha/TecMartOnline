@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Warehouses - TechMart Admin</title>
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+        body {
+            display: block !important;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-['Urbanist'] antialiased">
+
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div>
+        <!-- Logo -->
+        <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
+            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl font-bold text-xl">🛒</span>
+            <div>
+                <h2 class="font-black text-lg leading-tight tracking-wide">TechMart</h2>
+                <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
+            </div>
+        </div>
+                <!-- Nav Links -->
+        <nav class="px-4 py-6 space-y-1.5">
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📊</span> Dashboard
+            </a>
+            <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📦</span> Products
+            </a>
+            <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📋</span> Orders
+            </a>
+            <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">👥</span> Users
+            </a>
+            <a href="inventory.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📈</span> Inventory
+            </a>
+            <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-950 bg-amber-400 font-bold transition-all duration-200 shadow-lg shadow-amber-400/10">
+                <span class="text-lg">🏢</span> Warehouses
+            </a>
+            <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">🏭</span> Suppliers
+            </a>
+            <a href="invoices.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">🧾</span> Invoices
+            </a>
+            <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📊</span> Reports
+            </a>
+        </nav>
+    </div>
+    <!-- Profile & Logout -->
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+        <div class="flex items-center gap-3 px-2 py-2 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">A</div>
+            <div>
+                <h4 class="font-bold text-sm text-slate-100" id="adminName">Administrator</h4>
+                <p class="text-[11px] text-slate-500 font-semibold">admin@techmart.com</p>
+            </div>
+        </div>
+        <button onclick="AuthUtils.logout()" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-50 text-rose-500 hover:text-white text-sm font-bold transition-all duration-200 border border-rose-500/20 cursor-pointer">
+            <span>🚪</span> Log Out
+        </button>
+    </div>
+</aside>
+
+<!-- Sidebar Overlay for Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
+
+<!-- Content Wrapper -->
+<div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
+    <!-- Top Header -->
+    <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
+                <span class="text-xl">☰</span>
+            </button>
+            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Operational Depot Management</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live Server
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 space-y-6">
+        <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">🏢 Warehouse Depots</h2>
+            <p class="text-sm text-slate-500 font-medium">Verify location details, active inventory slots, and storage health.</p>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="py-4 px-6">ID</th>
+                            <th class="py-4 px-6">Depot Name</th>
+                            <th class="py-4 px-6">Location</th>
+                            <th class="py-4 px-6">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="warehousesTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                        <tr>
+                            <td colspan="4" class="text-center py-8 text-slate-400">Loading depots data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="../js/api/config.js"></script>
+<script src="../js/utils/auth.js"></script>
+<script src="../js/utils/helpers.js"></script>
+<script src="../js/api/admin.js"></script>
+<script src="../js/admin/warehouses.js"></script>
+<script>
+    // Sidebar responsive toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+
+    // Set Admin details on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = AuthUtils.getUser();
+        if (user) {
+            const adminName = document.getElementById('adminName');
+            if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
+        }
+    });
+</script>
+
+</body>
+</html>

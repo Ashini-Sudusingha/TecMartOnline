@@ -1,0 +1,16 @@
+# Maven build output
+**/target/
+
+# Node dependencies
+**/node_modules/
+
+# IDE configurations
+**/.idea/
+**/.settings/
+**/.project/
+**/.classpath/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
