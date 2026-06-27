@@ -21,11 +21,17 @@ function renderProducts(products) {
     }
 
     grid.innerHTML = products.map(product => {
+        const imageIcon = (product.images && product.images.length > 0) ? product.images[0] : '📦';
+        const isUrl = imageIcon.startsWith('http://') || imageIcon.startsWith('https://') || imageIcon.startsWith('data:image/');
+        const imageElement = isUrl 
+            ? `<img src="${imageIcon}" class="w-full h-full object-cover rounded-2xl" />`
+            : `<span class="text-5xl">${imageIcon}</span>`;
+
         return `
             <div class="product-card bg-white p-5 rounded-3xl border border-slate-100 shadow-sm relative transition-all hover:border-slate-200" data-id="${product.id}">
                 <span class="absolute top-4 left-4 bg-slate-100 px-2 py-0.5 rounded-lg text-[10px] font-bold text-slate-500 uppercase tracking-wider">${product.brand || 'Tech'}</span>
-                <div class="h-40 rounded-2xl bg-slate-50 flex items-center justify-center text-5xl mb-4 border border-slate-100/50">
-                    📦
+                <div class="h-40 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 border border-slate-100/50 overflow-hidden">
+                    ${imageElement}
                 </div>
                 <div class="space-y-2">
                     <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">${product.category || 'General'}</span>
@@ -45,10 +51,15 @@ function renderProducts(products) {
 function addToCartDirect(id, name, price) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existing = cart.find(x => x.id === id);
+    
+    const card = document.querySelector(`.product-card[data-id="${id}"]`);
+    const img = card ? card.querySelector('img') : null;
+    const imageUrl = img ? img.src : '📦';
+
     if (existing) {
         existing.quantity += 1;
     } else {
-        cart.push({ id, name, price, quantity: 1, image: '📦' });
+        cart.push({ id, name, price, quantity: 1, image: imageUrl });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     

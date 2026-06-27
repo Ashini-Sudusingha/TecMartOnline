@@ -32,10 +32,16 @@ function loadCart() {
     list.innerHTML = cart.map(item => {
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
+        
+        const isUrl = item.image && (item.image.startsWith('http://') || item.image.startsWith('https://') || item.image.startsWith('data:image/'));
+        const imageElement = isUrl 
+            ? `<img src="${item.image}" class="w-full h-full object-cover rounded-2xl" />`
+            : item.image || '📦';
+
         return `
             <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between gap-4 transition-all hover:border-slate-200">
                 <div class="flex items-center gap-4">
-                    <span class="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-3xl border border-slate-100 flex-shrink-0">${item.image || '📦'}</span>
+                    <span class="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-3xl border border-slate-100 flex-shrink-0 overflow-hidden">${imageElement}</span>
                     <div>
                         <h3 class="font-bold text-slate-900 leading-tight">${item.name}</h3>
                         <span class="text-sm font-black text-amber-500 block mt-1">${Helpers.formatPrice(item.price)}</span>

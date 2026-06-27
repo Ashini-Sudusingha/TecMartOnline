@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warehouse Dashboard - TechMart</title>
+    <link rel="stylesheet" href="../css/tailwind.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+        body {
+            display: block !important;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-['Urbanist'] antialiased">
+
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div>
+        <!-- Logo -->
+        <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
+            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl font-bold text-xl">🛒</span>
+            <div>
+                <h2 class="font-black text-lg leading-tight tracking-wide">TechMart</h2>
+                <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
+            </div>
+        </div>
+        <!-- Nav Links -->
+        <nav class="px-4 py-6 space-y-1.5">
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📊</span> Dashboard
+            </a>
+            <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📦</span> Products
+            </a>
+            <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📋</span> Orders
+            </a>
+            <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">👥</span> Users
+            </a>
+            
+            <!-- Warehouses Expandable Menu Group -->
+            <div class="space-y-1">
+                <button onclick="toggleWarehouseSubmenu()" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-slate-100 bg-slate-800 font-bold transition-all duration-200 focus:outline-none cursor-pointer">
+                    <span class="flex items-center gap-3"><span class="text-lg">🏢</span> Warehouses</span>
+                    <span id="warehouse-arrow" class="text-xs transition-transform duration-200">▼</span>
+                </button>
+                <div id="warehouse-submenu" class="pl-9 space-y-1">
+                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="flex items-center gap-2 py-2 text-sm text-slate-400 hover:text-slate-100 transition-all font-medium">
+                        📊 Dashboard
+                    </a>
+                    <a href="warehouses.html" id="sub-wh-locations" class="flex items-center gap-2 py-2 text-sm text-slate-400 hover:text-slate-100 transition-all font-medium">
+                        📍 Locations & Slots
+                    </a>
+                    <a href="inventory.html" id="sub-wh-inventory" class="flex items-center gap-2 py-2 text-sm text-slate-400 hover:text-slate-100 transition-all font-medium">
+                        📦 Inventory Stock
+                    </a>
+                </div>
+            </div>
+
+            <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">🏭</span> Suppliers
+            </a>
+            <a href="invoices.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">🧾</span> Invoices
+            </a>
+            <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
+                <span class="text-lg">📊</span> Reports
+            </a>
+        </nav>
+    </div>
+    <!-- Profile & Logout -->
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+        <div class="flex items-center gap-3 px-2 py-2 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">A</div>
+            <div>
+                <h4 id="adminName" class="font-bold text-sm text-slate-100">Administrator</h4>
+                <p class="text-[11px] text-slate-500 font-semibold">admin@techmart.com</p>
+            </div>
+        </div>
+        <button onclick="AuthUtils.logout()" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-50 text-rose-500 hover:text-white text-sm font-bold transition-all duration-200 border border-rose-500/20 cursor-pointer">
+            <span>🚪</span> Log Out
+        </button>
+    </div>
+</aside>
+
+<!-- Sidebar Overlay for Mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
+
+<!-- Content Wrapper -->
+<div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
+    <!-- Top Header -->
+    <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
+                <span class="text-xl">☰</span>
+            </button>
+            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Welcome back, Admin 👋</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live Server
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 space-y-6">
+        <!-- Page Title & Subtitle -->
+        <div class="flex flex-col gap-1">
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">🏢 Warehouse Dashboard</h2>
+            <p class="text-sm text-slate-500 font-medium">Real-time stats, capacity metrics, and stock logistics per warehouse depot.</p>
+        </div>
+
+        <!-- Warehouses Cards Grid -->
+        <div id="warehouseCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="col-span-full text-center py-8 text-slate-400 font-semibold animate-pulse">Loading warehouses...</div>
+        </div>
+
+        <!-- Warehouse Details Panel -->
+        <div id="warehouseDetailsPanel" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+            <!-- Left: Locations Slots & Inventory Tables -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Capacity Progress Card -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">🏢 Storage Slots & Capacity Health</h3>
+                    <div id="warehouseLocationsCapacity" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Dynamic locations bars -->
+                    </div>
+                </div>
+
+                <!-- Inventory Stock Table -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">📦 Current Inventory Stock</h3>
+                        <span id="inventoryCountBadge" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200">0 Items</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs min-w-[500px]">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="py-3 px-4">Item ID</th>
+                                    <th class="py-3 px-4">Product Name</th>
+                                    <th class="py-3 px-4">Storage Slot</th>
+                                    <th class="py-3 px-4">Buying Price</th>
+                                    <th class="py-3 px-4">Delivered Qty</th>
+                                    <th class="py-3 px-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warehouseInventoryBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                                <tr>
+                                    <td colspan="6" class="text-center py-6 text-slate-400">Select a warehouse card above.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Warehouse Specific Live Logs notifications panel -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4 flex flex-col h-[500px]">
+                <div class="border-b border-slate-100 pb-4 flex-shrink-0">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">🔔 Warehouse Live Stock Alerts</h3>
+                    <p class="text-[10px] text-slate-400 font-semibold">Real-time stock updates for this warehouse.</p>
+                </div>
+                <div id="warehouseLiveLogs" class="space-y-3 overflow-y-auto flex-1 pr-1">
+                    <div class="text-center py-8 text-slate-400 font-medium text-xs">No live notifications received yet.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="../js/api/config.js"></script>
+<script src="../js/utils/auth.js"></script>
+<script src="../js/api/admin.js"></script>
+<script src="../js/admin/warehouse-dashboard.js"></script>
+<script src="../js/admin/notifications.js"></script>
+<script>
+    // Sidebar responsive toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+
+    // Toggle warehouse submenu display
+    function toggleWarehouseSubmenu() {
+        const submenu = document.getElementById('warehouse-submenu');
+        const arrow = document.getElementById('warehouse-arrow');
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            submenu.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('warehouse-dashboard.html') || currentPath.includes('warehouses.html') || currentPath.includes('inventory.html')) {
+            const submenu = document.getElementById('warehouse-submenu');
+            const arrow = document.getElementById('warehouse-arrow');
+            if (submenu) submenu.classList.remove('hidden');
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+            
+            if (currentPath.includes('warehouse-dashboard.html')) {
+                const sub = document.getElementById('sub-wh-dashboard');
+                if (sub) sub.className = "flex items-center gap-2 py-2 text-sm text-amber-400 font-bold transition-all";
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

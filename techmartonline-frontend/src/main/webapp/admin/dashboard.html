@@ -41,12 +41,24 @@
             <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
                 <span class="text-lg">👥</span> Users
             </a>
-            <a href="inventory.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📈</span> Inventory
-            </a>
-            <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🏢</span> Warehouses
-            </a>
+            <!-- Warehouses Expandable Menu Group -->
+            <div class="space-y-1">
+                <button onclick="toggleWarehouseSubmenu()" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200 focus:outline-none cursor-pointer">
+                    <span class="flex items-center gap-3"><span class="text-lg">🏢</span> Warehouses</span>
+                    <span id="warehouse-arrow" class="text-xs transition-transform duration-200">▼</span>
+                </button>
+                <div id="warehouse-submenu" class="pl-9 space-y-1 hidden">
+                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="flex items-center gap-2 py-2 text-sm text-slate-400 hover:text-slate-100 transition-all font-medium">
+                        📊 Dashboard
+                    </a>
+                    <a href="warehouses.html" id="sub-wh-locations" class="flex items-center gap-2 py-2 text-sm text-slate-400 hover:text-slate-100 transition-all font-medium">
+                        📍 Locations & Slots
+                    </a>
+                    <a href="inventory.html" id="sub-wh-inventory" class="flex items-center gap-2 py-2 text-sm text-slate-400 hover:text-slate-100 transition-all font-medium">
+                        📦 Inventory Stock
+                    </a>
+                </div>
+            </div>
             <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
                 <span class="text-lg">🏭</span> Suppliers
             </a>
@@ -63,7 +75,7 @@
         <div class="flex items-center gap-3 px-2 py-2 mb-3">
             <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">A</div>
             <div>
-                <h4 class="font-bold text-sm text-slate-100">Administrator</h4>
+                <h4 id="adminName" class="font-bold text-sm text-slate-100">Administrator</h4>
                 <p class="text-[11px] text-slate-500 font-semibold">admin@techmart.com</p>
             </div>
         </div>
@@ -101,6 +113,8 @@
             <h2 class="text-2xl font-black text-slate-900 tracking-tight">📊 Dashboard</h2>
             <p class="text-sm text-slate-500 font-medium">Overview of store activity and sales progress.</p>
         </div>
+
+
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -275,6 +289,7 @@
 <script src="../js/api/config.js"></script>
 <script src="../js/utils/auth.js"></script>
 <script src="../js/admin/dashboard.js"></script>
+<script src="../js/admin/notifications.js"></script>
 <script>
     const menuBtn = document.getElementById('menu-btn');
     const sidebar = document.getElementById('sidebar');
@@ -292,12 +307,41 @@
         });
     }
 
-    // Set Admin details on load
+    // Toggle warehouse submenu display
+    function toggleWarehouseSubmenu() {
+        const submenu = document.getElementById('warehouse-submenu');
+        const arrow = document.getElementById('warehouse-arrow');
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            submenu.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    // Set Admin details and highlight active states on load
     document.addEventListener('DOMContentLoaded', () => {
         const user = AuthUtils.getUser();
         if (user) {
             const adminName = document.getElementById('adminName');
-            if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
+            if (adminName) {
+                if (user.firstName && user.lastName) {
+                    adminName.textContent = `${user.firstName} ${user.lastName}`;
+                } else if (user.name) {
+                    adminName.textContent = user.name;
+                } else if (user.email) {
+                    adminName.textContent = user.email.split('@')[0];
+                }
+            }
+        }
+
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('warehouse-dashboard.html') || currentPath.includes('warehouses.html') || currentPath.includes('inventory.html')) {
+            const submenu = document.getElementById('warehouse-submenu');
+            const arrow = document.getElementById('warehouse-arrow');
+            if (submenu) submenu.classList.remove('hidden');
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
         }
     });
 </script>

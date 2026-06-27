@@ -56,10 +56,14 @@
     function addToCartDirect(id, name, price) {
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const existing = cart.find(x => x.id === id);
+        
+        const img = document.getElementById('mainDetailImage');
+        const imageUrl = img ? img.src : '📦';
+
         if (existing) {
             existing.quantity += 1;
         } else {
-            cart.push({ id, name, price, quantity: 1, image: '📦' });
+            cart.push({ id, name, price, quantity: 1, image: imageUrl });
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         alert('✅ Added to Cart!');

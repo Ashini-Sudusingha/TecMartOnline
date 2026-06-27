@@ -8,12 +8,30 @@ public class InventoryDTO implements Serializable {
     private Integer id;
     private Long productId;
     private String productName;
+    private Long warehouseId;
     private String warehouseName;
+    private Long warehouseLocationId;
     private String location;
     private int stockQuantity;
     private double buyingPrice;
+    private Long invoiceId;
+    private String statusName;
 
     public InventoryDTO() {}
+
+    public InventoryDTO(Integer id, Long productId, String productName, Long warehouseId, String warehouseName, Long warehouseLocationId, String location, int stockQuantity, double buyingPrice, Long invoiceId, String statusName) {
+        this.id = id;
+        this.productId = productId;
+        this.productName = productName;
+        this.warehouseId = warehouseId;
+        this.warehouseName = warehouseName;
+        this.warehouseLocationId = warehouseLocationId;
+        this.location = location;
+        this.stockQuantity = stockQuantity;
+        this.buyingPrice = buyingPrice;
+        this.invoiceId = invoiceId;
+        this.statusName = statusName;
+    }
 
     public Integer getId() {
         return id;
@@ -39,12 +57,28 @@ public class InventoryDTO implements Serializable {
         this.productName = productName;
     }
 
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
     public String getWarehouseName() {
         return warehouseName;
     }
 
     public void setWarehouseName(String warehouseName) {
         this.warehouseName = warehouseName;
+    }
+
+    public Long getWarehouseLocationId() {
+        return warehouseLocationId;
+    }
+
+    public void setWarehouseLocationId(Long warehouseLocationId) {
+        this.warehouseLocationId = warehouseLocationId;
     }
 
     public String getLocation() {
@@ -69,5 +103,21 @@ public class InventoryDTO implements Serializable {
 
     public void setBuyingPrice(double buyingPrice) {
         this.buyingPrice = buyingPrice;
+    }
+
+    public Long getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(Long invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 }

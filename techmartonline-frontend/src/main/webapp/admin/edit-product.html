@@ -118,14 +118,18 @@
                         <label for="productDescription" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Description *</label>
                         <textarea id="productDescription" rows="4" placeholder="Enter high-level description of the features..." class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white resize-none" required></textarea>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-3 gap-4">
                         <div class="space-y-1.5">
                             <label for="productPrice" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Price ($) *</label>
-                            <input type="number" id="productPrice" placeholder="0.00" step="0.01" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                            <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0.01" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
                         </div>
                         <div class="space-y-1.5">
-                            <label for="productStock" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Stock Qty *</label>
-                            <input type="number" id="productStock" placeholder="0" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                            <label for="productWeight" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Weight (kg) *</label>
+                            <input type="number" id="productWeight" placeholder="0.0" step="0.01" min="0.01" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label for="productDimensions" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Dimensions *</label>
+                            <input type="text" id="productDimensions" placeholder="e.g. 35x24x1.6 cm" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
                         </div>
                     </div>
                 </div>
@@ -134,26 +138,76 @@
                 <div class="space-y-5">
                     <div class="space-y-1.5">
                         <label for="productCategory" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Category *</label>
-                        <select id="productCategory" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
-                            <option value="">Select Category</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Audio">Audio</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Clothing">Clothing</option>
-                        </select>
+                        <div class="flex gap-2">
+                            <select id="productCategory" class="flex-1 px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                                <option value="">Select Category</option>
+                            </select>
+                            <button type="button" onclick="openQuickAdd('category')" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all text-sm shadow-sm" title="Add New Category">+</button>
+                        </div>
                     </div>
                     <div class="space-y-1.5">
                         <label for="productBrand" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Brand *</label>
-                        <input type="text" id="productBrand" placeholder="e.g. Apple" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                        <div class="flex gap-2">
+                            <select id="productBrand" class="flex-1 px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                                <option value="">Select Brand</option>
+                            </select>
+                            <button type="button" onclick="openQuickAdd('brand')" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all text-sm shadow-sm" title="Add New Brand">+</button>
+                        </div>
                     </div>
                     <div class="space-y-1.5">
-                        <label for="productImage" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Image / Emoji Icon</label>
-                        <input type="text" id="productImage" placeholder="e.g. 💻 or image url" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" />
+                        <label for="productColor" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Color *</label>
+                        <div class="flex gap-2">
+                            <select id="productColor" class="flex-1 px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                                <option value="">Select Color</option>
+                            </select>
+                            <button type="button" onclick="openQuickAdd('color')" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all text-sm shadow-sm" title="Add New Color">+</button>
+                        </div>
                     </div>
                     <div class="space-y-1.5">
                         <label for="productBarcode" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Barcode</label>
                         <input type="text" id="productBarcode" placeholder="e.g. UPC / EAN code" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" />
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Product Images (Up to 3) *</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <!-- Slot 1 -->
+                            <div class="relative border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-xl h-24 flex flex-col items-center justify-center cursor-pointer transition-all bg-slate-50/50 hover:bg-white overflow-hidden group" id="imageSlot1" onclick="triggerFileInput(1)">
+                                <input type="file" id="productFile1" class="hidden" accept="image/*" onchange="handleImageUpload(event, 1)" />
+                                <span class="text-xl text-slate-400 group-hover:scale-110 transition-all" id="slotIcon1">+</span>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1" id="slotLabel1">Image 1</span>
+                                <img id="slotImg1" class="absolute inset-0 w-full h-full object-cover hidden" />
+                                <button type="button" onclick="clearImageSlot(event, 1)" class="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 hidden shadow-md transition-all z-10" id="slotRemoveBtn1" title="Remove image">
+                                    <span class="text-[10px] leading-none block">✕</span>
+                                </button>
+                            </div>
+                            <!-- Slot 2 -->
+                            <div class="relative border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-xl h-24 flex flex-col items-center justify-center cursor-pointer transition-all bg-slate-50/50 hover:bg-white overflow-hidden group" id="imageSlot2" onclick="triggerFileInput(2)">
+                                <input type="file" id="productFile2" class="hidden" accept="image/*" onchange="handleImageUpload(event, 2)" />
+                                <span class="text-xl text-slate-400 group-hover:scale-110 transition-all" id="slotIcon2">+</span>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1" id="slotLabel2">Image 2</span>
+                                <img id="slotImg2" class="absolute inset-0 w-full h-full object-cover hidden" />
+                                <button type="button" onclick="clearImageSlot(event, 2)" class="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 hidden shadow-md transition-all z-10" id="slotRemoveBtn2" title="Remove image">
+                                    <span class="text-[10px] leading-none block">✕</span>
+                                </button>
+                            </div>
+                            <!-- Slot 3 -->
+                            <div class="relative border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-xl h-24 flex flex-col items-center justify-center cursor-pointer transition-all bg-slate-50/50 hover:bg-white overflow-hidden group" id="imageSlot3" onclick="triggerFileInput(3)">
+                                <input type="file" id="productFile3" class="hidden" accept="image/*" onchange="handleImageUpload(event, 3)" />
+                                <span class="text-xl text-slate-400 group-hover:scale-110 transition-all" id="slotIcon3">+</span>
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1" id="slotLabel3">Image 3</span>
+                                <img id="slotImg3" class="absolute inset-0 w-full h-full object-cover hidden" />
+                                <button type="button" onclick="clearImageSlot(event, 3)" class="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 hidden shadow-md transition-all z-10" id="slotRemoveBtn3" title="Remove image">
+                                    <span class="text-[10px] leading-none block">✕</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label for="productStatus" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Status *</label>
+                        <select id="productStatus" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -171,9 +225,43 @@
     </main>
 </div>
 
+<!-- Modal for Add New Category/Brand/Color -->
+<div id="quickAddModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm modal-close-btn" onclick="closeQuickAdd()"></div>
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-3xl border border-slate-200 shadow-2xl p-6 w-full max-w-md mx-4 space-y-4">
+        <div>
+            <h3 id="modalTitle" class="text-lg font-black text-slate-900">Add New Option</h3>
+            <p id="modalSubtitle" class="text-xs text-slate-500 font-medium">Create a new entry in the database.</p>
+        </div>
+        <form id="quickAddForm" class="space-y-4">
+            <input type="hidden" id="modalType" value="" />
+            <div class="space-y-1.5">
+                <label for="modalInputName" id="modalLabelName" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Name *</label>
+                <input type="text" id="modalInputName" required class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all" />
+            </div>
+            <div class="space-y-1.5" id="modalDescContainer">
+                <label for="modalInputDesc" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Description</label>
+                <input type="text" id="modalInputDesc" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all" />
+            </div>
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="closeQuickAdd()" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition-all">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-xs transition-all shadow-md">
+                    Save Option
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="../js/api/config.js"></script>
 <script src="../js/utils/auth.js"></script>
+<script src="../js/utils/helpers.js"></script>
+<script src="../js/api/products.js"></script>
 <script>
     const menuBtn = document.getElementById('menu-btn');
     const sidebar = document.getElementById('sidebar');
@@ -192,64 +280,242 @@
     }
 
     // Set Admin details on load
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         if (!AuthUtils.checkAuth('ADMIN')) return;
         const user = AuthUtils.getUser();
         if (user) {
             const adminName = document.getElementById('adminName');
             if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
         }
+
+        // Fetch selections from DB
+        await loadDropdowns();
+
+        // Load product details
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        if (id) {
+            document.getElementById('productId').value = id;
+            await loadProductData(id);
+        } else {
+            alert('No product ID specified in URL.');
+            window.location.href = 'products.html';
+        }
     });
-</script>
-<script>
-    // Load product data from URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
 
-    if (productId) {
-        document.getElementById('productId').value = productId;
-        loadProductData(productId);
-    }
+    async function loadDropdowns() {
+        try {
+            const [categories, brands, colors] = await Promise.all([
+                ProductsAPI.getCategories(),
+                ProductsAPI.getBrands(),
+                ProductsAPI.getColors()
+            ]);
 
-    function loadProductData(id) {
-        const products = JSON.parse(localStorage.getItem('adminProducts') || '[]');
-        const product = products.find(p => p.id == id);
-
-        if (product) {
-            document.getElementById('productName').value = product.name || '';
-            document.getElementById('productDescription').value = product.description || '';
-            document.getElementById('productPrice').value = product.price || '';
-            document.getElementById('productStock').value = product.stock || '';
-            document.getElementById('productCategory').value = product.category || '';
-            document.getElementById('productBrand').value = product.brand || '';
-            document.getElementById('productImage').value = product.image || '';
-            document.getElementById('productBarcode').value = product.barcode || '';
+            populateSelect('productCategory', categories, 'name', 'name', 'Select Category');
+            populateSelect('productBrand', brands, 'name', 'name', 'Select Brand');
+            populateSelect('productColor', colors, 'color', 'color', 'Select Color');
+        } catch (err) {
+            console.error('Error loading attributes:', err);
+            alert('Failed to load attributes from server.');
         }
     }
 
-    document.getElementById('editProductForm').addEventListener('submit', function(e) {
+    function populateSelect(elementId, items, valueKey, labelKey, defaultText) {
+        const select = document.getElementById(elementId);
+        if (!select) return;
+        select.innerHTML = `<option value="">${defaultText}</option>` +
+            items.map(item => `<option value="${item[valueKey]}">${item[labelKey]}</option>`).join('');
+    }
+
+    async function loadProductData(id) {
+        try {
+            const product = await ProductsAPI.getById(id);
+            if (product) {
+                document.getElementById('productName').value = product.name || '';
+                document.getElementById('productDescription').value = product.description || '';
+                document.getElementById('productPrice').value = product.price || '';
+                document.getElementById('productWeight').value = product.weight || '';
+                document.getElementById('productDimensions').value = product.dimensions || '';
+                document.getElementById('productCategory').value = product.category || '';
+                document.getElementById('productBrand').value = product.brand || '';
+                document.getElementById('productColor').value = product.color || '';
+                document.getElementById('productBarcode').value = product.barcode || '';
+                document.getElementById('productStatus').value = String(product.isActive);
+
+                // Populate images
+                if (product.images && product.images.length > 0) {
+                    for (let i = 0; i < 3; i++) {
+                        if (product.images[i]) {
+                            const url = product.images[i];
+                            uploadedImages[i] = url;
+
+                            const img = document.getElementById(`slotImg${i + 1}`);
+                            img.src = url;
+                            img.classList.remove('hidden');
+
+                            document.getElementById(`slotIcon${i + 1}`).classList.add('hidden');
+                            document.getElementById(`slotLabel${i + 1}`).classList.add('hidden');
+                            document.getElementById(`slotRemoveBtn${i + 1}`).classList.remove('hidden');
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            console.error('Error loading product data:', err);
+            alert('Failed to load product details from server: ' + err.message);
+        }
+    }
+
+    // Quick Add Modals handling
+    function openQuickAdd(type) {
+        const modal = document.getElementById('quickAddModal');
+        const modalType = document.getElementById('modalType');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const modalLabelName = document.getElementById('modalLabelName');
+        const modalDescContainer = document.getElementById('modalDescContainer');
+
+        modalType.value = type;
+        modal.classList.remove('hidden');
+
+        // Reset fields
+        document.getElementById('modalInputName').value = '';
+        document.getElementById('modalInputDesc').value = '';
+
+        if (type === 'category') {
+            modalTitle.textContent = 'Add New Category';
+            modalSubtitle.textContent = 'Create a new product category in the database.';
+            modalLabelName.textContent = 'Category Name *';
+            modalDescContainer.style.display = 'block';
+        } else if (type === 'brand') {
+            modalTitle.textContent = 'Add New Brand';
+            modalSubtitle.textContent = 'Create a new product brand/manufacturer in the database.';
+            modalLabelName.textContent = 'Brand Name *';
+            modalDescContainer.style.display = 'block';
+        } else if (type === 'color') {
+            modalTitle.textContent = 'Add New Color';
+            modalSubtitle.textContent = 'Create a new color variant in the database.';
+            modalLabelName.textContent = 'Color Name *';
+            modalDescContainer.style.display = 'none';
+        }
+    }
+
+    function closeQuickAdd() {
+        document.getElementById('quickAddModal').classList.add('hidden');
+    }
+
+    document.getElementById('quickAddForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const type = document.getElementById('modalType').value;
+        const name = document.getElementById('modalInputName').value.trim();
+        const desc = document.getElementById('modalInputDesc').value.trim();
+        const token = AuthUtils.getToken();
+
+        try {
+            if (type === 'category') {
+                await ProductsAPI.addCategory({ name, description: desc }, token);
+                alert('✅ Category added successfully!');
+                await loadDropdowns();
+                document.getElementById('productCategory').value = name;
+            } else if (type === 'brand') {
+                await ProductsAPI.addBrand({ name, description: desc }, token);
+                alert('✅ Brand added successfully!');
+                await loadDropdowns();
+                document.getElementById('productBrand').value = name;
+            } else if (type === 'color') {
+                await ProductsAPI.addColor({ color: name }, token);
+                alert('✅ Color added successfully!');
+                await loadDropdowns();
+                document.getElementById('productColor').value = name;
+            }
+            closeQuickAdd();
+        } catch (err) {
+            alert('❌ Failed to add option: ' + err.message);
+        }
+    });
+
+    // Global array to store image base64 strings or existing URLs
+    let uploadedImages = [null, null, null];
+
+    function triggerFileInput(index) {
+        document.getElementById(`productFile${index}`).click();
+    }
+
+    function handleImageUpload(event, index) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Prevent bubble click
+        event.stopPropagation();
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Str = e.target.result;
+            uploadedImages[index - 1] = base64Str;
+
+            // Show image preview
+            const img = document.getElementById(`slotImg${index}`);
+            img.src = base64Str;
+            img.classList.remove('hidden');
+
+            // Hide text/icon
+            document.getElementById(`slotIcon${index}`).classList.add('hidden');
+            document.getElementById(`slotLabel${index}`).classList.add('hidden');
+
+            // Show delete button
+            document.getElementById(`slotRemoveBtn${index}`).classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function clearImageSlot(event, index) {
+        event.stopPropagation(); // Prevent triggerFileInput
+        uploadedImages[index - 1] = null;
+
+        // Reset input
+        document.getElementById(`productFile${index}`).value = '';
+
+        // Hide preview
+        const img = document.getElementById(`slotImg${index}`);
+        img.src = '';
+        img.classList.add('hidden');
+
+        // Show text/icon
+        document.getElementById(`slotIcon${index}`).classList.remove('hidden');
+        document.getElementById(`slotLabel${index}`).classList.remove('hidden');
+
+        // Hide delete button
+        document.getElementById(`slotRemoveBtn${index}`).classList.add('hidden');
+    }
+
+    // Handle edit product submit
+    document.getElementById('editProductForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const id = document.getElementById('productId').value;
-        let products = JSON.parse(localStorage.getItem('adminProducts') || '[]');
-        const index = products.findIndex(p => p.id == id);
+        const token = AuthUtils.getToken();
+        const productDto = {
+            id: parseInt(id),
+            name: document.getElementById('productName').value.trim(),
+            description: document.getElementById('productDescription').value.trim(),
+            price: parseFloat(document.getElementById('productPrice').value),
+            weight: parseFloat(document.getElementById('productWeight').value),
+            dimensions: document.getElementById('productDimensions').value.trim(),
+            category: document.getElementById('productCategory').value,
+            brand: document.getElementById('productBrand').value,
+            color: document.getElementById('productColor').value,
+            barcode: document.getElementById('productBarcode').value.trim(),
+            images: uploadedImages.filter(img => img !== null),
+            isActive: document.getElementById('productStatus').value === 'true',
+            blockQty: 0 // Default to 0
+        };
 
-        if (index !== -1) {
-            products[index] = {
-                id: parseInt(id),
-                name: document.getElementById('productName').value,
-                description: document.getElementById('productDescription').value,
-                price: parseFloat(document.getElementById('productPrice').value),
-                stock: parseInt(document.getElementById('productStock').value),
-                category: document.getElementById('productCategory').value,
-                brand: document.getElementById('productBrand').value,
-                image: document.getElementById('productImage').value || '📦',
-                barcode: document.getElementById('productBarcode').value,
-                status: products[index].status || 'active'
-            };
-            localStorage.setItem('adminProducts', JSON.stringify(products));
+        try {
+            await ProductsAPI.update(productDto, token);
             alert('✅ Product updated successfully!');
             window.location.href = 'products.html';
+        } catch (err) {
+            alert('❌ Failed to update product: ' + err.message);
         }
     });
 </script>

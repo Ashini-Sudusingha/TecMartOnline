@@ -14,6 +14,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lk.jiat.techmart.dto.ProductDTO;
+import lk.jiat.techmart.dto.BrandDTO;
+import lk.jiat.techmart.dto.CategoryDTO;
+import lk.jiat.techmart.dto.ColorDTO;
 import lk.jiat.techmart.security.JWTUtil;
 import lk.jiat.techmart.service.remote.ProductServiceRemote;
 import lk.jiat.techmart.util.ResponseUtil;
@@ -91,6 +94,101 @@ public class ProductResource {
         } else {
             return ResponseUtil.buildErrorResponse(Status.NOT_FOUND, "Product not found or deletion failed.");
         }
+    }
+
+    @GET
+    @Path("/categories")
+    public Response getAllCategories() {
+        return ResponseUtil.buildSuccessResponse("Categories retrieved successfully", productService.getAllCategories());
+    }
+
+    @GET
+    @Path("/brands")
+    public Response getAllBrands() {
+        return ResponseUtil.buildSuccessResponse("Brands retrieved successfully", productService.getAllBrands());
+    }
+
+    @GET
+    @Path("/colors")
+    public Response getAllColors() {
+        return ResponseUtil.buildSuccessResponse("Colors retrieved successfully", productService.getAllColors());
+    }
+
+    @POST
+    @Path("/categories")
+    public Response addCategory(@HeaderParam("Authorization") String authHeader, CategoryDTO dto) {
+        Response authResponse = checkAdmin(authHeader);
+        if (authResponse != null) return authResponse;
+
+        if (dto == null || dto.getName() == null || dto.getName().trim().isEmpty()) {
+            return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Category name is required.");
+        }
+
+        boolean success = productService.addCategory(dto);
+        if (success) {
+            return ResponseUtil.buildSuccessResponse("Category created successfully", dto);
+        } else {
+            return ResponseUtil.buildErrorResponse(Status.CONFLICT, "Category already exists or creation failed.");
+        }
+    }
+
+    @POST
+    @Path("/brands")
+    public Response addBrand(@HeaderParam("Authorization") String authHeader, BrandDTO dto) {
+        Response authResponse = checkAdmin(authHeader);
+        if (authResponse != null) return authResponse;
+
+        if (dto == null || dto.getName() == null || dto.getName().trim().isEmpty()) {
+            return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Brand name is required.");
+        }
+
+        boolean success = productService.addBrand(dto);
+        if (success) {
+            return ResponseUtil.buildSuccessResponse("Brand created successfully", dto);
+        } else {
+            return ResponseUtil.buildErrorResponse(Status.CONFLICT, "Brand already exists or creation failed.");
+        }
+    }
+
+    @POST
+    @Path("/colors")
+    public Response addColor(@HeaderParam("Authorization") String authHeader, ColorDTO dto) {
+        Response authResponse = checkAdmin(authHeader);
+        if (authResponse != null) return authResponse;
+
+        if (dto == null || dto.getColor() == null || dto.getColor().trim().isEmpty()) {
+            return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Color name is required.");
+        }
+
+        boolean success = productService.addColor(dto);
+        if (success) {
+            return ResponseUtil.buildSuccessResponse("Color created successfully", dto);
+        } else {
+            return ResponseUtil.buildErrorResponse(Status.CONFLICT, "Color already exists or creation failed.");
+        }
+    }
+
+    @GET
+    @Path("/images/{filename}")
+    @Produces({"image/png", "image/jpeg", "image/gif", "image/webp", "application/octet-stream"})
+    public Response getProductImage(@PathParam("filename") String filename) {
+        String homeDir = System.getProperty("user.home");
+        java.io.File file = new java.io.File(homeDir + "/techmart_uploads", filename);
+        if (!file.exists()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        
+        String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        String mediaType = "image/png";
+        if (ext.equals("jpg") || ext.equals("jpeg")) {
+            mediaType = "image/jpeg";
+        } else if (ext.equals("gif")) {
+            mediaType = "image/gif";
+        } else if (ext.equals("webp")) {
+            mediaType = "image/webp";
+        }
+        
+        return Response.ok(file).type(mediaType).build();
     }
 
     private Response checkAdmin(String authHeader) {

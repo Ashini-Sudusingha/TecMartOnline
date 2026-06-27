@@ -27,7 +27,7 @@
                 <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
             </div>
         </div>
-                <!-- Nav Links -->
+        <!-- Nav Links -->
         <nav class="px-4 py-6 space-y-1.5">
             <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
                 <span class="text-lg">📊</span> Dashboard
@@ -84,7 +84,7 @@
             <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
                 <span class="text-xl">☰</span>
             </button>
-            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Customer Invoice History</h1>
+            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Logistics Purchase Invoices</h1>
         </div>
         <div class="flex items-center gap-4">
             <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
@@ -95,9 +95,14 @@
 
     <!-- Main Content -->
     <main class="flex-1 p-6 space-y-6">
-        <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight">🧾 Sales Invoices</h2>
-            <p class="text-sm text-slate-500 font-medium">Verify taxable orders, retrieve payments details, and output printable pdf formats.</p>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex flex-col gap-1">
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">🧾 Supplier Invoices</h2>
+                <p class="text-sm text-slate-500 font-medium">Record new logistics deliveries, manage totals, and verify supplier transactions.</p>
+            </div>
+            <button onclick="openInvoiceModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all duration-200 shadow-md text-sm cursor-pointer">
+                ➕ Create Supplier Invoice
+            </button>
         </div>
 
         <!-- Table Card -->
@@ -107,36 +112,15 @@
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
                             <th class="py-4 px-6">Invoice ID</th>
-                            <th class="py-4 px-6">Customer</th>
-                            <th class="py-4 px-6">Billing Date</th>
-                            <th class="py-4 px-6">Subtotal</th>
-                            <th class="py-4 px-6">Total Tax</th>
+                            <th class="py-4 px-6">Supplier</th>
+                            <th class="py-4 px-6">Date Recorded</th>
                             <th class="py-4 px-6">Total Amount</th>
                             <th class="py-4 px-6 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
-                        <tr class="hover:bg-slate-50/50 transition-all">
-                            <td class="py-4 px-6 font-bold text-slate-900">#INV-10001</td>
-                            <td class="py-4 px-6 font-bold text-slate-700">Amal Perera</td>
-                            <td class="py-4 px-6 text-slate-500 font-semibold">June 24, 2026</td>
-                            <td class="py-4 px-6 font-semibold">$3,297.00</td>
-                            <td class="py-4 px-6 font-semibold">$0.00</td>
-                            <td class="py-4 px-6 font-black text-slate-900">$3,307.00</td>
-                            <td class="py-4 px-6 text-center">
-                                <button onclick="alert('🖨️ Generating printable PDF layout...')" class="px-3 py-1.5 bg-slate-100 hover:bg-amber-400 hover:text-slate-950 font-bold text-xs rounded-lg transition-all cursor-pointer">Print PDF</button>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50/50 transition-all">
-                            <td class="py-4 px-6 font-bold text-slate-900">#INV-10002</td>
-                            <td class="py-4 px-6 font-bold text-slate-700">Nimal Silva</td>
-                            <td class="py-4 px-6 text-slate-500 font-semibold">June 24, 2026</td>
-                            <td class="py-4 px-6 font-semibold">$79.99</td>
-                            <td class="py-4 px-6 font-semibold">$0.00</td>
-                            <td class="py-4 px-6 font-black text-slate-900">$89.99</td>
-                            <td class="py-4 px-6 text-center">
-                                <button onclick="alert('🖨️ Generating printable PDF layout...')" class="px-3 py-1.5 bg-slate-100 hover:bg-amber-400 hover:text-slate-950 font-bold text-xs rounded-lg transition-all cursor-pointer">Print PDF</button>
-                            </td>
+                    <tbody id="invoicesTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                        <tr>
+                            <td colspan="5" class="text-center py-8 text-slate-400">Loading supply invoices...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -145,10 +129,174 @@
     </main>
 </div>
 
+<!-- Invoice Creation Modal -->
+<div id="invoiceModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden transform transition-all">
+        <!-- Header -->
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div>
+                <h3 class="text-lg font-black text-slate-900">Create Supplier Invoice</h3>
+                <p class="text-xs text-slate-500 font-medium">Record a new purchase transaction for a supply partner.</p>
+            </div>
+            <button onclick="closeInvoiceModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+                ✕
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form id="invoiceForm" class="p-6 space-y-4">
+            <div class="space-y-1.5">
+                <label for="invoiceSupplier" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Select Supplier *</label>
+                <select id="invoiceSupplier" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                    <option value="">Select Supplier</option>
+                </select>
+            </div>
+            <div class="space-y-1.5">
+                <label for="invoiceAmount" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Amount *</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">Rs.</span>
+                    <input type="number" step="0.01" min="0.01" id="invoiceAmount" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="closeInvoiceModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-sm">
+                    Cancel
+                </button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black transition-all text-sm shadow-md shadow-amber-400/10">
+                    Create Invoice
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Invoice Items Modal -->
+<div id="invoiceItemsModal" class="fixed inset-0 z-50 hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden transform transition-all">
+        <!-- Header -->
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 flex-shrink-0">
+            <div>
+                <h3 class="text-lg font-black text-slate-900" id="itemsModalTitle">Invoice Inventory Items</h3>
+                <p class="text-xs text-slate-500 font-medium">Add delivered items to warehouse stock linked with this invoice.</p>
+            </div>
+            <button onclick="closeItemsModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+                ✕
+            </button>
+        </div>
+
+        <div class="p-6 space-y-6 overflow-y-auto flex-1">
+            <!-- Add Item Inline Form -->
+            <form id="itemForm" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
+                <input type="hidden" id="itemInvoiceId" />
+                
+                <div class="space-y-1.5">
+                    <label for="itemProduct" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Product *</label>
+                    <select id="itemProduct" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white cursor-pointer" required>
+                        <option value="">Select Product</option>
+                    </select>
+                </div>
+                <div class="space-y-1.5">
+                    <label for="itemWarehouse" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Warehouse *</label>
+                    <select id="itemWarehouse" onchange="loadLocationsForWarehouse(this.value)" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white cursor-pointer" required>
+                        <option value="">Select Warehouse</option>
+                    </select>
+                </div>
+                <div class="space-y-1.5">
+                    <label for="itemLocation" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Location (Slot Availability) *</label>
+                    <select id="itemLocation" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white cursor-pointer" required>
+                        <option value="">Select Location</option>
+                    </select>
+                </div>
+                <div class="space-y-1.5 grid grid-cols-2 gap-2">
+                    <div>
+                        <label for="itemQty" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Qty *</label>
+                        <input type="number" id="itemQty" min="1" placeholder="e.g. 50" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
+                    </div>
+                    <div>
+                        <label for="itemPrice" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Buy Price (Rs.) *</label>
+                        <input type="number" step="0.01" min="0.01" id="itemPrice" placeholder="0.00" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" style="background-color: #0f172a !important; color: #ffffff !important;" class="w-full px-4 py-2.5 rounded-lg font-bold transition-all text-xs shadow-sm cursor-pointer hover:opacity-90">
+                        ➕ Add to List
+                    </button>
+                </div>
+            </form>
+
+            <!-- Temporary Items Queue Section -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="text-xs font-black text-slate-900 tracking-wider uppercase">Pending Items Queue (Not Saved Yet)</h4>
+                        <p class="text-[10px] text-slate-400 font-semibold">Review your added items before sending them to the database.</p>
+                    </div>
+                    <button type="button" onclick="saveAllTempItems()" id="saveAllTempBtn" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold transition-all text-xs shadow-md shadow-emerald-500/10 cursor-pointer disabled:opacity-40 disabled:hover:bg-emerald-500">
+                        💾 Save All to Database
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl border-2 border-dashed border-slate-200 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs min-w-[600px]">
+                        <thead>
+                            <tr class="bg-slate-50/50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                <th class="py-2.5 px-4">Product Name</th>
+                                <th class="py-2.5 px-4">Warehouse Depot</th>
+                                <th class="py-2.5 px-4">Storage Slot</th>
+                                <th class="py-2.5 px-4">Buying Price</th>
+                                <th class="py-2.5 px-4">Qty</th>
+                                <th class="py-2.5 px-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tempItemsTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr>
+                                <td colspan="6" class="text-center py-6 text-slate-400">Queue is empty. Add items using the form above.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Saved Database Items Section -->
+            <div class="space-y-3">
+                <div>
+                    <h4 class="text-xs font-black text-slate-900 tracking-wider uppercase">Saved Database Stock Logs</h4>
+                    <p class="text-[10px] text-slate-400 font-semibold">Previously confirmed purchases registered in database records.</p>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                <th class="py-3 px-4">Item ID</th>
+                                <th class="py-3 px-4">Product Name</th>
+                                <th class="py-3 px-4">Warehouse Depot</th>
+                                <th class="py-3 px-4">Storage Slot</th>
+                                <th class="py-3 px-4">Buying Price</th>
+                                <th class="py-3 px-4">Delivered Qty</th>
+                                <th class="py-3 px-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr>
+                                <td colspan="7" class="text-center py-6 text-slate-400">No inventory items saved yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="../js/api/config.js"></script>
 <script src="../js/utils/auth.js"></script>
 <script src="../js/utils/helpers.js"></script>
+<script src="../js/api/products.js"></script>
+<script src="../js/api/admin.js"></script>
+<script src="../js/admin/invoices.js"></script>
+<script src="../js/admin/notifications.js"></script>
 <script>
     // Sidebar responsive toggle
     const menuBtn = document.getElementById('menu-btn');
@@ -169,11 +317,18 @@
 
     // Set Admin details on load
     document.addEventListener('DOMContentLoaded', () => {
-        if (!AuthUtils.checkAuth('ADMIN')) return;
         const user = AuthUtils.getUser();
         if (user) {
             const adminName = document.getElementById('adminName');
-            if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
+            if (adminName) {
+                if (user.firstName && user.lastName) {
+                    adminName.textContent = `${user.firstName} ${user.lastName}`;
+                } else if (user.name) {
+                    adminName.textContent = user.name;
+                } else if (user.email) {
+                    adminName.textContent = user.email.split('@')[0];
+                }
+            }
         }
     });
 </script>

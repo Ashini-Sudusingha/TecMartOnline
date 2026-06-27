@@ -29,6 +29,9 @@ public class Warehouse implements Serializable {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
+    @Column(name = "location", nullable = false, length = 500)
+    private String location;
+
     public Warehouse() {}
 
     public Long getId() {
@@ -77,5 +80,13 @@ public class Warehouse implements Serializable {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

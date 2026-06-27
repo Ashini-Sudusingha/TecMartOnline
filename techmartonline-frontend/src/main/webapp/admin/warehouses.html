@@ -27,7 +27,7 @@
                 <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
             </div>
         </div>
-                <!-- Nav Links -->
+        <!-- Nav Links -->
         <nav class="px-4 py-6 space-y-1.5">
             <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
                 <span class="text-lg">📊</span> Dashboard
@@ -95,9 +95,14 @@
 
     <!-- Main Content -->
     <main class="flex-1 p-6 space-y-6">
-        <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight">🏢 Warehouse Depots</h2>
-            <p class="text-sm text-slate-500 font-medium">Verify location details, active inventory slots, and storage health.</p>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex flex-col gap-1">
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">🏢 Warehouse Depots</h2>
+                <p class="text-sm text-slate-500 font-medium">Verify location details, active inventory slots, and storage health.</p>
+            </div>
+            <button onclick="openWarehouseModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all duration-200 shadow-md text-sm cursor-pointer">
+                ➕ Add New Warehouse
+            </button>
         </div>
 
         <!-- Table Card -->
@@ -109,12 +114,14 @@
                             <th class="py-4 px-6">ID</th>
                             <th class="py-4 px-6">Depot Name</th>
                             <th class="py-4 px-6">Location</th>
+                            <th class="py-4 px-6">Contact Info</th>
                             <th class="py-4 px-6">Status</th>
+                            <th class="py-4 px-6 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="warehousesTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
                         <tr>
-                            <td colspan="4" class="text-center py-8 text-slate-400">Loading depots data...</td>
+                            <td colspan="6" class="text-center py-8 text-slate-400">Loading depots data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -123,12 +130,146 @@
     </main>
 </div>
 
+<!-- Warehouse Add/Edit Modal -->
+<div id="warehouseModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-lg w-full overflow-hidden transform transition-all">
+        <!-- Header -->
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div>
+                <h3 class="text-lg font-black text-slate-900" id="modalTitle">Add New Warehouse</h3>
+                <p class="text-xs text-slate-500 font-medium">Define a new operational depot inside the database.</p>
+            </div>
+            <button onclick="closeWarehouseModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+                ✕
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form id="warehouseForm" class="p-6 space-y-4">
+            <input type="hidden" id="warehouseId" />
+            <div class="space-y-1.5">
+                <label for="warehouseName" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Depot Name *</label>
+                <input type="text" id="warehouseName" placeholder="e.g. Colombo Main Warehouse" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+            </div>
+            <div class="space-y-1.5">
+                <label for="warehouseLocation" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Location *</label>
+                <input type="text" id="warehouseLocation" placeholder="e.g. 123 Galle Road, Colombo 03" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label for="warehousePhone" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
+                    <input type="text" id="warehousePhone" placeholder="e.g. 0771234567" maxlength="10" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" />
+                </div>
+                <div class="space-y-1.5">
+                    <label for="warehouseEmail" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</label>
+                    <input type="email" id="warehouseEmail" placeholder="e.g. colombo@techmart.com" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" />
+                </div>
+            </div>
+            <div class="space-y-1.5">
+                <label for="warehouseStatus" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Status *</label>
+                <select id="warehouseStatus" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                    <option value="true">Active / Operational</option>
+                    <option value="false">Inactive / Under Maintenance</option>
+                </select>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="closeWarehouseModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-sm">
+                    Cancel
+                </button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black transition-all text-sm shadow-md shadow-amber-400/10">
+                    Save Depot
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Warehouse Locations Modal -->
+<div id="locationsModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all">
+        <!-- Header -->
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div>
+                <h3 class="text-lg font-black text-slate-900" id="locationsModalTitle">Depot Locations</h3>
+                <p class="text-xs text-slate-500 font-medium" id="locationsModalSubtitle">Manage slots and capacity layout for this warehouse.</p>
+            </div>
+            <button onclick="closeLocationsModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+                ✕
+            </button>
+        </div>
+
+        <div class="p-6 space-y-6">
+            <!-- Add/Edit Location Inline Form -->
+            <form id="locationForm" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+                <input type="hidden" id="locationWarehouseId" />
+                <input type="hidden" id="locationId" />
+                
+                <div class="space-y-1.5 sm:col-span-2">
+                    <label for="locationCode" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Location Name / Code *</label>
+                    <input type="text" id="locationCode" placeholder="e.g. Shelf A-12" class="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
+                </div>
+                <div class="space-y-1.5">
+                    <label for="locationMaxCap" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Max Capacity *</label>
+                    <input type="number" id="locationMaxCap" placeholder="e.g. 500" min="1" class="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
+                </div>
+                <div class="space-y-1.5 hidden">
+                    <input type="number" id="locationQty" value="0" />
+                </div>
+                <div>
+                    <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all text-xs shadow-sm cursor-pointer" id="locationSaveBtn">
+                        Save Slot
+                    </button>
+                </div>
+            </form>
+
+            <!-- Search and Filter Bar for Locations -->
+            <div class="relative flex-1">
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
+                <input type="text" id="locationSearchInput" placeholder="Search locations by code..." class="w-full pl-9 pr-4 py-2 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" />
+            </div>
+
+            <!-- Table of Locations -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="max-h-60 overflow-y-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer select-none">
+                                <th class="py-3 px-4" onclick="sortLocations('id')">ID <span id="sortDirId" class="ml-1 text-[8px]">↕</span></th>
+                                <th class="py-3 px-4" onclick="sortLocations('location')">Location Code <span id="sortDirLoc" class="ml-1 text-[8px]">↕</span></th>
+                                <th class="py-3 px-4" onclick="sortLocations('maxCapacity')">Max Capacity <span id="sortDirCap" class="ml-1 text-[8px]">↕</span></th>
+                                <th class="py-3 px-4 text-right cursor-default">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="locationsTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                            <tr>
+                                <td colspan="4" class="text-center py-6 text-slate-400">No locations added yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination Controls for Locations -->
+            <div class="flex items-center justify-between pt-4 border-t border-slate-100 text-xs font-bold text-slate-500">
+                <span id="locationPageInfo">Showing page 1 of 1</span>
+                <div class="flex gap-2">
+                    <button onclick="prevLocationPage()" id="locPrevBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 disabled:hover:bg-slate-100 transition-colors cursor-pointer">Prev</button>
+                    <button onclick="nextLocationPage()" id="locNextBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 disabled:hover:bg-slate-100 transition-colors cursor-pointer">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Scripts -->
 <script src="../js/api/config.js"></script>
 <script src="../js/utils/auth.js"></script>
 <script src="../js/utils/helpers.js"></script>
 <script src="../js/api/admin.js"></script>
 <script src="../js/admin/warehouses.js"></script>
+<script src="../js/admin/notifications.js"></script>
 <script>
     // Sidebar responsive toggle
     const menuBtn = document.getElementById('menu-btn');
@@ -152,7 +293,15 @@
         const user = AuthUtils.getUser();
         if (user) {
             const adminName = document.getElementById('adminName');
-            if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
+            if (adminName) {
+                if (user.firstName && user.lastName) {
+                    adminName.textContent = `${user.firstName} ${user.lastName}`;
+                } else if (user.name) {
+                    adminName.textContent = user.name;
+                } else if (user.email) {
+                    adminName.textContent = user.email.split('@')[0];
+                }
+            }
         }
     });
 </script>
