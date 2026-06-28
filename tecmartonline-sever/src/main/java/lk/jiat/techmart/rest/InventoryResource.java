@@ -143,12 +143,20 @@ public class InventoryResource {
             location.setQuantity(location.getQuantity() + dto.getStockQuantity());
             em.merge(location);
 
-            // Fetch default Status ID 1 (Active/Available)
-            lk.jiat.techmart.entity.Status status = em.find(lk.jiat.techmart.entity.Status.class, 1);
-            if (status == null) {
-                TypedQuery<lk.jiat.techmart.entity.Status> sq = em.createQuery("SELECT s FROM Status s", lk.jiat.techmart.entity.Status.class);
-                sq.setMaxResults(1);
+            // Fetch default Status (Active/Available)
+            lk.jiat.techmart.entity.Status status = null;
+            try {
+                TypedQuery<lk.jiat.techmart.entity.Status> sq = em.createQuery("SELECT s FROM Status s WHERE s.name = :name", lk.jiat.techmart.entity.Status.class);
+                sq.setParameter("name", "Active");
                 status = sq.getSingleResult();
+            } catch (Exception ex1) {
+                try {
+                    TypedQuery<lk.jiat.techmart.entity.Status> sq = em.createQuery("SELECT s FROM Status s WHERE s.name = :name", lk.jiat.techmart.entity.Status.class);
+                    sq.setParameter("name", "Available");
+                    status = sq.getSingleResult();
+                } catch (Exception ex2) {
+                    status = em.find(lk.jiat.techmart.entity.Status.class, 1);
+                }
             }
 
             lk.jiat.techmart.entity.Inventory inv = new lk.jiat.techmart.entity.Inventory();
@@ -207,11 +215,20 @@ public class InventoryResource {
             }
 
             List<InventoryDTO> savedDtos = new ArrayList<>();
-            lk.jiat.techmart.entity.Status status = em.find(lk.jiat.techmart.entity.Status.class, 1);
-            if (status == null) {
-                TypedQuery<lk.jiat.techmart.entity.Status> sq = em.createQuery("SELECT s FROM Status s", lk.jiat.techmart.entity.Status.class);
-                sq.setMaxResults(1);
+            // Fetch default Status (Active/Available)
+            lk.jiat.techmart.entity.Status status = null;
+            try {
+                TypedQuery<lk.jiat.techmart.entity.Status> sq = em.createQuery("SELECT s FROM Status s WHERE s.name = :name", lk.jiat.techmart.entity.Status.class);
+                sq.setParameter("name", "Active");
                 status = sq.getSingleResult();
+            } catch (Exception ex1) {
+                try {
+                    TypedQuery<lk.jiat.techmart.entity.Status> sq = em.createQuery("SELECT s FROM Status s WHERE s.name = :name", lk.jiat.techmart.entity.Status.class);
+                    sq.setParameter("name", "Available");
+                    status = sq.getSingleResult();
+                } catch (Exception ex2) {
+                    status = em.find(lk.jiat.techmart.entity.Status.class, 1);
+                }
             }
 
             for (InventoryDTO dto : dtos) {
