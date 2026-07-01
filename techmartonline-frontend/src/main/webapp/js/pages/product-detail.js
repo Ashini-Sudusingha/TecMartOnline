@@ -28,6 +28,16 @@ async function loadDetail() {
             `;
         }
 
+        // Availability calculations
+        const isAvailable = product.stockQty > 0;
+        const availabilityHtml = isAvailable 
+            ? `<div class="text-sm font-bold text-slate-700">Availability: <span class="text-emerald-600 bg-emerald-50 border border-emerald-250 px-2.5 py-1 rounded-lg ml-2 font-black">${product.stockQty} units in stock</span></div>`
+            : `<div class="text-sm font-bold text-slate-700">Availability: <span class="text-rose-600 bg-rose-50 border border-rose-250 px-2.5 py-1 rounded-lg ml-2 font-black">Out of Stock</span></div>`;
+
+        const actionButtonHtml = isAvailable
+            ? `<button onclick="addToCartDirect(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.stockQty}, '${isUrl ? imageIcon : '📦'}')" class="px-6 py-4 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-2xl shadow-lg shadow-amber-400/20 transition-all cursor-pointer">Add to Cart 🛒</button>`
+            : `<button class="px-6 py-4 bg-slate-150 text-slate-400 font-bold rounded-2xl border border-slate-200 cursor-not-allowed" disabled>Sold Out 🚫</button>`;
+
         container.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
                 <div>
@@ -38,16 +48,17 @@ async function loadDetail() {
                 </div>
                 <div class="space-y-6">
                     <div>
-                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1">${product.brand} - ${product.category}</span>
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-1">${product.brand || 'Tech'} - ${product.category || 'General'}</span>
                         <h1 class="text-3xl font-black text-slate-900 leading-tight">${product.name}</h1>
                     </div>
+                    
+                    ${availabilityHtml}
+
                     <p class="text-slate-500 font-semibold text-sm leading-relaxed">${product.description || 'No description provided.'}</p>
                     <div class="text-2xl font-black text-slate-900">${Helpers.formatPrice(product.price)}</div>
                     
                     <div class="flex gap-4">
-                        <button onclick="addToCartDirect(${product.id}, '${product.name}', ${product.price})" class="px-6 py-4 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold rounded-2xl shadow-lg shadow-amber-400/20 transition-all cursor-pointer">
-                            Add to Cart 🛒
-                        </button>
+                        ${actionButtonHtml}
                     </div>
                 </div>
             </div>
@@ -69,6 +80,34 @@ window.swapDetailEmoji = function(emoji) {
     if (wrapper) {
         wrapper.innerHTML = `<span class="text-8xl">${emoji}</span>`;
     }
+};
+
+window.addToCartDirect = function(id, name, price, maxStock, image) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existing = cart.find(x => x.id === id);
+
+    if (existing) {
+        if (existing.quantity >= maxStock) {
+            alert(`❌ Cannot add more! Only ${maxStock} units available in stock.`);
+            return;
+        }
+        existing.quantity += 1;
+    } else {
+        cart.push({ id, name, price, quantity: 1, image: image });
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    if (typeof updateCartBadge === 'function') {
+        updateCartBadge();
+    }
+    
+    // Toast notification instead of annoying alert dialog
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-4 right-4 z-50 p-4 rounded-xl text-xs font-bold transition-all shadow-xl bg-slate-950 text-white border border-slate-800 animate-bounce';
+    toast.textContent = `✓ Added ${name} to Cart.`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
 };
 
 document.addEventListener('DOMContentLoaded', () => {

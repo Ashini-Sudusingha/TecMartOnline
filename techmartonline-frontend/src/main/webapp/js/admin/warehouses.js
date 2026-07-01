@@ -14,28 +14,28 @@ async function loadWarehouses() {
 
         tbody.innerHTML = warehouses.map(w => {
             const statusBadge = w.isActive
-                ? '<span class="inline-flex px-2.5 py-0.5 text-xs font-bold rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>'
-                : '<span class="inline-flex px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-50 text-slate-400 border border-slate-200">Inactive</span>';
+                ? '<span class="inline-flex px-2.5 py-0.5 text-xs font-bold rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active</span>'
+                : '<span class="inline-flex px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-800/60 text-slate-400 border border-slate-700/40">Inactive</span>';
 
             return `
-                <tr class="hover:bg-slate-50/50 transition-all">
-                    <td class="py-4 px-6 font-bold text-slate-400">#${w.id}</td>
-                    <td class="py-4 px-6 font-bold text-slate-900">${w.name}</td>
-                    <td class="py-4 px-6 text-slate-500 font-semibold">${w.location || 'N/A'}</td>
-                    <td class="py-4 px-6 text-slate-500 text-xs">
+                <tr class="hover:bg-slate-800/20 transition-all border-b border-slate-800/40 last:border-b-0">
+                    <td class="py-4 px-6 font-bold text-slate-500">#${w.id}</td>
+                    <td class="py-4 px-6 font-bold text-white">${w.name}</td>
+                    <td class="py-4 px-6 text-slate-400 font-semibold">${w.location || 'N/A'}</td>
+                    <td class="py-4 px-6 text-slate-400 text-xs">
                         <div>📞 ${w.contactPhone || 'N/A'}</div>
                         <div class="mt-0.5">✉️ ${w.email || 'N/A'}</div>
                     </td>
                     <td class="py-4 px-6">${statusBadge}</td>
                     <td class="py-4 px-6 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <button onclick="manageLocations(${w.id}, '${w.name.replace(/'/g, "\\'")}')" class="inline-flex px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-500 text-indigo-600 hover:text-white border border-indigo-200 hover:border-indigo-500 text-xs font-bold transition-all duration-150 cursor-pointer" title="Manage storage locations">
+                            <button onclick="manageLocations(${w.id}, '${w.name.replace(/'/g, "\\'")}')" class="inline-flex px-2.5 py-1.5 rounded-lg bg-slate-800/60 hover:bg-amber-400 hover:text-slate-950 text-amber-400 border border-slate-700/50 text-xs font-bold transition-all duration-150 cursor-pointer" title="Manage storage locations">
                                 📍 Locations
                             </button>
-                            <button onclick="editWarehouse(${w.id}, '${w.name.replace(/'/g, "\\'")}', '${w.location.replace(/'/g, "\\'")}', '${w.contactPhone || ''}', '${w.email || ''}', ${w.isActive})" class="inline-flex p-1.5 rounded-lg bg-amber-50 hover:bg-amber-400 text-amber-600 hover:text-slate-950 border border-amber-200 hover:border-amber-400 text-xs font-bold transition-all duration-150 cursor-pointer">
+                            <button onclick="editWarehouse(${w.id}, '${w.name.replace(/'/g, "\\'")}', '${w.location.replace(/'/g, "\\'")}', '${w.contactPhone || ''}', '${w.email || ''}', ${w.isActive})" class="inline-flex p-1.5 rounded-lg bg-slate-800/60 hover:bg-amber-400 hover:text-slate-950 text-amber-400 border border-slate-700/50 text-xs font-bold transition-all duration-150 cursor-pointer">
                                 ✏️
                             </button>
-                            <button onclick="deleteWarehouse(${w.id})" class="inline-flex p-1.5 rounded-lg bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-200 hover:border-rose-500 text-xs font-bold transition-all duration-150 cursor-pointer">
+                            <button onclick="deleteWarehouse(${w.id})" class="inline-flex p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-500 text-xs font-bold transition-all duration-150 cursor-pointer">
                                 🗑️
                             </button>
                         </div>
@@ -44,7 +44,7 @@ async function loadWarehouses() {
             `;
         }).join('');
     } catch (e) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-rose-500 font-semibold">Failed to load warehouses data: ' + e.message + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-rose-400 font-semibold bg-slate-900/20">Failed to load warehouses data: ' + e.message + '</td></tr>';
     }
 }
 
@@ -173,20 +173,20 @@ function applyLocationsFiltersAndRender() {
 
     // Render rows
     if (paginated.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400">No matching locations found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 bg-slate-900/20">No matching locations found.</td></tr>';
     } else {
         tbody.innerHTML = paginated.map(loc => {
             return `
-                <tr class="hover:bg-slate-50/50 transition-all">
-                    <td class="py-3 px-4 text-slate-400 font-bold">#${loc.id}</td>
-                    <td class="py-3 px-4 font-bold text-slate-900">${loc.location}</td>
-                    <td class="py-3 px-4 text-slate-500 font-semibold">${loc.maxCapacity} units</td>
+                <tr class="hover:bg-slate-800/20 transition-all border-b border-slate-800/40 last:border-b-0">
+                    <td class="py-3 px-4 text-slate-500 font-bold">#${loc.id}</td>
+                    <td class="py-3 px-4 font-bold text-white">${loc.location}</td>
+                    <td class="py-3 px-4 text-slate-400 font-semibold">${loc.maxCapacity} units</td>
                     <td class="py-3 px-4 text-right">
                         <div class="flex items-center justify-end gap-1.5">
-                            <button onclick="editLocation(${loc.id}, '${loc.location.replace(/'/g, "\\'")}', ${loc.maxCapacity}, ${loc.quantity})" class="inline-flex p-1 rounded bg-amber-50 hover:bg-amber-400 text-amber-600 hover:text-slate-950 border border-amber-200 hover:border-amber-400 text-[10px] font-bold transition-all duration-150 cursor-pointer">
+                            <button onclick="editLocation('${loc.id}', '${loc.location.replace(/'/g, "\\'")}', ${loc.maxCapacity}, ${loc.quantity})" class="inline-flex p-1 rounded bg-slate-800/60 hover:bg-amber-400 hover:text-slate-950 text-amber-400 border border-slate-700/50 text-[10px] font-bold transition-all duration-150 cursor-pointer">
                                 ✏️
                             </button>
-                            <button onclick="deleteLocation(${loc.id})" class="inline-flex p-1 rounded bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-200 hover:border-rose-500 text-[10px] font-bold transition-all duration-150 cursor-pointer">
+                            <button onclick="deleteLocation('${loc.id}')" class="inline-flex p-1 rounded bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-500 text-[10px] font-bold transition-all duration-150 cursor-pointer">
                                 🗑️
                             </button>
                         </div>

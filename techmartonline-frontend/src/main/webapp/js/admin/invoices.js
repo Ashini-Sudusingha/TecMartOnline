@@ -32,17 +32,17 @@ async function loadInvoices() {
             }) : 'N/A';
 
             return `
-                <tr class="hover:bg-slate-50/50 transition-all">
-                    <td class="py-4 px-6 font-bold text-slate-900">#INV-${10000 + i.id}</td>
-                    <td class="py-4 px-6 font-bold text-slate-700">${i.supplierName || 'N/A'}</td>
-                    <td class="py-4 px-6 text-slate-500 font-semibold">${formattedDate}</td>
-                    <td class="py-4 px-6 font-black text-slate-900">Rs. ${parseFloat(i.totalAmount).toFixed(2)}</td>
+                <tr class="hover:bg-slate-800/20 border-b border-slate-800/40 transition-all">
+                    <td class="py-4 px-6 font-bold text-amber-450">#INV-${10000 + i.id}</td>
+                    <td class="py-4 px-6 font-bold text-slate-200">${i.supplierName || 'N/A'}</td>
+                    <td class="py-4 px-6 text-slate-400 font-semibold">${formattedDate}</td>
+                    <td class="py-4 px-6 font-black text-white">Rs. ${parseFloat(i.totalAmount).toFixed(2)}</td>
                     <td class="py-4 px-6 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <button onclick="manageInvoiceItems(${i.id}, '${i.supplierName.replace(/'/g, "\\'")}')" class="inline-flex px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-500 text-indigo-600 hover:text-white border border-indigo-200 hover:border-indigo-500 text-xs font-bold transition-all duration-150 cursor-pointer" title="Manage invoice items">
+                            <button onclick="manageInvoiceItems(${i.id}, '${i.supplierName.replace(/'/g, "\\'")}')" class="inline-flex px-2.5 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500 text-indigo-400 hover:text-white border border-indigo-500/20 hover:border-indigo-500 text-xs font-bold transition-all duration-150 cursor-pointer" title="Manage invoice items">
                                 📦 Items
                             </button>
-                            <button onclick="printInvoice(${i.id})" class="inline-flex px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-amber-400 text-slate-700 hover:text-slate-950 border border-slate-200 hover:border-amber-400 text-xs font-bold transition-all duration-150 cursor-pointer">
+                            <button onclick="printInvoice(${i.id})" class="inline-flex px-2.5 py-1.5 rounded-lg bg-slate-800/60 hover:bg-amber-400 text-slate-350 hover:text-slate-950 border border-slate-700/50 hover:border-amber-400 text-xs font-bold transition-all duration-150 cursor-pointer">
                                 🖨️ Print
                             </button>
                         </div>
@@ -196,14 +196,14 @@ function renderTempItems() {
 
     tbody.innerHTML = tempInvoiceItems.map((item, idx) => {
         return `
-            <tr class="hover:bg-slate-50/50 transition-all">
-                <td class="py-2.5 px-4 font-bold text-slate-900">${item.productName}</td>
-                <td class="py-2.5 px-4 text-slate-500 font-semibold">${item.warehouseName}</td>
-                <td class="py-2.5 px-4 text-slate-500 font-semibold">${item.locationName}</td>
-                <td class="py-2.5 px-4 font-semibold text-slate-900">Rs. ${parseFloat(item.buyingPrice).toFixed(2)}</td>
-                <td class="py-2.5 px-4 font-black text-slate-700">${item.stockQuantity}</td>
+            <tr class="hover:bg-slate-800/20 border-b border-slate-800/40 transition-all">
+                <td class="py-2.5 px-4 font-bold text-white">${item.productName}</td>
+                <td class="py-2.5 px-4 text-slate-400 font-semibold">${item.warehouseName}</td>
+                <td class="py-2.5 px-4 text-slate-400 font-semibold">${item.locationName}</td>
+                <td class="py-2.5 px-4 font-semibold text-amber-450">Rs. ${parseFloat(item.buyingPrice).toFixed(2)}</td>
+                <td class="py-2.5 px-4 font-black text-slate-200">${item.stockQuantity}</td>
                 <td class="py-2.5 px-4 text-right">
-                    <button type="button" onclick="removeTempItem(${idx})" class="inline-flex p-1 rounded bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-200 hover:border-rose-500 text-[10px] font-bold transition-all cursor-pointer">
+                    <button type="button" onclick="removeTempItem(${idx})" class="inline-flex p-1 rounded bg-rose-500/10 hover:bg-rose-500 text-rose-450 hover:text-white border border-rose-500/20 hover:border-rose-500 text-[10px] font-bold transition-all cursor-pointer">
                         🗑️ Remove
                     </button>
                 </td>
@@ -269,15 +269,15 @@ async function loadInvoiceItems(invoiceId) {
 
         tbody.innerHTML = items.map(item => {
             return `
-                <tr class="hover:bg-slate-50/50 transition-all">
-                    <td class="py-3 px-4 font-bold text-slate-400">#ITEM-${item.id}</td>
-                    <td class="py-3 px-4 font-bold text-slate-900">${item.productName || 'N/A'}</td>
-                    <td class="py-3 px-4 text-slate-500 font-semibold">${item.warehouseName || 'N/A'}</td>
-                    <td class="py-3 px-4 text-slate-500 font-semibold">${item.location || 'N/A'}</td>
-                    <td class="py-3 px-4 font-semibold text-slate-900">Rs. ${parseFloat(item.buyingPrice).toFixed(2)}</td>
-                    <td class="py-3 px-4 font-black text-slate-700">${item.stockQuantity} units</td>
+                <tr class="hover:bg-slate-800/20 border-b border-slate-800/40 transition-all">
+                    <td class="py-3 px-4 font-bold text-slate-500">#ITEM-${item.id}</td>
+                    <td class="py-3 px-4 font-bold text-white">${item.productName || 'N/A'}</td>
+                    <td class="py-3 px-4 text-slate-400 font-semibold">${item.warehouseName || 'N/A'}</td>
+                    <td class="py-3 px-4 text-slate-400 font-semibold">${item.location || 'N/A'}</td>
+                    <td class="py-3 px-4 font-semibold text-amber-450">Rs. ${parseFloat(item.buyingPrice).toFixed(2)}</td>
+                    <td class="py-3 px-4 font-black text-slate-200">${item.stockQuantity} units</td>
                     <td class="py-3 px-4">
-                        <span class="inline-flex px-2 py-0.5 text-[10px] font-bold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">${item.statusName || 'Active'}</span>
+                        <span class="inline-flex px-2 py-0.5 text-[10px] font-bold rounded-md bg-emerald-500/10 text-emerald-450 border border-emerald-500/20">${item.statusName || 'Active'}</span>
                     </td>
                 </tr>
             `;
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const productId = parseInt(pSelect.value);
             const warehouseId = parseInt(wSelect.value);
-            const locationId = parseInt(lSelect.value);
+            const locationId = lSelect.value;
             const qty = parseInt(document.getElementById('itemQty').value);
             const price = parseFloat(document.getElementById('itemPrice').value);
 

@@ -4,141 +4,246 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoices - TechMart Admin</title>
-    <link rel="stylesheet" href="../css/tailwind.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="../css/style.css" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;950&display=swap" rel="stylesheet"/>
     <style>
+        body, aside, button, select, input, textarea, td, th, h1, h2, h3, h4, span, p, a {
+            font-family: "Plus Jakarta Sans", sans-serif !important;
+        }
         body {
-            display: block !important;
-            background-color: #f8fafc;
+            background-color: #0b0f19;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .glass-card {
+            background: rgba(13, 18, 31, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .glass-card:hover {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(13, 18, 31, 0.6);
         }
     </style>
 </head>
-<body class="bg-slate-50 font-['Urbanist'] antialiased">
+<body class="text-slate-200 antialiased custom-scrollbar min-h-screen flex flex-col justify-between">
 
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div>
         <!-- Logo -->
-        <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
-            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl font-bold text-xl">🛒</span>
+        <div class="px-6 py-7 border-b border-slate-800/60 flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-extrabold text-lg shadow-lg shadow-amber-500/10">
+                <svg class="w-5 h-5 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+            </div>
             <div>
-                <h2 class="font-black text-lg leading-tight tracking-wide">TechMart</h2>
-                <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
+                <h2 class="font-extrabold text-sm leading-tight tracking-tight text-white">TechMart</h2>
+                <span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider block mt-0.5">Core Admin</span>
             </div>
         </div>
-        <!-- Nav Links -->
-        <nav class="px-4 py-6 space-y-1.5">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📊</span> Dashboard
+
+        <!-- Nav Links (Sleek minimalist vectors replacing emojis) -->
+        <nav class="px-4 py-6 space-y-1 h-[calc(100vh-170px)] overflow-y-auto custom-scrollbar">
+            
+            <a href="dashboard.html" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v6.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Dashboard
             </a>
-            <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📦</span> Products
-            </a>
-            <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📋</span> Orders
-            </a>
-            <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">👥</span> Users
-            </a>
-            <a href="inventory.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📈</span> Inventory
-            </a>
-            <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🏢</span> Warehouses
-            </a>
-            <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🏭</span> Suppliers
-            </a>
-            <a href="invoices.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-950 bg-amber-400 font-bold transition-all duration-200 shadow-lg shadow-amber-400/10">
-                <span class="text-lg">🧾</span> Invoices
-            </a>
-            <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📊</span> Reports
-            </a>
+            
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[9px] font-extrabold text-slate-505 uppercase tracking-widest mb-2 mt-2">Management</p>
+                <a href="products.html" id="nav-products" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25" />
+                    </svg>
+                    Products
+                </a>
+                <a href="orders.html" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Orders
+                </a>
+                <a href="order-packing.html" id="nav-order-packing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    Order Packing
+                </a>
+                <a href="users.html" id="nav-users" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Users
+                </a>
+            </div>
+
+            <!-- Warehouses Expandable Menu Group -->
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[9px] font-extrabold text-slate-505 uppercase tracking-widest mb-2 mt-2">Logistics</p>
+                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 focus:outline-none cursor-pointer">
+                    <span class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        Warehouses
+                    </span>
+                    <span id="warehouse-arrow" class="text-[9px] text-slate-500 transition-transform duration-200">▼</span>
+                </button>
+                <div id="warehouse-submenu" class="pl-9 pr-2 py-1 space-y-1 hidden rounded-xl mx-2 ml-6">
+                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Dashboard</a>
+                    <a href="warehouses.html" id="sub-wh-locations" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Locations & Slots</a>
+                    <a href="inventory.html" id="sub-wh-inventory" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Inventory Stock</a>
+                    <a href="warehouse-transfers.html" id="sub-wh-transfers" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Transfers</a>
+                </div>
+            </div>
+
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[9px] font-extrabold text-slate-505 uppercase tracking-widest mb-2 mt-2">Finance & Analytics</p>
+                <a href="suppliers.html" id="nav-suppliers" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Suppliers
+                </a>
+                <a href="invoices.html" id="nav-invoices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-950 bg-gradient-to-tr from-amber-400 to-amber-300 font-extrabold text-xs shadow-md shadow-amber-500/10 transition-all duration-200">
+                    <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Invoices
+                </a>
+                <a href="reports.html" id="nav-reports" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Reports
+                </a>
+                <a href="performance-metrics.html" id="nav-performance-metrics" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Performance Metrics
+                </a>
+            </div>
         </nav>
     </div>
+
     <!-- Profile & Logout -->
-    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+    <div class="p-4 border-t border-slate-800 bg-[#06090f]">
         <div class="flex items-center gap-3 px-2 py-2 mb-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">A</div>
+            <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/50 flex items-center justify-center font-bold text-xs shadow-sm">
+                A
+            </div>
             <div>
-                <h4 class="font-bold text-sm text-slate-100" id="adminName">Administrator</h4>
-                <p class="text-[11px] text-slate-500 font-semibold">admin@techmart.com</p>
+                <h4 id="adminName" class="font-semibold text-xs text-slate-200">Administrator</h4>
+                <p class="text-[10px] text-slate-505 font-medium">admin@techmart.com</p>
             </div>
         </div>
-        <button onclick="AuthUtils.logout()" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-50 text-rose-500 hover:text-white text-sm font-bold transition-all duration-200 border border-rose-500/20 cursor-pointer">
-            <span>🚪</span> Log Out
+        <button onclick="handleLogout()" class="flex items-center justify-center w-full py-2 rounded-xl text-rose-400 hover:text-rose-350 hover:bg-rose-500/10 text-[11px] font-bold transition-all duration-200 cursor-pointer">
+            Log Out
         </button>
     </div>
 </aside>
 
 <!-- Sidebar Overlay for Mobile -->
-<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/60 hidden backdrop-blur-sm transition-opacity duration-300 lg:hidden"></div>
 
 <!-- Content Wrapper -->
-<div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
-    <!-- Top Header -->
-    <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
-        <div class="flex items-center gap-4">
-            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
-                <span class="text-xl">☰</span>
-            </button>
-            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Logistics Purchase Invoices</h1>
-        </div>
-        <div class="flex items-center gap-4">
-            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Invoice Engine Active
-            </span>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-1 p-6 space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex flex-col gap-1">
-                <h2 class="text-2xl font-black text-slate-900 tracking-tight">🧾 Supplier Invoices</h2>
-                <p class="text-sm text-slate-500 font-medium">Record new logistics deliveries, manage totals, and verify supplier transactions.</p>
+<div class="lg:pl-64 min-h-screen bg-[#0b0f19] flex flex-col justify-between">
+    <div>
+        <!-- Top Header -->
+        <header class="sticky top-0 z-30 h-16 bg-[#0d121f]/80 backdrop-blur-md border-b border-slate-800/50 px-6 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-4">
+                <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-400 hover:bg-slate-800/60 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <h1 class="text-xs font-semibold text-slate-400 tracking-wider uppercase hidden sm:block">Purchase Orders ledger</h1>
             </div>
-            <button onclick="openInvoiceModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all duration-200 shadow-md text-sm cursor-pointer">
-                ➕ Create Supplier Invoice
-            </button>
-        </div>
-
-        <!-- Table Card -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                            <th class="py-4 px-6">Invoice ID</th>
-                            <th class="py-4 px-6">Supplier</th>
-                            <th class="py-4 px-6">Date Recorded</th>
-                            <th class="py-4 px-6">Total Amount</th>
-                            <th class="py-4 px-6 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="invoicesTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
-                        <tr>
-                            <td colspan="5" class="text-center py-8 text-slate-400">Loading supply invoices...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="flex items-center gap-4">
+                <span class="text-[11px] font-bold text-emerald-450 bg-emerald-500/5 border border-emerald-500/20 px-3 py-1.5 rounded-xl flex items-center gap-2 tracking-wide">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Invoice Engine Active
+                </span>
             </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="p-6 lg:p-8 space-y-6 max-w-[1600px] w-full mx-auto">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
+                <div class="flex flex-col gap-1">
+                    <h2 class="text-xl font-bold text-white tracking-tight">Supplier Invoices</h2>
+                    <p class="text-xs text-slate-400 font-medium">Record warehouse incoming assets and verify supplier accounts</p>
+                </div>
+                <button onclick="openInvoiceModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 hover:opacity-95 text-slate-950 font-bold transition-all duration-200 text-xs cursor-pointer shadow-md">
+                    <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Create Supplier Invoice
+                </button>
+            </div>
+
+            <!-- Table Card -->
+            <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-slate-800/80">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="border-b border-slate-800/60 text-[10px] font-bold text-slate-505 uppercase tracking-wider">
+                                <th class="py-4 px-6">Invoice ID</th>
+                                <th class="py-4 px-6">Supplier</th>
+                                <th class="py-4 px-6">Date Recorded</th>
+                                <th class="py-4 px-6">Total Amount</th>
+                                <th class="py-4 px-6 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoicesTableBody" class="divide-y divide-slate-800/40 text-xs font-semibold text-slate-300">
+                            <tr>
+                                <td colspan="5" class="text-center py-10 text-slate-505">Loading supply invoices ledger...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#090d16] border-t border-slate-800/40 py-8 w-full">
+        <div class="max-w-[1600px] mx-auto px-6 text-center text-xs font-semibold text-slate-550">
+            © 2026 TechMart Online. All rights reserved.
         </div>
-    </main>
+    </footer>
 </div>
 
 <!-- Invoice Creation Modal -->
-<div id="invoiceModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden transform transition-all">
+<div id="invoiceModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl border border-slate-800 shadow-2xl max-w-md w-full overflow-hidden transform transition-all text-left">
         <!-- Header -->
-        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div class="px-6 py-5 border-b border-slate-800/60 flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-black text-slate-900">Create Supplier Invoice</h3>
-                <p class="text-xs text-slate-500 font-medium">Record a new purchase transaction for a supply partner.</p>
+                <h3 class="text-sm font-bold text-white">Create Supplier Invoice</h3>
+                <p class="text-[10px] text-slate-505 font-semibold uppercase tracking-wider mt-0.5">Record incoming stock batch ledger</p>
             </div>
-            <button onclick="closeInvoiceModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+            <button onclick="closeInvoiceModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors flex items-center justify-center font-bold text-xs cursor-pointer">
                 ✕
             </button>
         </div>
@@ -146,25 +251,25 @@
         <!-- Form -->
         <form id="invoiceForm" class="p-6 space-y-4">
             <div class="space-y-1.5">
-                <label for="invoiceSupplier" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Select Supplier *</label>
-                <select id="invoiceSupplier" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                <label for="invoiceSupplier" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Select Supplier *</label>
+                <select id="invoiceSupplier" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-xs font-bold bg-[#0d121f] text-slate-200 cursor-pointer transition-all" required>
                     <option value="">Select Supplier</option>
                 </select>
             </div>
             <div class="space-y-1.5">
-                <label for="invoiceAmount" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Amount *</label>
+                <label for="invoiceAmount" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Amount *</label>
                 <div class="relative">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">Rs.</span>
-                    <input type="number" step="0.01" min="0.01" id="invoiceAmount" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-505">Rs.</span>
+                    <input type="number" step="0.01" min="0.01" id="invoiceAmount" placeholder="0.00" class="w-full pl-12 pr-4 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-xs font-bold bg-[#0d121f] text-slate-200" required />
                 </div>
             </div>
 
             <!-- Footer Buttons -->
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <button type="button" onclick="closeInvoiceModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-sm">
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800/60">
+                <button type="button" onclick="closeInvoiceModal()" class="px-4 py-2 rounded-xl border border-slate-700/50 hover:bg-slate-800 text-slate-300 font-bold text-xs cursor-pointer">
                     Cancel
                 </button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black transition-all text-sm shadow-md shadow-amber-400/10">
+                <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 hover:opacity-95 text-slate-950 font-black text-xs cursor-pointer shadow-md shadow-amber-400/10">
                     Create Invoice
                 </button>
             </div>
@@ -173,55 +278,53 @@
 </div>
 
 <!-- Invoice Items Modal -->
-<div id="invoiceItemsModal" class="fixed inset-0 z-50 hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden transform transition-all">
+<div id="invoiceItemsModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md overflow-y-auto flex items-start sm:items-center justify-center p-4">
+    <div class="glass-card rounded-3xl border border-slate-800 shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden transform transition-all text-left">
         <!-- Header -->
-        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 flex-shrink-0">
+        <div class="px-6 py-5 border-b border-slate-800/60 flex items-center justify-between flex-shrink-0">
             <div>
-                <h3 class="text-lg font-black text-slate-900" id="itemsModalTitle">Invoice Inventory Items</h3>
-                <p class="text-xs text-slate-500 font-medium">Add delivered items to warehouse stock linked with this invoice.</p>
+                <h3 class="text-sm font-bold text-white" id="itemsModalTitle">Invoice Inventory Items</h3>
+                <p class="text-[10px] text-slate-550 font-semibold uppercase tracking-wider mt-0.5">Allocate delivered items to warehouse slots</p>
             </div>
-            <button onclick="closeItemsModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+            <button onclick="closeItemsModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors flex items-center justify-center font-bold text-xs cursor-pointer">
                 ✕
             </button>
         </div>
 
-        <div class="p-6 space-y-6 overflow-y-auto flex-1">
+        <div class="p-6 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
             <!-- Add Item Inline Form -->
-            <form id="itemForm" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
+            <form id="itemForm" class="bg-slate-900/40 p-5 rounded-2xl border border-slate-800 grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
                 <input type="hidden" id="itemInvoiceId" />
                 
-                <div class="space-y-1.5">
-                    <label for="itemProduct" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Product *</label>
-                    <select id="itemProduct" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white cursor-pointer" required>
+                <div class="space-y-1.5 sm:col-span-4">
+                    <label for="itemProduct" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Product *</label>
+                    <select id="itemProduct" class="w-full px-3 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-[11px] font-bold bg-[#0d121f] text-slate-200 cursor-pointer" required>
                         <option value="">Select Product</option>
                     </select>
                 </div>
-                <div class="space-y-1.5">
-                    <label for="itemWarehouse" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Warehouse *</label>
-                    <select id="itemWarehouse" onchange="loadLocationsForWarehouse(this.value)" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white cursor-pointer" required>
+                <div class="space-y-1.5 sm:col-span-4">
+                    <label for="itemWarehouse" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Warehouse *</label>
+                    <select id="itemWarehouse" onchange="loadLocationsForWarehouse(this.value)" class="w-full px-3 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-[11px] font-bold bg-[#0d121f] text-slate-200 cursor-pointer" required>
                         <option value="">Select Warehouse</option>
                     </select>
                 </div>
-                <div class="space-y-1.5">
-                    <label for="itemLocation" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Location (Slot Availability) *</label>
-                    <select id="itemLocation" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white cursor-pointer" required>
+                <div class="space-y-1.5 sm:col-span-4">
+                    <label for="itemLocation" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Storage Slot *</label>
+                    <select id="itemLocation" class="w-full px-3 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-[11px] font-bold bg-[#0d121f] text-slate-200 cursor-pointer" required disabled>
                         <option value="">Select Location</option>
                     </select>
                 </div>
-                <div class="space-y-1.5 grid grid-cols-2 gap-2">
-                    <div>
-                        <label for="itemQty" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Qty *</label>
-                        <input type="number" id="itemQty" min="1" placeholder="e.g. 50" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
-                    </div>
-                    <div>
-                        <label for="itemPrice" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Buy Price (Rs.) *</label>
-                        <input type="number" step="0.01" min="0.01" id="itemPrice" placeholder="0.00" class="w-full px-2 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
-                    </div>
+                <div class="space-y-1.5 sm:col-span-4">
+                    <label for="itemQty" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Qty *</label>
+                    <input type="number" id="itemQty" min="1" placeholder="50" class="w-full px-3 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-[11px] font-bold bg-[#0d121f] text-slate-200" required />
                 </div>
-                <div>
-                    <button type="submit" style="background-color: #0f172a !important; color: #ffffff !important;" class="w-full px-4 py-2.5 rounded-lg font-bold transition-all text-xs shadow-sm cursor-pointer hover:opacity-90">
-                        ➕ Add to List
+                <div class="space-y-1.5 sm:col-span-4">
+                    <label for="itemPrice" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Buy Price (Rs.) *</label>
+                    <input type="number" step="0.01" min="0.01" id="itemPrice" placeholder="0.00" class="w-full px-3 py-2.5 rounded-xl border border-slate-800 focus:border-amber-400 focus:outline-none text-[11px] font-bold bg-[#0d121f] text-slate-200" required />
+                </div>
+                <div class="sm:col-span-4">
+                    <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 hover:opacity-95 text-slate-950 font-bold transition-all text-xs cursor-pointer shadow-md">
+                        Add to List
                     </button>
                 </div>
             </form>
@@ -230,17 +333,17 @@
             <div class="space-y-3">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h4 class="text-xs font-black text-slate-900 tracking-wider uppercase">Pending Items Queue (Not Saved Yet)</h4>
-                        <p class="text-[10px] text-slate-400 font-semibold">Review your added items before sending them to the database.</p>
+                        <h4 class="text-xs font-bold text-white tracking-wider uppercase">Pending Items Queue</h4>
+                        <p class="text-[10px] text-slate-500 font-semibold">Review your batch items before logging into databases</p>
                     </div>
                     <button type="button" onclick="saveAllTempItems()" id="saveAllTempBtn" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold transition-all text-xs shadow-md shadow-emerald-500/10 cursor-pointer disabled:opacity-40 disabled:hover:bg-emerald-500">
-                        💾 Save All to Database
+                        Save to Database
                     </button>
                 </div>
-                <div class="bg-white rounded-xl border-2 border-dashed border-slate-200 overflow-x-auto">
+                <div class="glass-card rounded-2xl border border-slate-800/60 overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs min-w-[600px]">
                         <thead>
-                            <tr class="bg-slate-50/50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                            <tr class="border-b border-slate-800/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                                 <th class="py-2.5 px-4">Product Name</th>
                                 <th class="py-2.5 px-4">Warehouse Depot</th>
                                 <th class="py-2.5 px-4">Storage Slot</th>
@@ -249,9 +352,9 @@
                                 <th class="py-2.5 px-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="tempItemsTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tbody id="tempItemsTableBody" class="divide-y divide-slate-800/40 font-semibold text-slate-300">
                             <tr>
-                                <td colspan="6" class="text-center py-6 text-slate-400">Queue is empty. Add items using the form above.</td>
+                                <td colspan="6" class="text-center py-6 text-slate-500">Queue is empty. Add items using the form above.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -261,13 +364,13 @@
             <!-- Saved Database Items Section -->
             <div class="space-y-3">
                 <div>
-                    <h4 class="text-xs font-black text-slate-900 tracking-wider uppercase">Saved Database Stock Logs</h4>
-                    <p class="text-[10px] text-slate-400 font-semibold">Previously confirmed purchases registered in database records.</p>
+                    <h4 class="text-xs font-bold text-white tracking-wider uppercase">Saved Database Stock Logs</h4>
+                    <p class="text-[10px] text-slate-505 font-semibold">Previously confirmed purchases recorded in system warehouses</p>
                 </div>
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+                <div class="glass-card rounded-2xl border border-slate-800/60 shadow-sm overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs min-w-[700px]">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                            <tr class="border-b border-slate-800/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                                 <th class="py-3 px-4">Item ID</th>
                                 <th class="py-3 px-4">Product Name</th>
                                 <th class="py-3 px-4">Warehouse Depot</th>
@@ -277,9 +380,9 @@
                                 <th class="py-3 px-4">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="itemsTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tbody id="itemsTableBody" class="divide-y divide-slate-800/40 font-semibold text-slate-300">
                             <tr>
-                                <td colspan="7" class="text-center py-6 text-slate-400">No inventory items saved yet.</td>
+                                <td colspan="7" class="text-center py-6 text-slate-505">No inventory items saved yet.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -315,6 +418,11 @@
         });
     }
 
+    function handleLogout() {
+        AuthUtils.logout();
+        window.location.href = "../index.html";
+    }
+
     // Set Admin details on load
     document.addEventListener('DOMContentLoaded', () => {
         const user = AuthUtils.getUser();
@@ -331,7 +439,18 @@
             }
         }
     });
-</script>
 
+    function toggleWarehouseSubmenu() {
+        const submenu = document.getElementById('warehouse-submenu');
+        const arrow = document.getElementById('warehouse-arrow');
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            submenu.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+</script>
 </body>
 </html>

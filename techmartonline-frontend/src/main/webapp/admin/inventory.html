@@ -4,144 +4,213 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Inventory - TechMart Admin</title>
-    <link rel="stylesheet" href="../css/tailwind.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="../css/style.css" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
+        body, aside, button, select, input, textarea, td, th, h1, h2, h3, h4, span, p, a {
+            font-family: "Plus Jakarta Sans", sans-serif !important;
+        }
         body {
-            display: block !important;
-            background-color: #f8fafc;
+            background-color: #0b0f19;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .glass-card {
+            background: rgba(13, 18, 31, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .glass-card:hover {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(13, 18, 31, 0.6);
+        }
+        .premium-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f1f5f9;
+            transition: all 0.2s ease-in-out;
+        }
+        .premium-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.15);
+            outline: none;
+            background: rgba(15, 23, 42, 0.95);
         }
     </style>
 </head>
-<body class="bg-slate-50 font-['Urbanist'] antialiased">
+<body class="text-slate-200 antialiased custom-scrollbar">
 
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div>
         <!-- Logo -->
-        <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
-            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl font-bold text-xl">🛒</span>
+        <div class="px-6 py-7 border-b border-slate-800/60 flex items-center gap-3">
+            <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-bold text-lg shadow-lg shadow-amber-500/10">
+                ⚡
+            </div>
             <div>
-                <h2 class="font-black text-lg leading-tight tracking-wide">TechMart</h2>
-                <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
+                <h2 class="font-bold text-sm leading-tight tracking-tight text-white">TechMart</h2>
+                <span class="text-[9px] text-amber-400 font-semibold uppercase tracking-widest block mt-0.5">Core Admin</span>
             </div>
         </div>
-                <!-- Nav Links -->
-        <nav class="px-4 py-6 space-y-1.5">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📊</span> Dashboard
+
+        <!-- Nav Links -->
+        <nav class="px-4 py-6 space-y-1 h-[calc(100vh-170px)] overflow-y-auto custom-scrollbar">
+            
+            <a href="dashboard.html" id="nav-dashboard" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 mb-2">
+                Dashboard
             </a>
-            <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📦</span> Products
-            </a>
-            <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📋</span> Orders
-            </a>
-            <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">👥</span> Users
-            </a>
-            <a href="inventory.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-950 bg-amber-400 font-bold transition-all duration-200 shadow-lg shadow-amber-400/10">
-                <span class="text-lg">📈</span> Inventory
-            </a>
-            <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🏢</span> Warehouses
-            </a>
-            <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🏭</span> Suppliers
-            </a>
-            <a href="invoices.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🧾</span> Invoices
-            </a>
-            <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📊</span> Reports
-            </a>
+            
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Management</p>
+                <a href="products.html" id="nav-products" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Products</span>
+                </a>
+                <a href="orders.html" id="nav-orders" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Orders</span>
+                </a>
+                <a href="order-packing.html" id="nav-order-packing" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Order Packing</span>
+                </a>
+                <a href="users.html" id="nav-users" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Users</span>
+                </a>
+            </div>
+
+            <!-- Warehouses Expandable Menu Group -->
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Logistics</p>
+                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-2 rounded-lg text-slate-105 bg-slate-800/40 font-bold text-[13px] transition-all duration-200 group focus:outline-none cursor-pointer">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Warehouses</span>
+                    <span id="warehouse-arrow" class="text-[9px] text-slate-500 transition-transform duration-200">▼</span>
+                </button>
+                <div id="warehouse-submenu" class="pl-5 pr-2 py-1 space-y-0.5 rounded-lg mx-2 border-l border-slate-800/60 ml-6">
+                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Dashboard</a>
+                    <a href="warehouses.html" id="sub-wh-locations" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Locations & Slots</a>
+                    <a href="inventory.html" id="sub-wh-inventory" class="block py-1.5 px-3 text-[12px] text-amber-400 font-bold rounded bg-slate-800/30 transition-all">Inventory Stock</a>
+                    <a href="warehouse-transfers.html" id="sub-wh-transfers" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Transfers</a>
+                </div>
+            </div>
+
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Finance & Analytics</p>
+                <a href="suppliers.html" id="nav-suppliers" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Suppliers</span>
+                </a>
+                <a href="invoices.html" id="nav-invoices" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Invoices</span>
+                </a>
+                <a href="reports.html" id="nav-reports" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Reports</span>
+                </a>
+                <a href="performance-metrics.html" id="nav-performance-metrics" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Performance Metrics</span>
+                </a>
+            </div>
         </nav>
     </div>
+
     <!-- Profile & Logout -->
-    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+    <div class="p-4 border-t border-slate-800/60 bg-[#06090f]">
         <div class="flex items-center gap-3 px-2 py-2 mb-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">A</div>
+            <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/50 flex items-center justify-center font-bold text-xs shadow-sm">
+                A
+            </div>
             <div>
-                <h4 class="font-bold text-sm text-slate-100" id="adminName">Administrator</h4>
-                <p class="text-[11px] text-slate-500 font-semibold">admin@techmart.com</p>
+                <h4 id="adminName" class="font-semibold text-[13px] text-slate-200">Administrator</h4>
+                <p class="text-[10px] text-slate-500 font-medium">admin@techmart.com</p>
             </div>
         </div>
-        <button onclick="AuthUtils.logout()" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-50 text-rose-500 hover:text-white text-sm font-bold transition-all duration-200 border border-rose-500/20 cursor-pointer">
-            <span>🚪</span> Log Out
+        <button onclick="AuthUtils.logout()" class="flex items-center justify-center w-full py-2 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 text-[12px] font-semibold transition-all duration-200 cursor-pointer">
+            Log Out
         </button>
     </div>
 </aside>
 
 <!-- Sidebar Overlay for Mobile -->
-<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/60 hidden backdrop-blur-sm transition-opacity duration-300 lg:hidden"></div>
 
 <!-- Content Wrapper -->
-<div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
+<div class="lg:pl-64 min-h-screen bg-[#0b0f19] flex flex-col">
     <!-- Top Header -->
-    <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
+    <header class="sticky top-0 z-30 h-16 bg-[#0d121f]/80 backdrop-blur-md border-b border-slate-800/50 px-6 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-4">
-            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
+            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-400 hover:bg-slate-800/60 transition-all">
                 <span class="text-xl">☰</span>
             </button>
-            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Inventory & Stock Replenishment</h1>
+            <h1 class="text-xs font-semibold text-slate-400 tracking-wider uppercase hidden sm:block">Inventory & Stock Replenishment</h1>
         </div>
         <div class="flex items-center gap-4">
-            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live WebSocket Logs
+            <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/5 border border-emerald-500/20 px-3 py-1.5 rounded-xl flex items-center gap-2 tracking-wide">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live JMS Broker
             </span>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6 space-y-6">
-        <div class="flex flex-col gap-1">
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight">📈 Stock Replenishment</h2>
-            <p class="text-sm text-slate-500 font-medium">Replenish stock of products at different warehouses using J2EE backend notifications.</p>
+    <main class="flex-1 p-6 lg:p-8 space-y-6 max-w-[1600px] w-full mx-auto">
+        <div class="flex flex-col gap-1 text-left">
+            <h2 class="text-xl font-bold text-white tracking-tight">📈 Stock Replenishment Workspace</h2>
+            <p class="text-xs text-slate-400 font-medium">Replenish stock of products at different warehouses using J2EE backend notifications.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Replenishment Form -->
-            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
-                <h3 class="font-bold text-slate-900 border-b border-slate-100 pb-3">📦 Replenish Form</h3>
+            <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-6 text-left">
+                <h3 class="font-bold text-white border-b border-slate-800/60 pb-3">📦 Replenish Form</h3>
                 
                 <form id="replenishForm" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="flex flex-col gap-1.5">
-                            <label for="repProductId" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Product ID</label>
-                            <input type="number" id="repProductId" placeholder="e.g. 1" required class="px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-amber-400 bg-slate-50/50" />
+                            <label for="repProductId" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product ID</label>
+                            <input type="number" id="repProductId" placeholder="e.g. 1" required class="px-4 py-3 rounded-xl premium-input text-xs font-bold" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <label for="repQuantity" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Replenishment Quantity</label>
-                            <input type="number" id="repQuantity" placeholder="e.g. 50" required min="1" class="px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-amber-400 bg-slate-50/50" />
+                            <label for="repQuantity" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Replenishment Quantity</label>
+                            <input type="number" id="repQuantity" placeholder="e.g. 50" required min="1" class="px-4 py-3 rounded-xl premium-input text-xs font-bold" />
                         </div>
                     </div>
 
                     <div class="flex flex-col gap-1.5">
-                        <label for="repWarehouse" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Warehouse Name</label>
-                        <select id="repWarehouse" required class="px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:focus:border-amber-400 bg-slate-50/50">
+                        <label for="repWarehouse" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Warehouse Name</label>
+                        <select id="repWarehouse" required class="px-4 py-3 rounded-xl premium-input text-xs font-bold bg-[#0d121f] text-slate-350 cursor-pointer">
                             <option value="Colombo Main Warehouse">Colombo Main Warehouse</option>
                             <option value="Kandy Secondary Depot">Kandy Secondary Depot</option>
                             <option value="Galle Coastal Storage">Galle Coastal Storage</option>
                         </select>
                     </div>
 
-                    <button type="submit" id="replenishBtn" class="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black rounded-xl shadow-lg shadow-amber-400/10 text-sm transition-all duration-200 cursor-pointer">
+                    <button type="submit" id="replenishBtn" class="w-full py-3.5 bg-slate-800/60 hover:bg-amber-400 text-amber-450 hover:text-slate-950 border border-slate-700/50 font-bold rounded-xl text-xs transition-all cursor-pointer">
                         Replenish Stock
                     </button>
                 </form>
             </div>
 
             <!-- WebSocket Live Logs -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-                <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-900 flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span> Live Logs
+            <div class="glass-card rounded-2xl p-6 space-y-4 text-left">
+                <div class="border-b border-slate-800/60 pb-3 flex justify-between items-center">
+                    <h3 class="font-bold text-white flex items-center gap-1.5 text-sm">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> JMS Logs
                     </h3>
-                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">WebSocket</span>
+                    <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">WebSocket Link</span>
                 </div>
-                <div id="wsReplenishLog" class="h-64 overflow-y-auto space-y-2 border border-slate-100 rounded-xl p-3 bg-slate-50/30">
-                    <div class="text-center py-12 text-xs text-slate-400 font-medium">
+                <div id="wsReplenishLog" class="h-64 overflow-y-auto space-y-2 border border-slate-800/60 rounded-xl p-3 bg-slate-950/30 custom-scrollbar">
+                    <div class="text-center py-12 text-xs text-slate-500 font-medium">
                         Waiting for real-time replenishment notifications...
                     </div>
                 </div>
@@ -175,15 +244,52 @@
         });
     }
 
+    // Toggle warehouse submenu display
+    function toggleWarehouseSubmenu() {
+        const submenu = document.getElementById('warehouse-submenu');
+        const arrow = document.getElementById('warehouse-arrow');
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            submenu.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
     // Set Admin details on load
     document.addEventListener('DOMContentLoaded', () => {
+        if (!AuthUtils.checkAuth('ADMIN')) return;
         const user = AuthUtils.getUser();
         if (user) {
             const adminName = document.getElementById('adminName');
-            if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
+            if (adminName) {
+                if (user.firstName && user.lastName) {
+                    adminName.textContent = `${user.firstName} ${user.lastName}`;
+                } else if (user.name) {
+                    adminName.textContent = user.name;
+                } else if (user.email) {
+                    adminName.textContent = user.email.split('@')[0];
+                }
+            }
+        }
+
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('warehouse-dashboard.html') || currentPath.includes('warehouses.html') || currentPath.includes('inventory.html') || currentPath.includes('warehouse-transfers.html')) {
+            const submenu = document.getElementById('warehouse-submenu');
+            const arrow = document.getElementById('warehouse-arrow');
+            if (submenu) submenu.classList.remove('hidden');
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+            
+            if (currentPath.includes('inventory.html')) {
+                const sub = document.getElementById('sub-wh-inventory');
+                if (sub) {
+                    sub.style.color = '#fbbf24';
+                    sub.style.fontWeight = '900';
+                }
+            }
         }
     });
 </script>
-
 </body>
 </html>

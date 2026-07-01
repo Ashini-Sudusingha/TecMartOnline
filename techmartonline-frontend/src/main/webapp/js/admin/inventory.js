@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const log = document.getElementById('wsReplenishLog');
         if (log) {
             const time = new Date(message.timestamp).toLocaleTimeString();
-            log.innerHTML = `<div class="p-3 bg-amber-50 text-amber-800 rounded-xl text-xs font-bold border border-amber-200 mb-2">
+            log.innerHTML = `<div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl text-xs font-bold border border-amber-500/20 mb-2 text-left animate-fade-in">
                 [${time}] Replenished Product #${message.productId} with ${message.replenishedQuantity} units inside ${message.warehouseName}
             </div>` + log.innerHTML;
         }

@@ -4,30 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shopping Cart - TechMart Online</title>
-    <link rel="stylesheet" href="../css/tailwind.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <style>
         body {
+            font-family: "Plus Jakarta Sans", sans-serif !important;
             background-color: #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
-<body class="font-['Urbanist'] text-slate-800 bg-slate-50 antialiased min-h-screen flex flex-col justify-between">
+<body class="text-slate-800 antialiased custom-scrollbar min-h-screen flex flex-col justify-between">
 
 <!-- Header Navigation -->
-<nav class="bg-white border-b border-slate-100 sticky top-0 z-50 py-4 shadow-sm">
+<nav class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 py-4 shadow-sm">
     <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
-        <a href="../index.html" class="flex items-center gap-2 font-black text-2xl text-slate-900">
-            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl text-lg font-bold">🛒</span>
+        <!-- Logo -->
+        <a href="../index.html" class="flex items-center gap-3 font-extrabold text-xl text-slate-900 tracking-tight">
+            <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/10">
+                <svg class="w-5 h-5 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1,0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0,1-1.12-1.243l1.264-12A1.125 1.125 0 0,1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1,1-.75 0 .375.375 0 0,1 .75 0Zm7.5 0a.375.375 0 1,1-.75 0 .375.375 0 0,1 .75 0Z" />
+                </svg>
+            </div>
             TechMart
         </a>
-        <div class="flex items-center gap-6 font-semibold text-sm">
-            <a href="products.html" class="text-slate-600 hover:text-slate-900 transition-colors">Products</a>
-            <a href="cart.html" class="text-amber-500 font-bold">Cart</a>
-            <a href="orders.html" class="text-slate-600 hover:text-slate-900 transition-colors">Orders</a>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+            <a href="products.html" class="text-slate-600 hover:text-slate-955 transition-colors">Shop Products</a>
+            <a href="cart.html" class="text-amber-500 transition-colors flex items-center gap-1.5">
+                Cart
+                <span id="cartCountBadgeMenu" class="hidden px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-400 text-slate-950">0</span>
+            </a>
+            <a href="profile.html" class="text-slate-600 hover:text-slate-955 transition-colors">My Profile</a>
         </div>
+
+        <!-- Logout Action -->
         <div class="flex items-center gap-3">
-            <button onclick="logout()" class="px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all cursor-pointer">Logout</button>
+            <button onclick="logout()" class="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all border border-slate-200/60 cursor-pointer">
+                Logout
+            </button>
         </div>
     </div>
 </nav>
@@ -108,6 +137,16 @@
         const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         countBadge.textContent = `${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}`;
 
+        const menuBadge = document.getElementById('cartCountBadgeMenu');
+        if (menuBadge) {
+            if (totalItemsCount > 0) {
+                menuBadge.textContent = totalItemsCount;
+                menuBadge.classList.remove('hidden');
+            } else {
+                menuBadge.classList.add('hidden');
+            }
+        }
+
         if (cart.length === 0) {
             list.innerHTML = '';
             emptyMsg.classList.remove('hidden');
@@ -126,10 +165,19 @@
         list.innerHTML = cart.map(item => {
             const itemTotal = item.price * item.quantity;
             subtotal += itemTotal;
+
+            const imageIcon = item.image || '📦';
+            const isUrl = imageIcon.startsWith('http://') || imageIcon.startsWith('https://') || imageIcon.startsWith('data:image/');
+            const imageElement = isUrl 
+                ? `<img src="${imageIcon}" class="w-full h-full object-cover rounded-2xl" />`
+                : `<span class="text-3xl">${imageIcon}</span>`;
+
             return `
                 <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between gap-4 transition-all hover:border-slate-200">
                     <div class="flex items-center gap-4">
-                        <span class="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-3xl border border-slate-100 flex-shrink-0">${item.image || '📦'}</span>
+                        <div class="w-14 h-14 bg-slate-50 flex items-center justify-center border border-slate-100 flex-shrink-0 rounded-2xl overflow-hidden">
+                            ${imageElement}
+                        </div>
                         <div>
                             <h3 class="font-bold text-slate-900 leading-tight">${item.name}</h3>
                             <span class="text-sm font-black text-amber-500 block mt-1">$${item.price.toFixed(2)}</span>

@@ -10,7 +10,7 @@ public class InventoryDTO implements Serializable {
     private String productName;
     private Long warehouseId;
     private String warehouseName;
-    private Long warehouseLocationId;
+    private String warehouseLocationId;
     private String location;
     private int stockQuantity;
     private double buyingPrice;
@@ -25,7 +25,7 @@ public class InventoryDTO implements Serializable {
         this.productName = productName;
         this.warehouseId = warehouseId;
         this.warehouseName = warehouseName;
-        this.warehouseLocationId = warehouseLocationId;
+        this.warehouseLocationId = warehouseLocationId != null ? warehouseLocationId.toString() : null;
         this.location = location;
         this.stockQuantity = stockQuantity;
         this.buyingPrice = buyingPrice;
@@ -73,12 +73,16 @@ public class InventoryDTO implements Serializable {
         this.warehouseName = warehouseName;
     }
 
-    public Long getWarehouseLocationId() {
+    public String getWarehouseLocationId() {
         return warehouseLocationId;
     }
 
-    public void setWarehouseLocationId(Long warehouseLocationId) {
+    public void setWarehouseLocationId(String warehouseLocationId) {
         this.warehouseLocationId = warehouseLocationId;
+    }
+
+    public Long getWarehouseLocationIdAsLong() {
+        return warehouseLocationId != null ? Long.valueOf(warehouseLocationId) : null;
     }
 
     public String getLocation() {

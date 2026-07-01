@@ -9,7 +9,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lk.jiat.techmart.dto.InventoryDTO;
+import lk.jiat.techmart.dto.LocationTransferRequestDTO;
+import lk.jiat.techmart.entity.Inventory;
+import lk.jiat.techmart.entity.WarehouseLocation;
+import lk.jiat.techmart.entity.WarehouseInventoryTransfer;
+import lk.jiat.techmart.entity.User;
 import lk.jiat.techmart.jms.InventoryPublisher;
+import jakarta.transaction.Transactional;
+import java.util.Date;
 import lk.jiat.techmart.security.JWTUtil;
 import lk.jiat.techmart.util.ResponseUtil;
 
@@ -127,7 +134,7 @@ public class InventoryResource {
             lk.jiat.techmart.entity.Invoice invoice = em.find(lk.jiat.techmart.entity.Invoice.class, invoiceId);
             lk.jiat.techmart.entity.Product product = em.find(lk.jiat.techmart.entity.Product.class, dto.getProductId());
             lk.jiat.techmart.entity.Warehouse warehouse = em.find(lk.jiat.techmart.entity.Warehouse.class, dto.getWarehouseId());
-            lk.jiat.techmart.entity.WarehouseLocation location = em.find(lk.jiat.techmart.entity.WarehouseLocation.class, dto.getWarehouseLocationId());
+            lk.jiat.techmart.entity.WarehouseLocation location = em.find(lk.jiat.techmart.entity.WarehouseLocation.class, dto.getWarehouseLocationIdAsLong());
 
             if (invoice == null || product == null || warehouse == null || location == null) {
                 return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Invalid invoice, product, warehouse, or location references.");
@@ -239,7 +246,7 @@ public class InventoryResource {
 
                 lk.jiat.techmart.entity.Product product = em.find(lk.jiat.techmart.entity.Product.class, dto.getProductId());
                 lk.jiat.techmart.entity.Warehouse warehouse = em.find(lk.jiat.techmart.entity.Warehouse.class, dto.getWarehouseId());
-                lk.jiat.techmart.entity.WarehouseLocation location = em.find(lk.jiat.techmart.entity.WarehouseLocation.class, dto.getWarehouseLocationId());
+                lk.jiat.techmart.entity.WarehouseLocation location = em.find(lk.jiat.techmart.entity.WarehouseLocation.class, dto.getWarehouseLocationIdAsLong());
 
                 if (product == null || warehouse == null || location == null) {
                     return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Invalid references specified for an item.");
@@ -339,5 +346,142 @@ public class InventoryResource {
             return ResponseUtil.buildErrorResponse(Status.FORBIDDEN, "Permission denied. Admin role required.");
         }
         return null;
+    }
+
+    @POST
+    @Path("/transfer")
+    @Transactional
+    public Response transferLocation(@HeaderParam("Authorization") String authHeader, LocationTransferRequestDTO request) {
+        Response authCheck = checkAdmin(authHeader);
+        if (authCheck != null) return authCheck;
+
+        if (request == null || request.getInventoryId() == null || request.getNewLocationId() == null) {
+            return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Inventory and target location parameters are required.");
+        }
+
+        try {
+            String token = authHeader.substring(7);
+            String email = JWTUtil.getSubject(token);
+
+            TypedQuery<User> userQuery = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
+            userQuery.setParameter("email", email);
+            User user = userQuery.getSingleResult();
+
+            Inventory inventory = em.find(Inventory.class, request.getInventoryId());
+            Long newLocId = Long.parseLong(request.getNewLocationId());
+            WarehouseLocation newLoc = em.find(WarehouseLocation.class, newLocId);
+
+            if (inventory == null || newLoc == null || user == null) {
+                System.out.println("=== DEBUG LOCATION TRANSFER ===");
+                System.out.println("inventoryId passed: " + request.getInventoryId() + " -> loaded: " + (inventory != null));
+                System.out.println("newLocationId passed: " + request.getNewLocationId() + " -> loaded: " + (newLoc != null));
+                System.out.println("user email: " + email + " -> loaded: " + (user != null));
+                return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Invalid inventory, location, or user references. (Inv: " + (inventory != null) + ", Loc: " + (newLoc != null) + ", User: " + (user != null) + ")");
+            }
+
+            WarehouseLocation oldLoc = inventory.getWarehouseLocation();
+            if (oldLoc.getId().equals(newLoc.getId())) {
+                return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Target location is the same as the current location.");
+            }
+
+            if (newLoc.getQuantity() + inventory.getStockQuantity() > newLoc.getMaxCapacity()) {
+                return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, 
+                    "Target location exceeds capacity limit (" + newLoc.getQuantity() + "/" + newLoc.getMaxCapacity() + ").");
+            }
+
+            // Adjust location quantities
+            oldLoc.setQuantity(oldLoc.getQuantity() - inventory.getStockQuantity());
+            em.merge(oldLoc);
+
+            newLoc.setQuantity(newLoc.getQuantity() + inventory.getStockQuantity());
+            em.merge(newLoc);
+
+            // Update inventory record location and warehouse
+            inventory.setWarehouseLocation(newLoc);
+            inventory.setWarehouse(newLoc.getWarehouse());
+            em.merge(inventory);
+
+            // Find or create "Completed" status
+            TypedQuery<lk.jiat.techmart.entity.Status> statusQuery = em.createQuery("SELECT s FROM Status s WHERE s.name = :name", lk.jiat.techmart.entity.Status.class);
+            statusQuery.setParameter("name", "Completed");
+            List<lk.jiat.techmart.entity.Status> statuses = statusQuery.getResultList();
+            lk.jiat.techmart.entity.Status status;
+            if (!statuses.isEmpty()) {
+                status = statuses.get(0);
+            } else {
+                status = new lk.jiat.techmart.entity.Status();
+                status.setName("Completed");
+                em.persist(status);
+            }
+
+            // Log WarehouseInventoryTransfer
+            WarehouseInventoryTransfer transfer = new WarehouseInventoryTransfer();
+            transfer.setOldLocation(oldLoc);
+            transfer.setNewLocation(newLoc);
+            transfer.setInventory(inventory);
+            transfer.setCreatedAt(new Date());
+            transfer.setUser(user);
+            transfer.setStatus(status);
+            em.persist(transfer);
+
+            // Broadcast WebSocket alert!
+            String wsMsg = String.format(
+                "{\"type\": \"locationTransfer\", \"productName\": \"%s\", \"oldLoc\": \"%s\", \"newLoc\": \"%s\", \"qty\": %d, \"sourceWarehouseId\": %d, \"sourceWarehouseName\": \"%s\", \"destWarehouseId\": %d, \"destWarehouseName\": \"%s\"}",
+                inventory.getProduct().getName().replace("\"", "\\\""),
+                oldLoc.getLocation().replace("\"", "\\\""),
+                newLoc.getLocation().replace("\"", "\\\""),
+                inventory.getStockQuantity(),
+                oldLoc.getWarehouse().getId(),
+                oldLoc.getWarehouse().getName().replace("\"", "\\\""),
+                newLoc.getWarehouse().getId(),
+                newLoc.getWarehouse().getName().replace("\"", "\\\"")
+            );
+            lk.jiat.techmart.websocket.InventoryWebSocket.broadcast(wsMsg);
+
+            return ResponseUtil.buildSuccessResponse("Inventory location transferred successfully", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, "Internal server error: " + e.getMessage());
+        }
+    }
+
+    @GET
+    @Path("/transfers")
+    public Response getTransferHistory(@HeaderParam("Authorization") String authHeader) {
+        Response authCheck = checkAdmin(authHeader);
+        if (authCheck != null) return authCheck;
+
+        try {
+            TypedQuery<WarehouseInventoryTransfer> query = em.createQuery(
+                "SELECT wit FROM WarehouseInventoryTransfer wit ORDER BY wit.createdAt DESC",
+                WarehouseInventoryTransfer.class
+            );
+            List<WarehouseInventoryTransfer> list = query.getResultList();
+
+            List<lk.jiat.techmart.dto.WarehouseInventoryTransferDTO> dtos = new ArrayList<>();
+            for (WarehouseInventoryTransfer wit : list) {
+                String srcWh = wit.getOldLocation().getWarehouse() != null ? wit.getOldLocation().getWarehouse().getName() : "Unknown";
+                String destWh = wit.getNewLocation().getWarehouse() != null ? wit.getNewLocation().getWarehouse().getName() : "Unknown";
+                String userName = wit.getUser() != null ? wit.getUser().getFname() + " " + wit.getUser().getLname() : "System";
+
+                dtos.add(new lk.jiat.techmart.dto.WarehouseInventoryTransferDTO(
+                    wit.getId(),
+                    wit.getInventory().getProduct().getName(),
+                    wit.getInventory().getStockQuantity(),
+                    wit.getOldLocation().getLocation(),
+                    wit.getNewLocation().getLocation(),
+                    srcWh,
+                    destWh,
+                    wit.getCreatedAt().getTime(),
+                    userName,
+                    wit.getStatus().getName()
+                ));
+            }
+
+            return ResponseUtil.buildSuccessResponse("Transfer history retrieved successfully", dtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, "Internal server error: " + e.getMessage());
+        }
     }
 }

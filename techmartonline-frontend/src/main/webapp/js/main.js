@@ -5,58 +5,32 @@
  * ============================================================
  */
 
-// ============================================================ */
-// PRODUCT DATA
-// ============================================================ */
-const products = {
+// Fallback mockup data in case API fails
+const mockupProducts = {
     newArrivals: [
         {
             id: 101,
             name: 'MacBook Pro M3 16"',
             category: 'Electronics',
             price: 2499.99,
-            oldPrice: 2799.99,
             rating: 4.9,
             reviews: 128,
             emoji: '💻',
             badge: 'new',
-            badgeText: 'NEW'
+            badgeText: 'NEW',
+            stockQty: 5
         },
         {
             id: 102,
             name: 'Sony WH-1000XM6',
             category: 'Audio',
             price: 399.99,
-            oldPrice: null,
             rating: 4.8,
             reviews: 95,
             emoji: '🎧',
             badge: 'new',
-            badgeText: 'NEW'
-        },
-        {
-            id: 103,
-            name: 'Samsung Galaxy S24 Ultra',
-            category: 'Electronics',
-            price: 1299.99,
-            oldPrice: 1499.99,
-            rating: 4.9,
-            reviews: 210,
-            emoji: '📱',
-            badge: 'new',
-            badgeText: 'NEW'
-        },
-        {
-            id: 104,
-            name: 'Dell XPS 16"',
-            category: 'Electronics',
-            price: 1899.99,
-            oldPrice: null,
-            rating: 4.7,
-            reviews: 78,
-            emoji: '🖥️',
-            badge: 'new',
-            badgeText: 'NEW'
+            badgeText: 'NEW',
+            stockQty: 8
         }
     ],
     trending: [
@@ -65,95 +39,71 @@ const products = {
             name: 'Apple AirPods Pro 3',
             category: 'Audio',
             price: 249.99,
-            oldPrice: null,
             rating: 4.8,
             reviews: 450,
             emoji: '🎧',
             badge: 'trending',
-            badgeText: '🔥 TRENDING'
-        },
-        {
-            id: 202,
-            name: 'Logitech MX Master 4S',
-            category: 'Accessories',
-            price: 99.99,
-            oldPrice: null,
-            rating: 4.9,
-            reviews: 320,
-            emoji: '🖱️',
-            badge: 'trending',
-            badgeText: '🔥 TRENDING'
-        },
-        {
-            id: 203,
-            name: 'LG 32" 4K OLED Monitor',
-            category: 'Electronics',
-            price: 899.99,
-            oldPrice: 1099.99,
-            rating: 4.7,
-            reviews: 180,
-            emoji: '🖥️',
-            badge: 'sale',
-            badgeText: 'SALE'
-        },
-        {
-            id: 204,
-            name: 'Bose QuietComfort Ultra',
-            category: 'Audio',
-            price: 429.99,
-            oldPrice: null,
-            rating: 4.9,
-            reviews: 290,
-            emoji: '🎧',
-            badge: 'trending',
-            badgeText: '🔥 TRENDING'
+            badgeText: '🔥 TRENDING',
+            stockQty: 12
         }
     ]
 };
 
 // ============================================================ */
-// RENDER PRODUCT CARDS - With Add to Cart + Buy Now
+// RENDER PRODUCT CARDS - With Dynamic DB Stock Checking
 // ============================================================ */
-function renderProductCards(products, containerId) {
+function renderProductCards(productsList, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    container.innerHTML = products.map(product => {
-        // Rating stars
-        const fullStars = Math.floor(product.rating);
-        const halfStar = product.rating % 1 >= 0.5 ? 1 : 0;
-        const emptyStars = 5 - fullStars - halfStar;
-        const starsHtml = '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+    if (!productsList || productsList.length === 0) {
+        container.innerHTML = '<p class="text-slate-400 text-xs font-semibold py-8 text-center col-span-full">No products in this category.</p>';
+        return;
+    }
 
-        // Old price
-        let oldPriceHtml = '';
-        if (product.oldPrice) {
-            oldPriceHtml = `<span class="old-price">$${product.oldPrice.toFixed(2)}</span>`;
-        }
+    container.innerHTML = productsList.map(product => {
+        const imageIcon = (product.images && product.images.length > 0) ? product.images[0] : '📦';
+        const isUrl = imageIcon.startsWith('http://') || imageIcon.startsWith('https://') || imageIcon.startsWith('data:image/');
+        const imageElement = isUrl 
+            ? `<img src="${imageIcon}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />`
+            : `<span class="product-emoji">${imageIcon}</span>`;
+
+        // Check availability
+        const isAvailable = product.stockQty > 0;
+        const availabilityBadge = isAvailable
+            ? `<span style="font-size:10px; font-weight:bold; color:#059669; background:#ecfdf5; padding:2px 6px; border-radius:4px; border:1px solid #a7f3d0; margin-left:8px;">Stock: ${product.stockQty}</span>`
+            : `<span style="font-size:10px; font-weight:bold; color:#dc2626; background:#fef2f2; padding:2px 6px; border-radius:4px; border:1px solid #fecaca; margin-left:8px;">Out of Stock</span>`;
+
+        const addButton = isAvailable
+            ? `<button class="btn-add cursor-pointer" onclick="addToCart(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.stockQty}, '${isUrl ? imageIcon : '📦'}')">🛒 Add to Cart</button>`
+            : `<button class="btn-add cursor-not-allowed" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0;" disabled>Sold Out</button>`;
+
+        const buyButton = isAvailable
+            ? `<button class="btn-buy cursor-pointer" onclick="buyNow(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.stockQty}, '${isUrl ? imageIcon : '📦'}')">⚡ Buy Now</button>`
+            : `<button class="btn-buy cursor-not-allowed" style="background:#f8fafc; color:#cbd5e1; border:1px solid #f1f5f9;" disabled>Sold Out</button>`;
 
         return `
             <div class="product-card" data-id="${product.id}">
-                <span class="badge ${product.badge}">${product.badgeText}</span>
+                <span class="badge new">NEW</span>
                 <div class="image-wrapper">
-                    <span class="product-emoji">${product.emoji}</span>
+                    ${imageElement}
                 </div>
                 <div class="body">
-                    <span class="category-tag">${product.category}</span>
-                    <h3 class="name">${product.name}</h3>
+                    <div style="display:flex; justify-between; align-items:center;">
+                        <span class="category-tag">${product.category || 'General'}</span>
+                        ${availabilityBadge}
+                    </div>
+                    <h3 class="name"><a href="user/product-detail.html?id=${product.id}">${product.name}</a></h3>
                     <div class="rating">
-                        <span class="stars">${starsHtml}</span>
-                        <span class="count">(${product.reviews})</span>
+                        <span class="stars">★★★★★</span>
+                        <span class="count">(10)</span>
                     </div>
                     <div class="price-row">
-                        <span class="price">$${product.price.toFixed(2)} ${oldPriceHtml}</span>
+                        <span class="price">${Helpers.formatPrice(product.price)}</span>
                     </div>
                     <div class="actions">
-                        <button class="btn-add" onclick="addToCart(${product.id}, '${product.name}', ${product.price}, '${product.emoji}')">
-                            🛒 Add to Cart
-                        </button>
-                        <button class="btn-buy" onclick="buyNow(${product.id}, '${product.name}', ${product.price}, '${product.emoji}')">
-                            ⚡ Buy Now
-                        </button>
+                        ${addButton}
+                        ${buyButton}
                         <button class="btn-wishlist" onclick="toggleWishlist(${product.id})">
                             ♡
                         </button>
@@ -163,21 +113,24 @@ function renderProductCards(products, containerId) {
         `;
     }).join('');
 
-    // Load wishlist state
     loadWishlistState();
 }
 
 // ============================================================ */
 // ADD TO CART
 // ============================================================ */
-function addToCart(id, name, price, emoji) {
+function addToCart(id, name, price, maxStock, image) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existing = cart.find(item => item.id === id);
 
     if (existing) {
+        if (existing.quantity >= maxStock) {
+            alert(`❌ Cannot add more! Only ${maxStock} units available in stock.`);
+            return;
+        }
         existing.quantity += 1;
     } else {
-        cart.push({ id, name, price, emoji, quantity: 1 });
+        cart.push({ id, name, price, image, quantity: 1 });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -188,15 +141,17 @@ function addToCart(id, name, price, emoji) {
     cards.forEach(card => {
         if (card.dataset.id == id) {
             const btn = card.querySelector('.btn-add');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Added!';
-            btn.style.backgroundColor = '#5FC756';
-            btn.style.color = 'white';
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.backgroundColor = '';
-                btn.style.color = '';
-            }, 2000);
+            if (btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Added!';
+                btn.style.backgroundColor = '#5FC756';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            }
         }
     });
 }
@@ -204,21 +159,23 @@ function addToCart(id, name, price, emoji) {
 // ============================================================ */
 // BUY NOW - Redirect to checkout with product
 // ============================================================ */
-function buyNow(id, name, price, emoji) {
-    // Add to cart first
+function buyNow(id, name, price, maxStock, image) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existing = cart.find(item => item.id === id);
 
     if (existing) {
+        if (existing.quantity >= maxStock) {
+            window.location.href = 'user/checkout.html';
+            return;
+        }
         existing.quantity += 1;
     } else {
-        cart.push({ id, name, price, emoji, quantity: 1 });
+        cart.push({ id, name, price, image, quantity: 1 });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    // Redirect to checkout page
     window.location.href = 'user/checkout.html';
 }
 
@@ -237,23 +194,21 @@ function toggleWishlist(productId) {
 
     localStorage.setItem('wishlist', JSON.stringify(wishlist));
 
-    // Update UI
     const card = document.querySelector(`.product-card[data-id="${productId}"]`);
     if (card) {
         const btn = card.querySelector('.btn-wishlist');
-        if (wishlist.includes(productId)) {
-            btn.innerHTML = '❤️';
-            btn.classList.add('active');
-        } else {
-            btn.innerHTML = '♡';
-            btn.classList.remove('active');
+        if (btn) {
+            if (wishlist.includes(productId)) {
+                btn.innerHTML = '❤️';
+                btn.classList.add('active');
+            } else {
+                btn.innerHTML = '♡';
+                btn.classList.remove('active');
+            }
         }
     }
 }
 
-// ============================================================ */
-// LOAD WISHLIST STATE
-// ============================================================ */
 function loadWishlistState() {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     wishlist.forEach(id => {
@@ -281,9 +236,6 @@ function updateCartCount() {
     });
 }
 
-// ============================================================ */
-// CATEGORY BUTTONS - Active State
-// ============================================================ */
 function initCategoryButtons() {
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -293,9 +245,6 @@ function initCategoryButtons() {
     });
 }
 
-// ============================================================ */
-// MOBILE MENU
-// ============================================================ */
 function initMobileMenu() {
     const menuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -313,9 +262,6 @@ function initMobileMenu() {
     }
 }
 
-// ============================================================ */
-// DYNAMIC NAVIGATION BASED ON AUTH
-// ============================================================ */
 function initDynamicNav() {
     if (typeof AuthUtils === 'undefined') return;
     if (AuthUtils.isAuthenticated()) {
@@ -343,12 +289,24 @@ function initDynamicNav() {
 }
 
 // ============================================================ */
-// INIT
+// INIT - Load dynamic products from DB
 // ============================================================ */
-document.addEventListener('DOMContentLoaded', function() {
-    // Render products
-    renderProductCards(products.newArrivals, 'newArrivalsGrid');
-    renderProductCards(products.trending, 'trendingGrid');
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const dbProducts = await ProductsAPI.getAll();
+        
+        // Show actual database products
+        const newArrivals = dbProducts.slice(0, 4);
+        const trending = dbProducts.slice(4, 8);
+
+        renderProductCards(newArrivals, 'newArrivalsGrid');
+        renderProductCards(trending, 'trendingGrid');
+    } catch (e) {
+        console.error("Failed to load products from database:", e);
+        // Fallback to mockup data if database fails
+        renderProductCards(mockupProducts.newArrivals, 'newArrivalsGrid');
+        renderProductCards(mockupProducts.trending, 'trendingGrid');
+    }
 
     // Update cart count
     updateCartCount();
@@ -363,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initDynamicNav();
 });
 
-// Listen for storage changes (if cart updated in another tab)
 window.addEventListener('storage', function(e) {
     if (e.key === 'cart') {
         updateCartCount();

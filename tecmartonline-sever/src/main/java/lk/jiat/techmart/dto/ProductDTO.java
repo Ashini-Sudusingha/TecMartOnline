@@ -19,8 +19,17 @@ public class ProductDTO implements Serializable {
     private String category;
     private String brand;
     private List<String> images;
+    private int stockQty;
 
     public ProductDTO() {}
+
+    public int getStockQty() {
+        return stockQty;
+    }
+
+    public void setStockQty(int stockQty) {
+        this.stockQty = stockQty;
+    }
 
     public Long getId() {
         return id;

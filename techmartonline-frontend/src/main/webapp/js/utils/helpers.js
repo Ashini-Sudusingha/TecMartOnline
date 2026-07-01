@@ -4,7 +4,12 @@ const Helpers = {
     },
     formatDate(dateVal) {
         if (!dateVal) return 'N/A';
-        return new Date(dateVal).toLocaleDateString(undefined, {
+        // Clean timezone suffix like "[UTC]" or "[Asia/Colombo]" that breaks JS Date parsing
+        let cleanedDate = dateVal;
+        if (typeof dateVal === 'string') {
+            cleanedDate = dateVal.replace(/\[[^\]]+\]$/, '');
+        }
+        return new Date(cleanedDate).toLocaleDateString(undefined, {
             year: 'numeric',
             month: 'long',
             day: 'numeric',

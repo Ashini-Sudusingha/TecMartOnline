@@ -3,272 +3,288 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TechMart Online - Shop Smart</title>
-    <link rel="stylesheet" href="css/tailwind.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <!-- External CSS -->
-    <link rel="stylesheet" href="css/style.css" />
+    <title>TechMart Online - Premium Tech Destination</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif !important;
+            background-color: #f8fafc;
+        }
+        .premium-shadow {
+            box-shadow: 0 10px 30px -3px rgba(148, 163, 184, 0.06), 0 4px 12px -2px rgba(148, 163, 184, 0.03);
+        }
+        .premium-card-shadow {
+            box-shadow: 0 20px 40px -4px rgba(148, 163, 184, 0.08);
+        }
+        .hero-gradient {
+            background: radial-gradient(120% 120% at 50% 10%, #ffffff 40%, #fef3c7 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
 </head>
-<body>
+<body class="text-slate-800 antialiased custom-scrollbar min-h-screen flex flex-col justify-between">
 
-<!-- ============================================================ -->
-<!-- NAVIGATION                                                   -->
-<!-- ============================================================ -->
-<nav class="navbar">
-    <div class="container">
-        <a href="index.html" class="logo">
-            <span class="logo-icon">🛒</span>
+<!-- Header Navigation -->
+<nav class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 py-4 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3 font-extrabold text-xl text-slate-900 tracking-tight">
+            <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/10">
+                <svg class="w-5 h-5 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1,0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0,1-1.12-1.243l1.264-12A1.125 1.125 0 0,1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1,1-.75 0 .375.375 0 0,1 .75 0Zm7.5 0a.375.375 0 1,1-.75 0 .375.375 0 0,1 .75 0Z" />
+                </svg>
+            </div>
             TechMart
         </a>
-        <div class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="user/products.html">Products</a>
-            <a href="user/cart.html">Cart</a>
-            <a href="user/orders.html">Orders</a>
+
+        <!-- Center links -->
+        <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+            <a href="index.html" class="text-amber-500 transition-colors">Home</a>
+            <a href="user/products.html" class="text-slate-600 hover:text-slate-950 transition-colors">Products</a>
+            <a href="user/cart.html" class="text-slate-600 hover:text-slate-950 transition-colors flex items-center gap-1.5">
+                Cart
+                <span id="cartCountBadge" class="hidden px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-400 text-slate-950 animate-bounce">0</span>
+            </a>
+            <a href="user/profile.html" class="text-slate-600 hover:text-slate-950 transition-colors">My Profile</a>
         </div>
-        <div class="nav-actions">
-            <a href="auth/login.html" class="btn-primary">Login</a>
-            <a href="auth/signup.html" class="btn-outline">Sign Up</a>
+
+        <!-- Auth Actions / Dynamic Profile state wrapper -->
+        <div class="flex items-center gap-3">
+            <div id="authActionsContainer" class="flex items-center gap-2">
+                <!-- Swapped out automatically with dynamic state if logged in -->
+                <a href="auth/login.html" class="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-xl transition-all border border-slate-200/60">Login</a>
+                <a href="auth/signup.html" class="px-4 py-2 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-500 rounded-xl transition-all shadow-md shadow-amber-400/10">Sign Up</a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden p-1.5 text-slate-600 hover:bg-slate-50 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
         </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">Home</a>
-        <a href="user/products.html">Products</a>
-        <a href="user/cart.html">Cart</a>
-        <a href="user/orders.html">Orders</a>
-        <div class="nav-actions-mobile">
-            <a href="auth/login.html" class="btn-primary">Login</a>
-            <a href="auth/signup.html" class="btn-outline">Sign Up</a>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-100 px-6 py-4 space-y-3 bg-white">
+        <a href="index.html" class="block text-sm font-bold text-amber-500">Home</a>
+        <a href="user/products.html" class="block text-sm font-semibold text-slate-600 hover:text-slate-900">Products</a>
+        <a href="user/cart.html" class="block text-sm font-semibold text-slate-600 hover:text-slate-900">Cart</a>
+        <a href="user/profile.html" class="block text-sm font-semibold text-slate-600 hover:text-slate-900">My Profile</a>
+        <div class="pt-3 border-t border-slate-100 flex flex-col gap-2" id="mobileAuthContainer">
+            <!-- Mobile Auth state -->
         </div>
     </div>
 </nav>
 
-<!-- ============================================================ -->
-<!-- CATEGORY BUTTONS - Logo එකට යටින්                           -->
-<!-- ============================================================ -->
-<div class="container">
-    <div class="category-buttons">
-        <a href="user/products.html?category=all" class="category-btn active">
-            <span class="icon">📦</span> All
+<!-- Categories Navigation Quick Buttons -->
+<div class="bg-white border-b border-slate-100 py-3.5">
+    <div class="max-w-6xl mx-auto px-6 overflow-x-auto scrollbar-none flex gap-2">
+        <a href="user/products.html?category=all" class="flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-slate-50 text-slate-600 hover:bg-amber-400 hover:text-slate-950 border border-slate-200/50 transition-all whitespace-nowrap">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+            All Products
         </a>
-        <a href="user/products.html?category=electronics" class="category-btn">
-            <span class="icon">📱</span> Electronics
+        <a href="user/products.html?category=Laptops %26 Devices" class="flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-slate-50 text-slate-600 hover:bg-amber-400 hover:text-slate-950 border border-slate-200/50 transition-all whitespace-nowrap">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" /></svg>
+            Laptops & Devices
         </a>
-        <a href="user/products.html?category=audio" class="category-btn">
-            <span class="icon">🎧</span> Audio
+        <a href="user/products.html?category=Audio Systems" class="flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-slate-50 text-slate-600 hover:bg-amber-400 hover:text-slate-950 border border-slate-200/50 transition-all whitespace-nowrap">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" /></svg>
+            Audio Systems
         </a>
-        <a href="user/products.html?category=accessories" class="category-btn">
-            <span class="icon">⌨️</span> Accessories
+        <a href="user/products.html?category=Monitor Displays" class="flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-slate-50 text-slate-600 hover:bg-amber-400 hover:text-slate-950 border border-slate-200/50 transition-all whitespace-nowrap">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h14.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" /></svg>
+            Monitor Displays
         </a>
-        <a href="user/products.html?category=furniture" class="category-btn">
-            <span class="icon">🪑</span> Furniture
+        <a href="user/products.html?category=Accessories" class="flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl bg-slate-50 text-slate-600 hover:bg-amber-400 hover:text-slate-950 border border-slate-200/50 transition-all whitespace-nowrap">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.438 1.11 1.007L14.9 7.42c.076.438.567.68 1.007.494l2.455-1.037a1.007 1.007 0 0 1 1.257.433l1.296 2.247c.28.483.153 1.1-.284 1.411l-2.074 1.48c-.372.264-.51.758-.335 1.178l1.01 2.42c.222.528-.013 1.139-.525 1.341l-2.453 1.02a1.007 1.007 0 0 1-1.257-.433l-1.296-2.247c-.28-.483-.758-.61-.178-.335l-2.073-1.48a1.007 1.007 0 0 1-.336-1.178l.582-1.396c.076-.438-.567-.68-1.007-.494l-2.455 1.037a1.007 1.007 0 0 1-1.257-.433L2.012 11.2c-.28-.483-.153-1.1.284-1.411l2.074-1.48c.372-.264.51-.758.335-1.178l-1.01-2.42c-.222-.528.013-1.139.525-1.341l2.453-1.02a1.007 1.007 0 0 1 1.257.433l1.296 2.247c.28.483.758.61.178.335l2.073 1.48c.372.264.51.758.335 1.178Z" /></svg>
+            Accessories
         </a>
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- HERO SECTION                                                 -->
-<!-- ============================================================ -->
-<section class="hero">
-    <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="hero-badge">🔥 New Season Sale</span>
-                <h1>
-                    Shop Smart.<br />
-                    <span>Live Better.</span>
-                </h1>
-                <p>
-                    Discover the latest tech gadgets, electronics, and accessories at unbeatable prices. Free shipping on orders over $50.
-                </p>
-                <div class="hero-actions">
-                    <a href="user/products.html" class="btn-primary">
-                        Explore Products →
-                    </a>
-                    <a href="auth/signup.html" class="btn-dark">
-                        Join Now
-                    </a>
-                </div>
-                <div class="hero-stats">
-                    <div>
-                        <div class="stat-number">10K+</div>
-                        <div class="stat-label">Happy Customers</div>
-                    </div>
-                    <div>
-                        <div class="stat-number">500+</div>
-                        <div class="stat-label">Products</div>
-                    </div>
-                    <div>
-                        <div class="stat-number">4.9★</div>
-                        <div class="stat-label">Average Rating</div>
-                    </div>
-                </div>
+<!-- Hero Section -->
+<section class="hero-gradient py-16 md:py-24 border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6 text-left">
+            <span class="inline-flex px-3 py-1 rounded-full text-xs font-bold bg-amber-400/10 text-amber-600 border border-amber-400/20">
+                ⚡ New Season Launch
+            </span>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-none tracking-tight">
+                Shop Smart.<br />
+                <span class="text-amber-500">Live Better.</span>
+            </h1>
+            <p class="text-sm md:text-base text-slate-500 font-medium leading-relaxed max-w-lg">
+                Discover the latest high-fidelity computers, devices, audio solutions, and digital accessories curated with premium global quality at unbeatable prices.
+            </p>
+            <div class="flex flex-wrap gap-3 pt-2">
+                <a href="user/products.html" class="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all shadow-lg flex items-center gap-2">
+                    Explore Tech Products
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+                <a href="auth/signup.html" id="heroSignupBtn" class="px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs transition-all">
+                    Register Account
+                </a>
             </div>
-            <div class="hero-image">
-                <div class="hero-image-box">
-                    <span class="emoji">🛍️</span>
-                    <h3>TechMart Online</h3>
-                    <p>Your Tech Destination</p>
+
+            <!-- Mini Metrics Row -->
+            <div class="grid grid-cols-3 gap-6 pt-6 border-t border-slate-100">
+                <div>
+                    <span class="text-xl md:text-2xl font-black text-slate-900 block leading-none">10K+</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1 block">Happy Users</span>
+                </div>
+                <div>
+                    <span class="text-xl md:text-2xl font-black text-slate-900 block leading-none">500+</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1 block">Assets</span>
+                </div>
+                <div>
+                    <span class="text-xl md:text-2xl font-black text-slate-900 block leading-none">4.9★</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1 block">Average Rating</span>
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- ============================================================ -->
-<!-- FEATURES SECTION                                              -->
-<!-- ============================================================ -->
-<section class="section bg-white">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="heading-lg">Why Choose TechMart?</h2>
-            <p class="subtitle">We make online shopping easy, secure, and enjoyable.</p>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div class="card-feature">
-                <span class="icon">🚀</span>
-                <h4 class="heading-xs">Fast Delivery</h4>
-                <p class="body-sm text-gray">Get your products within 24 hours</p>
+        <!-- Hero graphic box simulation -->
+        <div class="relative flex justify-center">
+            <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl max-w-sm w-full relative z-10 space-y-6">
+                <!-- Decorative Graphic -->
+                <div class="aspect-video w-full rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-300 flex items-center justify-center shadow-inner relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <svg class="w-16 h-16 text-slate-950/20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 11.375a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm5.25 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                </div>
+                <div class="space-y-1.5 text-center">
+                    <h3 class="font-extrabold text-slate-900 text-sm">TechMart Logistics Ecosystem</h3>
+                    <p class="text-xs text-slate-400 font-semibold">Instant door-step dispatch tracking</p>
+                </div>
+                <a href="user/products.html" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    Start Ordering
+                </a>
             </div>
-            <div class="card-feature">
-                <span class="icon">🔒</span>
-                <h4 class="heading-xs">Secure Payments</h4>
-                <p class="body-sm text-gray">100% secure transactions</p>
-            </div>
-            <div class="card-feature">
-                <span class="icon">💎</span>
-                <h4 class="heading-xs">Quality Products</h4>
-                <p class="body-sm text-gray">Premium brands guaranteed</p>
-            </div>
-            <div class="card-feature">
-                <span class="icon">🎧</span>
-                <h4 class="heading-xs">24/7 Support</h4>
-                <p class="body-sm text-gray">Always here to help you</p>
-            </div>
+            <!-- Background element glows -->
+            <div class="absolute -right-4 -bottom-4 w-72 h-72 rounded-full bg-amber-400/10 blur-3xl -z-10"></div>
+            <div class="absolute -left-4 -top-4 w-72 h-72 rounded-full bg-amber-300/10 blur-3xl -z-10"></div>
         </div>
     </div>
 </section>
 
-<!-- ============================================================ -->
-<!-- SHOP BY CATEGORY                                              -->
-<!-- ============================================================ -->
-<section class="section bg-light">
-    <div class="container">
-        <div class="section-header-with-link">
-            <div>
-                <h2>📂 Shop by Category</h2>
-                <p class="subtitle">Find what you're looking for</p>
-            </div>
-            <a href="user/products.html" class="view-all">View All →</a>
+<!-- Why Choose TechMart Feature section -->
+<section class="py-16 bg-white border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-6 space-y-12">
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl font-black text-slate-900">Why Choose TechMart?</h2>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Making logistics operations transparent, secure, and rapid</p>
         </div>
-        <div class="category-grid">
-            <a href="user/products.html?category=electronics" class="category-item">
-                <span class="icon">📱</span>
-                <span class="name">Electronics</span>
-                <span class="count">120+ Products</span>
-            </a>
-            <a href="user/products.html?category=audio" class="category-item">
-                <span class="icon">🎧</span>
-                <span class="name">Audio</span>
-                <span class="count">85+ Products</span>
-            </a>
-            <a href="user/products.html?category=accessories" class="category-item">
-                <span class="icon">⌨️</span>
-                <span class="name">Accessories</span>
-                <span class="count">200+ Products</span>
-            </a>
-            <a href="user/products.html?category=furniture" class="category-item">
-                <span class="icon">🪑</span>
-                <span class="name">Furniture</span>
-                <span class="count">45+ Products</span>
-            </a>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Feature 1 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-3 hover:border-amber-400 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-500 border border-amber-400/20 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm">Fast Delivery</h4>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">Pristine dispatch operations ensure door step tracking in 24 hours.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-3 hover:border-amber-400 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm">Secure Checkout</h4>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">Transactions are handled safely with mock invoice verification.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-3 hover:border-amber-400 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm">Depot Allocation</h4>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">Multi-location regional nodes reduce delivery friction.</p>
+            </div>
+            <!-- Feature 4 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-3 hover:border-amber-400 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-amber-400/10 text-amber-500 border border-amber-400/20 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
+                <h4 class="font-extrabold text-slate-900 text-sm">24/7 Operations</h4>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">Our logistics managers monitor dispatch queues continuously.</p>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ============================================================ -->
-<!-- NEW ARRIVALS - PRODUCT CARDS                                 -->
-<!-- ============================================================ -->
-<section class="section bg-white">
-    <div class="container">
-        <div class="section-header-with-link">
-            <div>
-                <h2>✨ New Arrivals</h2>
-                <p class="subtitle">Fresh products just added to our store</p>
+<!-- New Arrivals Section -->
+<section class="py-16 bg-slate-50 border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-6 space-y-8">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div class="text-left">
+                <h2 class="text-xl font-black text-slate-900">✨ New arrivals</h2>
+                <p class="text-xs text-slate-400 font-semibold mt-0.5">Fresh tech items newly synced to regional catalog depots</p>
             </div>
-            <a href="user/products.html" class="view-all">View All →</a>
+            <a href="user/products.html" class="text-xs font-bold text-amber-500 hover:text-amber-600 transition-colors uppercase tracking-wider">View All Catalog →</a>
         </div>
-        <div class="product-grid" id="newArrivalsGrid">
-            <!-- Rendered by JavaScript -->
+
+        <div id="newArrivalsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Dynamic data fallback -->
         </div>
     </div>
 </section>
 
-<!-- ============================================================ -->
-<!-- TRENDING NOW - PRODUCT CARDS                                 -->
-<!-- ============================================================ -->
-<section class="section bg-light">
-    <div class="container">
-        <div class="section-header-with-link">
-            <div>
-                <h2>🔥 Trending Now</h2>
-                <p class="subtitle">Most popular products this week</p>
-            </div>
-            <a href="user/products.html" class="view-all">View All →</a>
+<!-- Customer Testimonials -->
+<section class="py-16 bg-white border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-6 space-y-12">
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl font-black text-slate-900">Verified Customer Stories</h2>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">True experiences from real corporate tech buyers</p>
         </div>
-        <div class="product-grid" id="trendingGrid">
-            <!-- Rendered by JavaScript -->
-        </div>
-    </div>
-</section>
 
-<!-- ============================================================ -->
-<!-- TESTIMONIALS SECTION                                          -->
-<!-- ============================================================ -->
-<section class="section bg-white">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="heading-lg">What Our Customers Say</h2>
-            <p class="subtitle">Real reviews from real people</p>
-        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="card-testimonial">
-                <div class="text-primary" style="font-size:20px; letter-spacing:2px;">★★★★★</div>
-                <p class="body-md" style="margin-top:12px; color:#4a4a5a;">
-                    "Amazing products and super fast delivery! TechMart is my go-to for all tech needs."
+            <!-- Review 1 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-4 shadow-sm hover:border-amber-400 transition-all">
+                <div class="flex text-amber-400 gap-0.5 text-xs">★★★★★</div>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">
+                    "Exceptional high-performance modules. Deliveries arrived at the Rajagiriya hub within 18 hours. Highly recommended catalog!"
                 </p>
-                <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
-                    <div style="width:40px; height:40px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--dark);">JD</div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-xs">AM</div>
                     <div>
-                        <p style="font-weight:700; font-size:14px; color:var(--dark);">John Doe</p>
-                        <p style="color:var(--gray); font-size:12px;">Verified Buyer</p>
+                        <p class="font-extrabold text-slate-900 text-xs">Alex Mercer</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Dev Operations Lead</p>
                     </div>
                 </div>
             </div>
-            <div class="card-testimonial">
-                <div class="text-primary" style="font-size:20px; letter-spacing:2px;">★★★★★</div>
-                <p class="body-md" style="margin-top:12px; color:#4a4a5a;">
-                    "Best prices I've found online. The quality is excellent and customer service is top-notch."
+            <!-- Review 2 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-4 shadow-sm hover:border-amber-400 transition-all">
+                <div class="flex text-amber-400 gap-0.5 text-xs">★★★★★</div>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">
+                    "The checkout integration works seamlessly. I can add multiple custom shipping addresses and retrieve instant PDF invoices."
                 </p>
-                <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
-                    <div style="width:40px; height:40px; border-radius:50%; background:var(--purple); display:flex; align-items:center; justify-content:center; font-weight:700; color:white;">JS</div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center font-bold text-xs">ER</div>
                     <div>
-                        <p style="font-weight:700; font-size:14px; color:var(--dark);">Jane Smith</p>
-                        <p style="color:var(--gray); font-size:12px;">Verified Buyer</p>
+                        <p class="font-extrabold text-slate-900 text-xs">Elena Rostova</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Procurement Manager</p>
                     </div>
                 </div>
             </div>
-            <div class="card-testimonial">
-                <div class="text-primary" style="font-size:20px; letter-spacing:2px;">★★★★★</div>
-                <p class="body-md" style="margin-top:12px; color:#4a4a5a;">
-                    "The shopping experience was seamless. Got my laptop within 2 days. Highly recommend!"
+            <!-- Review 3 -->
+            <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-4 shadow-sm hover:border-amber-400 transition-all">
+                <div class="flex text-amber-400 gap-0.5 text-xs">★★★★★</div>
+                <p class="text-xs text-slate-500 font-semibold leading-relaxed">
+                    "I track all shipments inside my profile tracker page. Very clear status updates for Depot Alpha sorted queues."
                 </p>
-                <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
-                    <div style="width:40px; height:40px; border-radius:50%; background:var(--success); display:flex; align-items:center; justify-content:center; font-weight:700; color:white;">MW</div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center font-bold text-xs">SC</div>
                     <div>
-                        <p style="font-weight:700; font-size:14px; color:var(--dark);">Mike Wilson</p>
-                        <p style="color:var(--gray); font-size:12px;">Verified Buyer</p>
+                        <p class="font-extrabold text-slate-900 text-xs">Sarah Connor</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Ecosystem Analyst</p>
                     </div>
                 </div>
             </div>
@@ -276,75 +292,218 @@
     </div>
 </section>
 
-<!-- ============================================================ -->
-<!-- CTA SECTION                                                   -->
-<!-- ============================================================ -->
-<section class="section" style="background: linear-gradient(135deg, var(--primary) 0%, #f5c800 100%); padding:72px 0;">
-    <div class="container text-center">
-        <h2 class="heading-lg" style="color:var(--dark); margin-bottom:12px;">
-            Ready to Shop?
-        </h2>
-        <p class="body-lg" style="color:rgba(39,40,49,0.7); max-width:500px; margin:0 auto 32px;">
-            Join thousands of happy customers. Start shopping today!
+<!-- Call to Action Section -->
+<section class="py-16 bg-gradient-to-tr from-amber-400 to-amber-300 border-b border-slate-100 text-slate-950">
+    <div class="max-w-4xl mx-auto px-6 text-center space-y-6">
+        <h2 class="text-2xl md:text-3xl font-black tracking-tight leading-none">Ready to upgrade your workflow?</h2>
+        <p class="text-xs md:text-sm font-bold text-slate-800/80 max-w-lg mx-auto leading-relaxed">
+            Join thousands of modern tech buyers. Set up your delivery address and check out securely within seconds.
         </p>
-        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-            <a href="auth/signup.html" class="btn-dark">
-                Create Account
-            </a>
-            <a href="user/products.html" class="btn-outline" style="border-color:var(--dark); color:var(--dark);">
-                Browse Products
-            </a>
+        <div class="flex justify-center gap-3 pt-2">
+            <a href="auth/signup.html" class="px-5 py-3 bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-lg transition-all">Create Free Account</a>
+            <a href="user/products.html" class="px-5 py-3 border border-slate-950 hover:bg-slate-950 hover:text-white text-slate-950 font-bold text-xs rounded-xl transition-all">Explore Tech Products</a>
         </div>
     </div>
 </section>
 
-<!-- ============================================================ -->
-<!-- FOOTER                                                       -->
-<!-- ============================================================ -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <h3>🛒 TechMart</h3>
-                <p>Your one-stop shop for all things tech. Quality products, fast delivery, and excellent service.</p>
+<!-- Footer -->
+<footer class="bg-white py-12 border-t border-slate-100">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-left">
+        <div class="space-y-3">
+            <div class="flex items-center gap-2.5 font-extrabold text-slate-900 text-lg">
+                <div class="h-8 w-8 rounded-lg bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-sm">🛒</div>
+                TechMart
             </div>
-            <div>
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="user/products.html">Products</a></li>
-                    <li><a href="user/cart.html">Cart</a></li>
-                    <li><a href="user/orders.html">Orders</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Returns</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Follow Us</h4>
-                <div class="footer-social">
-                    <a href="#">📘</a>
-                    <a href="#">🐦</a>
-                    <a href="#">📸</a>
-                    <a href="#">▶️</a>
-                </div>
+            <p class="text-xs text-slate-400 font-semibold leading-relaxed">
+                Your high-fidelity operational technology partner. Quality guaranteed, tracked globally.
+            </p>
+        </div>
+
+        <div>
+            <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-3">Quick Navigation</h4>
+            <ul class="space-y-2 text-xs font-semibold text-slate-500">
+                <li><a href="user/products.html" class="hover:text-amber-500 transition-colors">Catalog Products</a></li>
+                <li><a href="user/cart.html" class="hover:text-amber-500 transition-colors">Shopping Cart</a></li>
+                <li><a href="user/profile.html" class="hover:text-amber-500 transition-colors">Tracking Hub</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-3">Logistics Support</h4>
+            <ul class="space-y-2 text-xs font-semibold text-slate-500">
+                <li><a href="admin/dashboard.html" class="hover:text-amber-500 transition-colors">Admin Terminal</a></li>
+                <li><a href="#" class="hover:text-amber-500 transition-colors">Regional Depots</a></li>
+                <li><a href="#" class="hover:text-amber-500 transition-colors">Help Center</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-3">Keep Connected</h4>
+            <div class="flex gap-2">
+                <a href="#" class="w-8 h-8 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/50 flex items-center justify-center text-slate-500 text-sm">📘</a>
+                <a href="#" class="w-8 h-8 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/50 flex items-center justify-center text-slate-500 text-sm">🐦</a>
+                <a href="#" class="w-8 h-8 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/50 flex items-center justify-center text-slate-500 text-sm">📸</a>
             </div>
         </div>
-        <div class="footer-bottom">
-            © 2026 TechMart Online. All rights reserved. Built with ❤️
-        </div>
+    </div>
+    <div class="max-w-6xl mx-auto px-6 pt-8 mt-8 border-t border-slate-100 text-center text-xs font-bold text-slate-400">
+        © 2026 TechMart Online. All rights reserved. Created with design precision.
     </div>
 </footer>
 
-<!-- ============================================================ -->
-<!-- EXTERNAL JAVASCRIPT                                          -->
-<!-- ============================================================ -->
+<!-- Local Storage & Dynamic Fallback Integrations -->
+<script src="js/api/config.js"></script>
 <script src="js/utils/auth.js"></script>
-<script src="js/main.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/api/products.js"></script>
+
+<script>
+    // Toggle menu
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    // Dynamic product display mapping
+    async function renderNewArrivals() {
+        const grid = document.getElementById('newArrivalsGrid');
+        if (!grid) return;
+
+        try {
+            // Fetch real products from server API
+            const productsList = await ProductsAPI.getAll();
+            
+            // Limit to first 4 for new arrivals
+            const latestProducts = productsList.slice(0, 4);
+
+            if (latestProducts.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-8 text-slate-400 text-xs font-semibold bg-slate-100/50 rounded-2xl">No products registered in catalog yet.</div>';
+                return;
+            }
+
+            grid.innerHTML = latestProducts.map(prod => {
+                // Determine cover image
+                const imgUrl = prod.imagePath ? `${API_CONFIG.BASE_URL}/${prod.imagePath}` : 'https://placehold.co/300x200/f1f5f9/0f172a?text=Product';
+
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden hover:-translate-y-1 transition-all duration-300">
+                        <div class="relative bg-slate-50 aspect-video overflow-hidden">
+                            <img src="${imgUrl}" alt="${prod.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/300x200/f1f5f9/0f172a?text=Product'" />
+                        </div>
+                        <div class="p-5 flex flex-col justify-between flex-grow text-left">
+                            <div class="space-y-1">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">${prod.categoryName || 'General'}</span>
+                                <h3 class="font-extrabold text-sm text-slate-900 leading-snug line-clamp-1">${prod.name}</h3>
+                                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${prod.description || 'No description available'}</p>
+                            </div>
+                            
+                            <div class="space-y-4 pt-4 mt-auto">
+                                <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                    <span class="font-extrabold text-sm text-slate-900">${Helpers.formatPrice(prod.price)}</span>
+                                    <span class="text-[10px] font-bold text-emerald-500 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-lg uppercase tracking-wide">
+                                        Active
+                                    </span>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-2">
+                                    <a href="user/products.html" class="py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[10px] rounded-xl border border-slate-200/60 transition-all text-center">
+                                        View Detail
+                                    </a>
+                                    <button onclick="addToCartQuick(${prod.id}, '${prod.name.replace(/'/g, "\\'")}', ${prod.price}, '${imgUrl}')" class="py-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-[10px] rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer">
+                                        Add Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (err) {
+            grid.innerHTML = `<div class="col-span-full text-center py-8 text-rose-500 text-xs font-semibold bg-rose-50 border border-rose-100 rounded-2xl">Error: ${err.message}</div>`;
+        }
+    }
+
+    // Dynamic cart badge handler
+    function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cartCountBadge');
+        if (badge) {
+            if (total > 0) {
+                badge.textContent = total;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    }
+
+    // Quick Add handler
+    window.addToCartQuick = function(id, name, price, imgUrl) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existing = cart.find(item => item.id === id);
+
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id: id, name: name, price: price, quantity: 1, image: imgUrl });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadge();
+        
+        // Dynamic notification popup
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-4 right-4 z-50 p-4 rounded-xl text-xs font-bold transition-all shadow-xl bg-slate-950 text-white border border-slate-800 animate-bounce';
+        toast.textContent = `✓ Added ${name} to Cart.`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    };
+
+    // User authentication flow simulator
+    function initAuthState() {
+        const desktopContainer = document.getElementById('authActionsContainer');
+        const mobileContainer = document.getElementById('mobileAuthContainer');
+        const user = AuthUtils.getUser();
+
+        // Check if there is a real logged in user
+        if (user && user.email) {
+            const logoutHtml = `
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ${user.firstName || user.email.split('@')[0]}
+                    </span>
+                    ${user.role === 'ADMIN' ? `
+                        <a href="admin/dashboard.html" class="px-3 py-1.5 text-xs font-bold text-amber-500 bg-amber-400/5 hover:bg-amber-400 hover:text-slate-950 border border-amber-400/20 rounded-xl transition-all">Admin</a>
+                    ` : ''}
+                    <button onclick="handleLogout()" class="px-3 py-1.5 text-xs font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-all cursor-pointer">Logout</button>
+                </div>
+            `;
+            if (desktopContainer) desktopContainer.innerHTML = logoutHtml;
+            if (mobileContainer) mobileContainer.innerHTML = logoutHtml;
+
+            // Remove register elements from Hero
+            const heroSignup = document.getElementById('heroSignupBtn');
+            if (heroSignup) {
+                heroSignup.textContent = 'Go to My Profile';
+                heroSignup.href = 'user/profile.html';
+            }
+        }
+    }
+
+    function handleLogout() {
+        AuthUtils.logout();
+        window.location.reload();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderNewArrivals();
+        updateCartBadge();
+        initAuthState();
+    });
+</script>
 
 </body>
 </html>

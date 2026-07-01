@@ -50,10 +50,10 @@ function renderProducts(products) {
     if (!products || products.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="text-center py-12 text-slate-400">
+                <td colspan="7" class="text-center py-12 text-slate-400 bg-slate-900/20">
                     <div class="text-5xl mb-3">📦</div>
-                    <p class="font-semibold text-slate-500">No products found</p>
-                    <a href="add-product.html" class="inline-flex mt-4 px-6 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-sm shadow-md transition-all">
+                    <p class="font-semibold text-slate-400">No products found</p>
+                    <a href="add-product.html" class="inline-flex mt-4 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 hover:opacity-95 text-slate-950 font-bold text-xs shadow-md transition-all">
                         Add First Product
                     </a>
                 </td>
@@ -70,38 +70,38 @@ function renderProducts(products) {
             : imageIcon;
         const isActive = product.isActive;
         const statusBadge = isActive
-            ? '<span class="inline-flex px-2.5 py-0.5 text-xs font-bold rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>'
-            : '<span class="inline-flex px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-50 text-slate-400 border border-slate-200">Inactive</span>';
+            ? '<span class="inline-flex px-2 py-0.5 text-[11px] font-bold rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Active</span>'
+            : '<span class="inline-flex px-2 py-0.5 text-[11px] font-bold rounded-md bg-slate-800/60 text-slate-400 border border-slate-700/40">Inactive</span>';
 
         return `
-            <tr class="hover:bg-slate-50/50 transition-all">
-                <td class="py-4 px-6 font-bold text-slate-400">#${product.id}</td>
+            <tr class="hover:bg-slate-800/20 transition-all border-b border-slate-800/40 last:border-b-0">
+                <td class="py-4 px-6 font-bold text-slate-500">#${product.id}</td>
                 <td class="py-4 px-6">
                     <div class="flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-2xl flex-shrink-0">${imageElement}</span>
+                        <span class="w-10 h-10 rounded-xl bg-slate-900/40 border border-slate-850 flex items-center justify-center text-2xl flex-shrink-0 overflow-hidden">${imageElement}</span>
                         <div>
-                            <div class="font-bold text-slate-900 leading-tight">${product.name}</div>
-                            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">${product.brand || ''}</div>
+                            <div class="font-bold text-white leading-tight text-xs">${product.name}</div>
+                            <div class="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">${product.brand || ''}</div>
                         </div>
                     </div>
                 </td>
-                <td class="py-4 px-6 text-slate-500 font-semibold">${product.category || 'Uncategorized'}</td>
-                <td class="py-4 px-6 font-black text-slate-900">$${product.price.toFixed(2)}</td>
+                <td class="py-4 px-6 text-slate-350 font-semibold text-xs">${product.category || 'Uncategorized'}</td>
+                <td class="py-4 px-6 font-black text-white text-xs">$${product.price.toFixed(2)}</td>
                 <td class="py-4 px-6">
-                    <span class="font-bold text-slate-700">
+                    <span class="font-bold text-slate-200 text-xs">
                         ${product.blockQty || 0}
                     </span>
-                    <span class="text-[10px] text-slate-400 font-medium block">Blocked</span>
+                    <span class="text-[10px] text-slate-500 font-medium block">Blocked</span>
                 </td>
                 <td class="py-4 px-6">
                     ${statusBadge}
                 </td>
                 <td class="py-4 px-6">
                     <div class="flex items-center gap-2">
-                        <a href="edit-product.html?id=${product.id}" class="inline-flex px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-400 hover:text-slate-950 text-amber-600 border border-amber-200 text-xs font-bold transition-all duration-150">
+                        <a href="edit-product.html?id=${product.id}" class="inline-flex px-2.5 py-1.5 rounded-lg bg-slate-805 hover:bg-amber-400 hover:text-slate-950 text-amber-400 border border-slate-700/50 text-[11px] font-bold transition-all duration-150 cursor-pointer">
                             ✏️ Edit
                         </a>
-                        <button onclick="deleteProduct(${product.id})" class="inline-flex p-1.5 rounded-lg bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-200 hover:border-rose-500 text-xs font-bold transition-all duration-150 cursor-pointer">
+                        <button onclick="deleteProduct(${product.id})" class="inline-flex p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-500 text-[11px] font-bold transition-all duration-150 cursor-pointer">
                             🗑️
                         </button>
                     </div>

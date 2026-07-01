@@ -71,4 +71,24 @@ public class OrderDTO implements Serializable {
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
+
+    private String customerName;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    private boolean assignedToPicklist;
+
+    public boolean isAssignedToPicklist() {
+        return assignedToPicklist;
+    }
+
+    public void setAssignedToPicklist(boolean assignedToPicklist) {
+        this.assignedToPicklist = assignedToPicklist;
+    }
 }

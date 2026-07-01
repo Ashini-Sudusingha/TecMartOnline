@@ -1,6 +1,4 @@
 let dashboardWarehouses = [];
-let selectedWarehouseId = null;
-let warehouseNotifications = {}; // Key: warehouseName, Value: Array of stock alerts
 
 async function loadWarehousesMonitor() {
     const grid = document.getElementById('warehouseCardsGrid');
@@ -16,10 +14,6 @@ async function loadWarehousesMonitor() {
         }
 
         renderWarehouseCards();
-
-        if (selectedWarehouseId === null && dashboardWarehouses.length > 0) {
-            selectWarehouse(dashboardWarehouses[0].id, dashboardWarehouses[0].name);
-        }
     } catch (err) {
         grid.innerHTML = `<div class="col-span-full text-center py-8 text-rose-500 font-semibold">Failed to load warehouses: ${err.message}</div>`;
     }
@@ -30,176 +24,37 @@ function renderWarehouseCards() {
     if (!grid) return;
 
     grid.innerHTML = dashboardWarehouses.map(w => {
-        const isSelected = w.id === selectedWarehouseId;
-        const borderStyle = isSelected ? 'border-amber-400 bg-amber-50/20 shadow-md' : 'border-slate-200 hover:border-slate-400';
-        const badgeStyle = isSelected ? 'bg-amber-400 text-slate-900' : 'bg-slate-100 text-slate-600';
-
         return `
-            <div onclick="selectWarehouse(${w.id}, '${w.name.replace(/'/g, "\\'")}')" class="bg-white p-5 rounded-2xl border-2 ${borderStyle} transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[140px]">
+            <div onclick="goToWarehouseDetail(${w.id})" class="glass-card rounded-2xl shadow-xl border border-slate-800/80 p-6 flex flex-col justify-between hover:border-slate-700/60 hover:scale-[1.01] transition-all duration-200 cursor-pointer min-h-[160px] group text-left">
                 <div class="flex items-start justify-between">
-                    <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center text-xl">🏢</div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${badgeStyle}">ID: #${w.id}</span>
+                    <div>
+                        <span class="px-2 py-0.5 rounded text-[9px] font-extrabold border border-amber-500/20 bg-amber-500/5 text-amber-400 tracking-wider uppercase block w-fit">
+                            ID: #${w.id}
+                        </span>
+                        <h4 class="text-base font-bold text-white mt-3 tracking-tight">${w.name}</h4>
+                        <p class="text-[10px] text-slate-500 font-semibold truncate mt-0.5">${w.location || 'N/A'}</p>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
                 </div>
-                <div class="space-y-1 mt-4">
-                    <h4 class="font-black text-slate-900 text-sm leading-tight">${w.name}</h4>
-                    <p class="text-[10px] text-slate-500 font-semibold truncate">${w.location || 'N/A'}</p>
+                <div class="mt-4 pt-3 border-t border-slate-800/60 text-[10px] text-slate-500 flex items-center justify-between">
+                    <span class="truncate pr-3 text-slate-400 font-medium">Inspect capacity & slots</span>
+                    <span class="text-amber-400 hover:text-amber-300 font-bold whitespace-nowrap transition-colors flex items-center gap-1">
+                        Open Hub
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </span>
                 </div>
             </div>
         `;
     }).join('');
 }
 
-async function selectWarehouse(warehouseId, warehouseName) {
-    selectedWarehouseId = warehouseId;
-    renderWarehouseCards();
-
-    const panel = document.getElementById('warehouseDetailsPanel');
-    if (panel) panel.classList.remove('hidden');
-
-    await Promise.all([
-        loadWarehouseInventory(warehouseId),
-        loadWarehouseLocationsCapacity(warehouseId)
-    ]);
-
-    renderWarehouseLiveLogs(warehouseName);
+function goToWarehouseDetail(id) {
+    window.location.href = `single-warehouse-view.html?id=${id}`;
 }
-
-async function loadWarehouseLocationsCapacity(warehouseId) {
-    const container = document.getElementById('warehouseLocationsCapacity');
-    if (!container) return;
-
-    try {
-        const token = AuthUtils.getToken();
-        const locations = await AdminAPI.getWarehouseLocations(warehouseId, token);
-
-        if (locations.length === 0) {
-            container.innerHTML = '<div class="col-span-full text-slate-400 text-xs font-semibold py-4">No locations/slots added for this warehouse.</div>';
-            return;
-        }
-
-        container.innerHTML = locations.map(l => {
-            const percentage = Math.min(100, Math.max(0, (l.quantity / l.maxCapacity) * 100));
-            let colorClass = 'bg-emerald-500';
-            if (percentage >= 90) colorClass = 'bg-rose-500';
-            else if (percentage >= 70) colorClass = 'bg-amber-500';
-
-            return `
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150 space-y-2">
-                    <div class="flex items-center justify-between text-xs font-bold">
-                        <span class="text-slate-800">${l.location}</span>
-                        <span class="text-slate-500">${l.quantity} / ${l.maxCapacity} units</span>
-                    </div>
-                    <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                        <div class="h-full rounded-full ${colorClass} transition-all duration-300" style="width: ${percentage}%"></div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    } catch (err) {
-        console.error('Error loading locations capacity:', err);
-    }
-}
-
-async function loadWarehouseInventory(warehouseId) {
-    const tbody = document.getElementById('warehouseInventoryBody');
-    const badge = document.getElementById('inventoryCountBadge');
-    if (!tbody) return;
-
-    try {
-        const token = AuthUtils.getToken();
-        const items = await AdminAPI.getWarehouseInventory(warehouseId, token);
-
-        if (badge) badge.textContent = `${items.length} Items`;
-
-        if (items.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-400 font-semibold">No stock items available in this warehouse.</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = items.map(item => {
-            return `
-                <tr class="hover:bg-slate-50/50 transition-all">
-                    <td class="py-3 px-4 font-bold text-slate-400">#ITEM-${item.id}</td>
-                    <td class="py-3 px-4 font-bold text-slate-900">${item.productName || 'N/A'}</td>
-                    <td class="py-3 px-4 text-slate-500 font-semibold">${item.location || 'N/A'}</td>
-                    <td class="py-3 px-4 font-semibold text-slate-900">Rs. ${parseFloat(item.buyingPrice).toFixed(2)}</td>
-                    <td class="py-3 px-4 font-black text-slate-700">${item.stockQuantity} units</td>
-                    <td class="py-3 px-4">
-                        <span class="inline-flex px-2 py-0.5 text-[10px] font-bold rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">${item.statusName || 'Active'}</span>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-    } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-rose-500 font-semibold">Error: ${err.message}</td></tr>`;
-    }
-}
-
-function renderWarehouseLiveLogs(warehouseName) {
-    const logsContainer = document.getElementById('warehouseLiveLogs');
-    if (!logsContainer) return;
-
-    const list = warehouseNotifications[warehouseName] || [];
-
-    if (list.length === 0) {
-        logsContainer.innerHTML = '<div class="text-center py-8 text-slate-400 font-medium text-xs">No live notifications received yet.</div>';
-        return;
-    }
-
-    logsContainer.innerHTML = list.map(log => {
-        const time = new Date(log.timestamp).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-
-        return `
-            <div class="p-3.5 bg-slate-50 border border-slate-150 rounded-xl space-y-1 transform transition-all duration-200 hover:scale-[1.01] hover:border-slate-300 animate-fade-in">
-                <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-bold text-amber-500 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">Replenished</span>
-                    <span class="text-[10px] text-slate-400 font-bold">${time}</span>
-                </div>
-                <p class="text-xs font-semibold text-slate-700 leading-relaxed">
-                    Added <b class="text-slate-900">${log.replenishedQuantity} units</b> of <b class="text-slate-900">${log.productName}</b> to location <b class="text-slate-950">${log.locationName || 'Slot'}</b>.
-                </p>
-            </div>
-        `;
-    }).join('');
-}
-
-// Bind live WebSocket stockUpdate events
-window.addEventListener('stockUpdate', async (e) => {
-    const data = e.detail;
-    console.log("Warehouse Dashboard received live stock event:", data);
-
-    if (data.warehouseName) {
-        if (!warehouseNotifications[data.warehouseName]) {
-            warehouseNotifications[data.warehouseName] = [];
-        }
-
-        // Add to front
-        warehouseNotifications[data.warehouseName].unshift({
-            productName: data.productName,
-            replenishedQuantity: data.replenishedQuantity,
-            locationName: data.locationName,
-            timestamp: data.timestamp || Date.now()
-        });
-
-        if (warehouseNotifications[data.warehouseName].length > 50) {
-            warehouseNotifications[data.warehouseName].pop();
-        }
-
-        const selectedWh = dashboardWarehouses.find(w => w.id === selectedWarehouseId);
-        
-        if (selectedWh && selectedWh.name === data.warehouseName) {
-            renderWarehouseLiveLogs(data.warehouseName);
-            await Promise.all([
-                loadWarehouseInventory(selectedWarehouseId),
-                loadWarehouseLocationsCapacity(selectedWarehouseId)
-            ]);
-        }
-    }
-});
 
 // Setup admin details and event bindings on load
 document.addEventListener('DOMContentLoaded', () => {

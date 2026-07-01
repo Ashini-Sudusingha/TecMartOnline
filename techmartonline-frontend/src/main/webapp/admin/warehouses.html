@@ -4,113 +4,182 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Warehouses - TechMart Admin</title>
-    <link rel="stylesheet" href="../css/tailwind.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="../css/style.css" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
+        body, aside, button, select, input, textarea, td, th, h1, h2, h3, h4, span, p, a {
+            font-family: "Plus Jakarta Sans", sans-serif !important;
+        }
         body {
-            display: block !important;
-            background-color: #f8fafc;
+            background-color: #0b0f19;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .glass-card {
+            background: rgba(13, 18, 31, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .glass-card:hover {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(13, 18, 31, 0.6);
+        }
+        .premium-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f1f5f9;
+            transition: all 0.2s ease-in-out;
+        }
+        .premium-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.15);
+            outline: none;
+            background: rgba(15, 23, 42, 0.95);
         }
     </style>
 </head>
-<body class="bg-slate-50 font-['Urbanist'] antialiased">
+<body class="text-slate-200 antialiased custom-scrollbar">
 
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-100 flex flex-col justify-between border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div>
         <!-- Logo -->
-        <div class="px-6 py-5 border-b border-slate-800 flex items-center gap-3">
-            <span class="bg-amber-400 text-slate-950 p-2 rounded-xl font-bold text-xl">🛒</span>
+        <div class="px-6 py-7 border-b border-slate-800/60 flex items-center gap-3">
+            <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-bold text-lg shadow-lg shadow-amber-500/10">
+                ⚡
+            </div>
             <div>
-                <h2 class="font-black text-lg leading-tight tracking-wide">TechMart</h2>
-                <span class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Admin Panel</span>
+                <h2 class="font-bold text-sm leading-tight tracking-tight text-white">TechMart</h2>
+                <span class="text-[9px] text-amber-400 font-semibold uppercase tracking-widest block mt-0.5">Core Admin</span>
             </div>
         </div>
+
         <!-- Nav Links -->
-        <nav class="px-4 py-6 space-y-1.5">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📊</span> Dashboard
+        <nav class="px-4 py-6 space-y-1 h-[calc(100vh-170px)] overflow-y-auto custom-scrollbar">
+            
+            <a href="dashboard.html" id="nav-dashboard" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 mb-2">
+                Dashboard
             </a>
-            <a href="products.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📦</span> Products
-            </a>
-            <a href="orders.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📋</span> Orders
-            </a>
-            <a href="users.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">👥</span> Users
-            </a>
-            <a href="inventory.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📈</span> Inventory
-            </a>
-            <a href="warehouses.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-950 bg-amber-400 font-bold transition-all duration-200 shadow-lg shadow-amber-400/10">
-                <span class="text-lg">🏢</span> Warehouses
-            </a>
-            <a href="suppliers.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🏭</span> Suppliers
-            </a>
-            <a href="invoices.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">🧾</span> Invoices
-            </a>
-            <a href="reports.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 font-semibold transition-all duration-200">
-                <span class="text-lg">📊</span> Reports
-            </a>
+            
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Management</p>
+                <a href="products.html" id="nav-products" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Products</span>
+                </a>
+                <a href="orders.html" id="nav-orders" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Orders</span>
+                </a>
+                <a href="order-packing.html" id="nav-order-packing" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Order Packing</span>
+                </a>
+                <a href="users.html" id="nav-users" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Users</span>
+                </a>
+            </div>
+
+            <!-- Warehouses Expandable Menu Group -->
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Logistics</p>
+                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-2 rounded-lg text-slate-100 bg-slate-800/40 font-bold text-[13px] transition-all duration-200 group focus:outline-none cursor-pointer">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Warehouses</span>
+                    <span id="warehouse-arrow" class="text-[9px] text-slate-500 transition-transform duration-200">▼</span>
+                </button>
+                <div id="warehouse-submenu" class="pl-5 pr-2 py-1 space-y-0.5 rounded-lg mx-2 border-l border-slate-800/60 ml-6">
+                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Dashboard</a>
+                    <a href="warehouses.html" id="sub-wh-locations" class="block py-1.5 px-3 text-[12px] text-amber-400 font-bold rounded bg-slate-800/30 transition-all">Locations & Slots</a>
+                    <a href="inventory.html" id="sub-wh-inventory" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Inventory Stock</a>
+                    <a href="warehouse-transfers.html" id="sub-wh-transfers" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Transfers</a>
+                </div>
+            </div>
+
+            <div class="space-y-0.5 pt-2">
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Finance & Analytics</p>
+                <a href="suppliers.html" id="nav-suppliers" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Suppliers</span>
+                </a>
+                <a href="invoices.html" id="nav-invoices" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Invoices</span>
+                </a>
+                <a href="reports.html" id="nav-reports" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Reports</span>
+                </a>
+                <a href="performance-metrics.html" id="nav-performance-metrics" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Performance Metrics</span>
+                </a>
+            </div>
         </nav>
     </div>
+
     <!-- Profile & Logout -->
-    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+    <div class="p-4 border-t border-slate-800/60 bg-[#06090f]">
         <div class="flex items-center gap-3 px-2 py-2 mb-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">A</div>
+            <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/50 flex items-center justify-center font-bold text-xs shadow-sm">
+                A
+            </div>
             <div>
-                <h4 class="font-bold text-sm text-slate-100" id="adminName">Administrator</h4>
-                <p class="text-[11px] text-slate-500 font-semibold">admin@techmart.com</p>
+                <h4 id="adminName" class="font-semibold text-[13px] text-slate-200">Administrator</h4>
+                <p class="text-[10px] text-slate-500 font-medium">admin@techmart.com</p>
             </div>
         </div>
-        <button onclick="AuthUtils.logout()" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-50 text-rose-500 hover:text-white text-sm font-bold transition-all duration-200 border border-rose-500/20 cursor-pointer">
-            <span>🚪</span> Log Out
+        <button onclick="AuthUtils.logout()" class="flex items-center justify-center w-full py-2 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 text-[12px] font-semibold transition-all duration-200 cursor-pointer">
+            Log Out
         </button>
     </div>
 </aside>
 
 <!-- Sidebar Overlay for Mobile -->
-<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/60 hidden backdrop-blur-sm transition-opacity duration-300 lg:hidden"></div>
 
 <!-- Content Wrapper -->
-<div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
+<div class="lg:pl-64 min-h-screen bg-[#0b0f19] flex flex-col">
     <!-- Top Header -->
-    <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
+    <header class="sticky top-0 z-30 h-16 bg-[#0d121f]/80 backdrop-blur-md border-b border-slate-800/50 px-6 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-4">
-            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
+            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-400 hover:bg-slate-800/60 transition-all">
                 <span class="text-xl">☰</span>
             </button>
-            <h1 class="text-base font-bold text-slate-800 hidden sm:block">Operational Depot Management</h1>
+            <h1 class="text-xs font-semibold text-slate-400 tracking-wider uppercase hidden sm:block">Operational Depot Management</h1>
         </div>
         <div class="flex items-center gap-4">
-            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live Server
+            <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/5 border border-emerald-500/20 px-3 py-1.5 rounded-xl flex items-center gap-2 tracking-wide">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live Server
             </span>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6 space-y-6">
+    <main class="flex-1 p-6 lg:p-8 space-y-6 max-w-[1600px] w-full mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex flex-col gap-1">
-                <h2 class="text-2xl font-black text-slate-900 tracking-tight">🏢 Warehouse Depots</h2>
-                <p class="text-sm text-slate-500 font-medium">Verify location details, active inventory slots, and storage health.</p>
+            <div class="flex flex-col gap-1 text-left">
+                <h2 class="text-xl font-bold text-white tracking-tight">🏢 Warehouse Depots</h2>
+                <p class="text-xs text-slate-400 font-medium">Verify location details, active inventory slots, and storage health.</p>
             </div>
-            <button onclick="openWarehouseModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all duration-200 shadow-md text-sm cursor-pointer">
+            <button onclick="openWarehouseModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/60 hover:bg-amber-400 hover:text-slate-950 text-amber-450 border border-slate-700/50 font-bold transition-all duration-200 shadow-md text-xs cursor-pointer">
                 ➕ Add New Warehouse
             </button>
         </div>
 
         <!-- Table Card -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
+        <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="overflow-x-auto custom-scrollbar">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                        <tr class="border-b border-slate-800/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                             <th class="py-4 px-6">ID</th>
                             <th class="py-4 px-6">Depot Name</th>
                             <th class="py-4 px-6">Location</th>
@@ -119,9 +188,9 @@
                             <th class="py-4 px-6 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="warehousesTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                    <tbody id="warehousesTableBody" class="divide-y divide-slate-800/40 text-xs font-semibold text-slate-300">
                         <tr>
-                            <td colspan="6" class="text-center py-8 text-slate-400">Loading depots data...</td>
+                            <td colspan="6" class="text-center py-8 text-slate-400 bg-slate-900/10">Loading depots data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -131,54 +200,54 @@
 </div>
 
 <!-- Warehouse Add/Edit Modal -->
-<div id="warehouseModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-lg w-full overflow-hidden transform transition-all">
+<div id="warehouseModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-lg w-full overflow-hidden transform transition-all">
         <!-- Header -->
-        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div class="px-6 py-5 border-b border-slate-800/60 flex items-center justify-between text-left">
             <div>
-                <h3 class="text-lg font-black text-slate-900" id="modalTitle">Add New Warehouse</h3>
-                <p class="text-xs text-slate-500 font-medium">Define a new operational depot inside the database.</p>
+                <h3 class="text-base font-bold text-white" id="modalTitle">Add New Warehouse</h3>
+                <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-0.5">Define a new operational depot inside the database.</p>
             </div>
-            <button onclick="closeWarehouseModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+            <button onclick="closeWarehouseModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors">
                 ✕
             </button>
         </div>
 
         <!-- Form -->
-        <form id="warehouseForm" class="p-6 space-y-4">
+        <form id="warehouseForm" class="p-6 space-y-4 text-left">
             <input type="hidden" id="warehouseId" />
             <div class="space-y-1.5">
-                <label for="warehouseName" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Depot Name *</label>
-                <input type="text" id="warehouseName" placeholder="e.g. Colombo Main Warehouse" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                <label for="warehouseName" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Depot Name *</label>
+                <input type="text" id="warehouseName" placeholder="e.g. Colombo Main Warehouse" class="w-full px-4 py-2.5 rounded-xl premium-input text-xs font-bold" required />
             </div>
             <div class="space-y-1.5">
-                <label for="warehouseLocation" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Location *</label>
-                <input type="text" id="warehouseLocation" placeholder="e.g. 123 Galle Road, Colombo 03" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" required />
+                <label for="warehouseLocation" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Location *</label>
+                <input type="text" id="warehouseLocation" placeholder="e.g. 123 Galle Road, Colombo 03" class="w-full px-4 py-2.5 rounded-xl premium-input text-xs font-bold" required />
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-1.5">
-                    <label for="warehousePhone" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Contact Phone</label>
-                    <input type="text" id="warehousePhone" placeholder="e.g. 0771234567" maxlength="10" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" />
+                    <label for="warehousePhone" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contact Phone</label>
+                    <input type="text" id="warehousePhone" placeholder="e.g. 0771234567" maxlength="10" class="w-full px-4 py-2.5 rounded-xl premium-input text-xs font-bold" />
                 </div>
                 <div class="space-y-1.5">
-                    <label for="warehouseEmail" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</label>
-                    <input type="email" id="warehouseEmail" placeholder="e.g. colombo@techmart.com" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-medium transition-all bg-slate-50/50 focus:bg-white" />
+                    <label for="warehouseEmail" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email</label>
+                    <input type="email" id="warehouseEmail" placeholder="e.g. colombo@techmart.com" class="w-full px-4 py-2.5 rounded-xl premium-input text-xs font-bold" />
                 </div>
             </div>
             <div class="space-y-1.5">
-                <label for="warehouseStatus" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Status *</label>
-                <select id="warehouseStatus" class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-sm font-bold bg-white text-slate-700 cursor-pointer transition-all" required>
+                <label for="warehouseStatus" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status *</label>
+                <select id="warehouseStatus" class="w-full px-4 py-2.5 rounded-xl premium-input text-xs font-bold bg-[#0d121f] text-slate-300 cursor-pointer">
                     <option value="true">Active / Operational</option>
                     <option value="false">Inactive / Under Maintenance</option>
                 </select>
             </div>
 
             <!-- Footer Buttons -->
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <button type="button" onclick="closeWarehouseModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-sm">
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800/60">
+                <button type="button" onclick="closeWarehouseModal()" class="px-4 py-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-400 font-bold transition-all text-xs">
                     Cancel
                 </button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black transition-all text-sm shadow-md shadow-amber-400/10">
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-850 hover:bg-amber-400 text-amber-450 hover:text-slate-950 border border-slate-700/50 font-bold transition-all text-xs">
                     Save Depot
                 </button>
             </div>
@@ -187,64 +256,64 @@
 </div>
 
 <!-- Warehouse Locations Modal -->
-<div id="locationsModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all">
+<div id="locationsModal" class="fixed inset-0 z-50 overflow-y-auto hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-2xl w-full overflow-hidden transform transition-all">
         <!-- Header -->
-        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div class="px-6 py-5 border-b border-slate-800/60 flex items-center justify-between text-left">
             <div>
-                <h3 class="text-lg font-black text-slate-900" id="locationsModalTitle">Depot Locations</h3>
-                <p class="text-xs text-slate-500 font-medium" id="locationsModalSubtitle">Manage slots and capacity layout for this warehouse.</p>
+                <h3 class="text-base font-bold text-white" id="locationsModalTitle">Depot Locations</h3>
+                <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider mt-0.5" id="locationsModalSubtitle">Manage slots and capacity layout for this warehouse.</p>
             </div>
-            <button onclick="closeLocationsModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+            <button onclick="closeLocationsModal()" class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors">
                 ✕
             </button>
         </div>
 
         <div class="p-6 space-y-6">
             <!-- Add/Edit Location Inline Form -->
-            <form id="locationForm" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <form id="locationForm" class="bg-slate-950/30 p-4 rounded-2xl border border-slate-800/60 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end text-left">
                 <input type="hidden" id="locationWarehouseId" />
                 <input type="hidden" id="locationId" />
                 
                 <div class="space-y-1.5 sm:col-span-2">
-                    <label for="locationCode" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Location Name / Code *</label>
-                    <input type="text" id="locationCode" placeholder="e.g. Shelf A-12" class="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
+                    <label for="locationCode" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Location Name / Code *</label>
+                    <input type="text" id="locationCode" placeholder="e.g. Shelf A-12" class="w-full px-3 py-2 rounded-xl premium-input text-xs font-bold" required />
                 </div>
                 <div class="space-y-1.5">
-                    <label for="locationMaxCap" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Max Capacity *</label>
-                    <input type="number" id="locationMaxCap" placeholder="e.g. 500" min="1" class="w-full px-3 py-2 rounded-lg border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" required />
+                    <label for="locationMaxCap" class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Max Capacity *</label>
+                    <input type="number" id="locationMaxCap" placeholder="e.g. 500" min="1" class="w-full px-3 py-2 rounded-xl premium-input text-xs font-bold" required />
                 </div>
                 <div class="space-y-1.5 hidden">
                     <input type="number" id="locationQty" value="0" />
                 </div>
                 <div>
-                    <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-amber-400 text-white hover:text-slate-950 font-bold transition-all text-xs shadow-sm cursor-pointer" id="locationSaveBtn">
+                    <button type="submit" class="w-full px-4 py-2 rounded-xl bg-slate-800/60 hover:bg-amber-400 hover:text-slate-950 text-amber-400 border border-slate-700/50 font-bold transition-all text-xs cursor-pointer" id="locationSaveBtn">
                         Save Slot
                     </button>
                 </div>
             </form>
 
             <!-- Search and Filter Bar for Locations -->
-            <div class="relative flex-1">
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
-                <input type="text" id="locationSearchInput" placeholder="Search locations by code..." class="w-full pl-9 pr-4 py-2 rounded-xl border-2 border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-semibold bg-white" />
+            <div class="relative flex-1 text-left">
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs">🔍</span>
+                <input type="text" id="locationSearchInput" placeholder="Search locations by code..." class="w-full pl-9 pr-4 py-2.5 rounded-xl premium-input text-xs font-bold" />
             </div>
 
             <!-- Table of Locations -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="max-h-60 overflow-y-auto">
+            <div class="glass-card rounded-xl overflow-hidden">
+                <div class="max-h-60 overflow-y-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer select-none">
+                            <tr class="border-b border-slate-800/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider cursor-pointer select-none">
                                 <th class="py-3 px-4" onclick="sortLocations('id')">ID <span id="sortDirId" class="ml-1 text-[8px]">↕</span></th>
                                 <th class="py-3 px-4" onclick="sortLocations('location')">Location Code <span id="sortDirLoc" class="ml-1 text-[8px]">↕</span></th>
                                 <th class="py-3 px-4" onclick="sortLocations('maxCapacity')">Max Capacity <span id="sortDirCap" class="ml-1 text-[8px]">↕</span></th>
                                 <th class="py-3 px-4 text-right cursor-default">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="locationsTableBody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tbody id="locationsTableBody" class="divide-y divide-slate-800/40 font-semibold text-slate-300">
                             <tr>
-                                <td colspan="4" class="text-center py-6 text-slate-400">No locations added yet.</td>
+                                <td colspan="4" class="text-center py-6 text-slate-400 bg-slate-900/10">No locations added yet.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -252,11 +321,11 @@
             </div>
 
             <!-- Pagination Controls for Locations -->
-            <div class="flex items-center justify-between pt-4 border-t border-slate-100 text-xs font-bold text-slate-500">
+            <div class="flex items-center justify-between pt-4 border-t border-slate-800/60 text-xs font-bold text-slate-500">
                 <span id="locationPageInfo">Showing page 1 of 1</span>
                 <div class="flex gap-2">
-                    <button onclick="prevLocationPage()" id="locPrevBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 disabled:hover:bg-slate-100 transition-colors cursor-pointer">Prev</button>
-                    <button onclick="nextLocationPage()" id="locNextBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-40 disabled:hover:bg-slate-100 transition-colors cursor-pointer">Next</button>
+                    <button onclick="prevLocationPage()" id="locPrevBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-900/60 hover:bg-slate-800 text-slate-400 disabled:opacity-40 disabled:hover:bg-slate-900/60 transition-colors cursor-pointer">Prev</button>
+                    <button onclick="nextLocationPage()" id="locNextBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-900/60 hover:bg-slate-800 text-slate-400 disabled:opacity-40 disabled:hover:bg-slate-900/60 transition-colors cursor-pointer">Next</button>
                 </div>
             </div>
         </div>
@@ -288,8 +357,22 @@
         });
     }
 
+    // Toggle warehouse submenu display
+    function toggleWarehouseSubmenu() {
+        const submenu = document.getElementById('warehouse-submenu');
+        const arrow = document.getElementById('warehouse-arrow');
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            submenu.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
     // Set Admin details on load
     document.addEventListener('DOMContentLoaded', () => {
+        if (!AuthUtils.checkAuth('ADMIN')) return;
         const user = AuthUtils.getUser();
         if (user) {
             const adminName = document.getElementById('adminName');
@@ -303,8 +386,15 @@
                 }
             }
         }
+
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('warehouse-dashboard.html') || currentPath.includes('warehouses.html') || currentPath.includes('inventory.html') || currentPath.includes('warehouse-transfers.html')) {
+            const submenu = document.getElementById('warehouse-submenu');
+            const arrow = document.getElementById('warehouse-arrow');
+            if (submenu) submenu.classList.remove('hidden');
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+        }
     });
 </script>
-
 </body>
 </html>

@@ -12,6 +12,9 @@ import jakarta.jms.TextMessage;
 })
 public class OrderProcessorMDB implements MessageListener {
 
+    @jakarta.ejb.EJB
+    private lk.jiat.techmart.service.singleton.PerformanceTrackerBean tracker;
+
     @Override
     public void onMessage(Message message) {
         try {
@@ -19,7 +22,10 @@ public class OrderProcessorMDB implements MessageListener {
                 TextMessage textMessage = (TextMessage) message;
                 String orderJson = textMessage.getText();
                 System.out.println("MDB OrderProcessorMDB: Received order message to process async: " + orderJson);
-                // Perform order verification, stock deduction, and status updates here...
+                
+                if (tracker != null) {
+                    tracker.recordOrderProcessed();
+                }
             } else {
                 System.err.println("MDB OrderProcessorMDB: Received unsupported message type.");
             }

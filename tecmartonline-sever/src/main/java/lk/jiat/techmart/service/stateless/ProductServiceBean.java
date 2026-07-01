@@ -266,6 +266,25 @@ public class ProductServiceBean implements ProductServiceRemote {
         } else {
             dto.setImages(new ArrayList<>());
         }
+
+        // Calculate available stock count
+        int stock = 0;
+        try {
+            TypedQuery<Object> sq = em.createQuery(
+                "SELECT COALESCE(SUM(i.stockQuantity), 0L) FROM Inventory i WHERE i.product.id = :productId", 
+                Object.class
+            );
+            sq.setParameter("productId", p.getId());
+            Object res = sq.getSingleResult();
+            if (res instanceof Number) {
+                stock = ((Number) res).intValue();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int availability = stock - p.getBlockQty();
+        dto.setStockQty(availability);
+
         return dto;
     }
 

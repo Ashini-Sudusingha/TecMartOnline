@@ -14,22 +14,28 @@ async function loadSuppliers() {
 
         tbody.innerHTML = suppliers.map(s => {
             return `
-                <tr class="hover:bg-slate-50/50 transition-all">
-                    <td class="py-4 px-6 font-bold text-slate-400">#${s.id}</td>
-                    <td class="py-4 px-6 font-bold text-slate-900">${s.name}</td>
-                    <td class="py-4 px-6 text-slate-500 font-semibold">${s.brandName || 'N/A'}</td>
-                    <td class="py-4 px-6 text-slate-500 font-semibold">${s.categoryName || 'N/A'}</td>
-                    <td class="py-4 px-6 text-slate-500 text-xs">
-                        <div>📞 ${s.mobile || 'N/A'}</div>
-                        <div class="mt-0.5">✉️ ${s.email || 'N/A'}</div>
+                <tr class="hover:bg-slate-800/20 transition-all border-b border-slate-800/40 last:border-b-0">
+                    <td class="py-4 px-6 text-slate-450 font-bold">#${s.id}</td>
+                    <td class="py-4 px-6 font-bold text-white">${s.name}</td>
+                    <td class="py-4 px-6">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border border-indigo-500/20 bg-indigo-500/5 text-indigo-400">
+                            ${s.brandName || 'N/A'}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 text-slate-350">${s.categoryName || 'N/A'}</td>
+                    <td class="py-4 px-6 text-slate-400">
+                        <div class="flex flex-col gap-0.5 text-left font-semibold">
+                            <span class="text-xs font-bold text-slate-205">${s.email || 'N/A'}</span>
+                            <span class="text-[10px] text-slate-500">${s.mobile || 'N/A'}</span>
+                        </div>
                     </td>
                     <td class="py-4 px-6 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <button onclick="editSupplier(${s.id}, '${s.name.replace(/'/g, "\\'")}', ${s.brandId}, ${s.categoryId}, '${s.mobile}', '${s.email}')" class="inline-flex p-1.5 rounded-lg bg-amber-50 hover:bg-amber-400 text-amber-600 hover:text-slate-950 border border-amber-200 hover:border-amber-400 text-xs font-bold transition-all duration-150 cursor-pointer">
-                                ✏️
+                            <button onclick="editSupplier(${s.id}, '${s.name.replace(/'/g, "\\'")}', ${s.brandId}, ${s.categoryId}, '${s.mobile}', '${s.email}')" class="text-[10px] font-bold text-amber-400 bg-amber-400/5 hover:bg-amber-400 hover:text-slate-950 border border-amber-400/20 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer">
+                                Edit
                             </button>
-                            <button onclick="deleteSupplier(${s.id})" class="inline-flex p-1.5 rounded-lg bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-200 hover:border-rose-500 text-xs font-bold transition-all duration-150 cursor-pointer">
-                                🗑️
+                            <button onclick="deleteSupplier(${s.id})" class="text-[10px] font-bold text-rose-400 bg-rose-500/5 hover:bg-rose-500 hover:text-white border border-rose-500/20 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer">
+                                Delete
                             </button>
                         </div>
                     </td>
@@ -37,7 +43,7 @@ async function loadSuppliers() {
             `;
         }).join('');
     } catch (e) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-rose-500 font-semibold">Failed to load suppliers data: ' + e.message + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-rose-455 font-bold bg-slate-900/10">Failed to load suppliers data: ' + e.message + '</td></tr>';
     }
 }
 

@@ -23,6 +23,9 @@ import lk.jiat.techmart.util.ResponseUtil;
 
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @Path("/products")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -30,6 +33,9 @@ public class ProductResource {
 
     @EJB
     private ProductServiceRemote productService;
+
+    @PersistenceContext(unitName = "TechMartOnlinePU")
+    private EntityManager em;
 
     @GET
     public Response getAllProducts() {
@@ -172,13 +178,19 @@ public class ProductResource {
     @Path("/images/{filename}")
     @Produces({"image/png", "image/jpeg", "image/gif", "image/webp", "application/octet-stream"})
     public Response getProductImage(@PathParam("filename") String filename) {
+        System.out.println("DEBUG IMAGE: filename received = '" + filename + "'");
         String homeDir = System.getProperty("user.home");
         java.io.File file = new java.io.File(homeDir + "/techmart_uploads", filename);
+        System.out.println("DEBUG IMAGE: absolute path = '" + file.getAbsolutePath() + "'");
+        System.out.println("DEBUG IMAGE: file.exists() = " + file.exists());
+
         if (!file.exists()) {
+            System.out.println("DEBUG IMAGE: file does not exist, returning 404");
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         
         String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        System.out.println("DEBUG IMAGE: extension = '" + ext + "'");
         String mediaType = "image/png";
         if (ext.equals("jpg") || ext.equals("jpeg")) {
             mediaType = "image/jpeg";
@@ -187,8 +199,17 @@ public class ProductResource {
         } else if (ext.equals("webp")) {
             mediaType = "image/webp";
         }
+        System.out.println("DEBUG IMAGE: mediaType determined = '" + mediaType + "'");
         
-        return Response.ok(file).type(mediaType).build();
+        try {
+            byte[] data = java.nio.file.Files.readAllBytes(file.toPath());
+            System.out.println("DEBUG IMAGE: read bytes count = " + data.length);
+            return Response.ok(data).type(mediaType).build();
+        } catch (Exception e) {
+            System.out.println("DEBUG IMAGE: exception thrown!");
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     private Response checkAdmin(String authHeader) {

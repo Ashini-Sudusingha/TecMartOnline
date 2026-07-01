@@ -25,7 +25,30 @@ function initLiveNotifications() {
             const data = JSON.parse(event.data);
             console.log("📥 WebSocket stock alert received:", data);
             
-            if (data.productName && data.replenishedQuantity && data.warehouseName) {
+            if (data.type === 'order' || (data.customerName && data.totalAmount && data.orderId)) {
+                showStockToast(
+                    `🔔 New Order Received`, 
+                    `Customer <b>${data.customerName}</b> placed an order for <b>$${Helpers.formatPrice(data.totalAmount)}</b> (Order ID: #${data.orderId}).`
+                );
+                
+                // Dispatch custom event for live dashboard and order list listeners
+                window.dispatchEvent(new CustomEvent('newOrder', { detail: data }));
+            } else if (data.type === 'picklist' || (data.picklistId && data.warehouseId)) {
+                showStockToast(
+                    `📋 New Pick List Assigned`, 
+                    `Pick list <b>#PL-${1000 + data.picklistId}</b> with <b>${data.ordersCount} orders</b> assigned to warehouse <b>${data.warehouseName}</b>.`
+                );
+                
+                // Dispatch custom event for warehouse listeners
+                window.dispatchEvent(new CustomEvent('newPicklist', { detail: data }));
+            } else if (data.type === 'locationTransfer' || (data.oldLoc && data.newLoc)) {
+                showStockToast(
+                    `🔄 Location Transfer`, 
+                    `Moved <b>${data.qty} units</b> of <b>${data.productName}</b> from <b>${data.oldLoc}</b> to <b>${data.newLoc}</b> at warehouse <b>${data.warehouseName}</b>.`
+                );
+                
+                window.dispatchEvent(new CustomEvent('locationTransfer', { detail: data }));
+            } else if (data.productName && data.replenishedQuantity && data.warehouseName) {
                 showStockToast(
                     `🔔 Stock Update`, 
                     `Added <b>${data.replenishedQuantity} units</b> of <b>${data.productName}</b> to <b>${data.warehouseName}</b> (${data.locationName || 'Slot'}).`
