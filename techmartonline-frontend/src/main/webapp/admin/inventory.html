@@ -5,56 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Inventory - TechMart Admin</title>
     
+    
+
+    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
         body, aside, button, select, input, textarea, td, th, h1, h2, h3, h4, span, p, a {
             font-family: "Plus Jakarta Sans", sans-serif !important;
         }
-        body {
-            background-color: #0b0f19;
-        }
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: #334155;
             border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #334155;
+            background: #475569;
         }
-        .glass-card {
-            background: rgba(13, 18, 31, 0.45);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-        .glass-card:hover {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(13, 18, 31, 0.6);
-        }
-        .premium-input {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #f1f5f9;
-            transition: all 0.2s ease-in-out;
-        }
-        .premium-input:focus {
-            border-color: #fbbf24;
-            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.15);
-            outline: none;
-            background: rgba(15, 23, 42, 0.95);
-        }
+
     </style>
 </head>
 <body class="text-slate-200 antialiased custom-scrollbar">
 
+<!-- Sidebar -->
+<!-- Sidebar -->
 <!-- Sidebar -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div>
@@ -69,7 +50,7 @@
             </div>
         </div>
 
-        <!-- Nav Links -->
+        <!-- Nav Links (Modern, Minimal, No Icons, Smaller Font) -->
         <nav class="px-4 py-6 space-y-1 h-[calc(100vh-170px)] overflow-y-auto custom-scrollbar">
             
             <a href="dashboard.html" id="nav-dashboard" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 mb-2">
@@ -90,14 +71,18 @@
                 <a href="users.html" id="nav-users" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
                     <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Users</span>
                 </a>
+                <a href="chat.html" id="nav-chat" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group flex items-center justify-between">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Messages</span>
+                    <span id="sidebar-chat-badge" class="px-1.5 py-0.5 text-[9px] font-black rounded bg-rose-500 text-white hidden">0</span>
+                </a>
             </div>
 
             <!-- Warehouses Expandable Menu Group -->
             <div class="space-y-0.5 pt-2">
                 <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Logistics</p>
-                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-2 rounded-lg text-slate-105 bg-slate-800/40 font-bold text-[13px] transition-all duration-200 group focus:outline-none cursor-pointer">
+                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-2 rounded-lg text-slate-100 bg-slate-800/40 font-bold text-[13px] transition-all duration-200 group focus:outline-none cursor-pointer">
                     <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Warehouses</span>
-                    <span id="warehouse-arrow" class="text-[9px] text-slate-500 transition-transform duration-200">▼</span>
+                    <span id="warehouse-arrow" class="text-[9px] text-slate-500 transition-transform duration-200" style="transform: rotate(180deg)">▲</span>
                 </button>
                 <div id="warehouse-submenu" class="pl-5 pr-2 py-1 space-y-0.5 rounded-lg mx-2 border-l border-slate-800/60 ml-6">
                     <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Dashboard</a>
@@ -126,7 +111,7 @@
     </div>
 
     <!-- Profile & Logout -->
-    <div class="p-4 border-t border-slate-800/60 bg-[#06090f]">
+    <div class="p-4 border-t border-slate-800/60 bg-[#0a0e17]">
         <div class="flex items-center gap-3 px-2 py-2 mb-3">
             <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/50 flex items-center justify-center font-bold text-xs shadow-sm">
                 A

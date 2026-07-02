@@ -5,160 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoices - TechMart Admin</title>
     
+    
+
+    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;950&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
         body, aside, button, select, input, textarea, td, th, h1, h2, h3, h4, span, p, a {
             font-family: "Plus Jakarta Sans", sans-serif !important;
         }
-        body {
-            background-color: #0b0f19;
-        }
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: #334155;
             border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #334155;
+            background: #475569;
         }
-        .glass-card {
-            background: rgba(13, 18, 31, 0.45);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-        .glass-card:hover {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(13, 18, 31, 0.6);
-        }
+
     </style>
 </head>
 <body class="text-slate-200 antialiased custom-scrollbar min-h-screen flex flex-col justify-between">
 
 <!-- Sidebar -->
+<!-- Sidebar -->
+<!-- Sidebar -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <div>
         <!-- Logo -->
         <div class="px-6 py-7 border-b border-slate-800/60 flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-extrabold text-lg shadow-lg shadow-amber-500/10">
-                <svg class="w-5 h-5 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                </svg>
+            <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-bold text-lg shadow-lg shadow-amber-500/10">
+                ⚡
             </div>
             <div>
-                <h2 class="font-extrabold text-sm leading-tight tracking-tight text-white">TechMart</h2>
-                <span class="text-[9px] text-amber-400 font-bold uppercase tracking-wider block mt-0.5">Core Admin</span>
+                <h2 class="font-bold text-sm leading-tight tracking-tight text-white">TechMart</h2>
+                <span class="text-[9px] text-amber-400 font-semibold uppercase tracking-widest block mt-0.5">Core Admin</span>
             </div>
         </div>
 
-        <!-- Nav Links (Sleek minimalist vectors replacing emojis) -->
+        <!-- Nav Links (Modern, Minimal, No Icons, Smaller Font) -->
         <nav class="px-4 py-6 space-y-1 h-[calc(100vh-170px)] overflow-y-auto custom-scrollbar">
             
-            <a href="dashboard.html" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v6.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <a href="dashboard.html" id="nav-dashboard" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 mb-2">
                 Dashboard
             </a>
             
             <div class="space-y-0.5 pt-2">
-                <p class="px-4 text-[9px] font-extrabold text-slate-505 uppercase tracking-widest mb-2 mt-2">Management</p>
-                <a href="products.html" id="nav-products" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25" />
-                    </svg>
-                    Products
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Management</p>
+                <a href="products.html" id="nav-products" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Products</span>
                 </a>
-                <a href="orders.html" id="nav-orders" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    Orders
+                <a href="orders.html" id="nav-orders" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Orders</span>
                 </a>
-                <a href="order-packing.html" id="nav-order-packing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                    Order Packing
+                <a href="order-packing.html" id="nav-order-packing" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Order Packing</span>
                 </a>
-                <a href="users.html" id="nav-users" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Users
+                <a href="users.html" id="nav-users" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Users</span>
+                </a>
+                <a href="chat.html" id="nav-chat" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group flex items-center justify-between">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Messages</span>
+                    <span id="sidebar-chat-badge" class="px-1.5 py-0.5 text-[9px] font-black rounded bg-rose-500 text-white hidden">0</span>
                 </a>
             </div>
 
             <!-- Warehouses Expandable Menu Group -->
             <div class="space-y-0.5 pt-2">
-                <p class="px-4 text-[9px] font-extrabold text-slate-505 uppercase tracking-widest mb-2 mt-2">Logistics</p>
-                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 focus:outline-none cursor-pointer">
-                    <span class="flex items-center gap-3">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        Warehouses
-                    </span>
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Logistics</p>
+                <button onclick="toggleWarehouseSubmenu()" id="nav-warehouses-btn" class="flex items-center justify-between w-full px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group focus:outline-none cursor-pointer">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Warehouses</span>
                     <span id="warehouse-arrow" class="text-[9px] text-slate-500 transition-transform duration-200">▼</span>
                 </button>
-                <div id="warehouse-submenu" class="pl-9 pr-2 py-1 space-y-1 hidden rounded-xl mx-2 ml-6">
-                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Dashboard</a>
-                    <a href="warehouses.html" id="sub-wh-locations" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Locations & Slots</a>
-                    <a href="inventory.html" id="sub-wh-inventory" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Inventory Stock</a>
-                    <a href="warehouse-transfers.html" id="sub-wh-transfers" class="block py-1.5 px-3 text-xs text-slate-400 hover:text-slate-100 transition-all font-medium rounded-lg hover:bg-slate-800/30">Transfers</a>
+                <div id="warehouse-submenu" class="pl-5 pr-2 py-1 space-y-0.5 hidden rounded-lg mx-2 border-l border-slate-800/60 ml-6">
+                    <a href="warehouse-dashboard.html" id="sub-wh-dashboard" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Dashboard</a>
+                    <a href="warehouses.html" id="sub-wh-locations" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Locations & Slots</a>
+                    <a href="inventory.html" id="sub-wh-inventory" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Inventory Stock</a>
+                    <a href="warehouse-transfers.html" id="sub-wh-transfers" class="block py-1.5 px-3 text-[12px] text-slate-500 hover:text-slate-200 transition-all font-medium rounded hover:bg-slate-800/30">Transfers</a>
                 </div>
             </div>
 
             <div class="space-y-0.5 pt-2">
-                <p class="px-4 text-[9px] font-extrabold text-slate-505 uppercase tracking-widest mb-2 mt-2">Finance & Analytics</p>
-                <a href="suppliers.html" id="nav-suppliers" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Suppliers
+                <p class="px-4 text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2 mt-2">Finance & Analytics</p>
+                <a href="suppliers.html" id="nav-suppliers" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Suppliers</span>
                 </a>
-                <a href="invoices.html" id="nav-invoices" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-950 bg-gradient-to-tr from-amber-400 to-amber-300 font-extrabold text-xs shadow-md shadow-amber-500/10 transition-all duration-200">
-                    <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Invoices
+                <a href="invoices.html" id="nav-invoices" class="block px-4 py-2.5 rounded-lg text-slate-950 bg-gradient-to-r from-amber-400 to-amber-300 font-semibold text-[13px] transition-all duration-200 shadow-md shadow-amber-400/10 mb-2">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Invoices</span>
                 </a>
-                <a href="reports.html" id="nav-reports" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    Reports
+                <a href="reports.html" id="nav-reports" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Reports</span>
                 </a>
-                <a href="performance-metrics.html" id="nav-performance-metrics" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    Performance Metrics
+                <a href="performance-metrics.html" id="nav-performance-metrics" class="block px-4 py-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/40 font-medium text-[13px] transition-all duration-200 group">
+                    <span class="group-hover:translate-x-1.5 inline-block transition-transform duration-200">Performance Metrics</span>
                 </a>
             </div>
         </nav>
     </div>
 
     <!-- Profile & Logout -->
-    <div class="p-4 border-t border-slate-800 bg-[#06090f]">
+    <div class="p-4 border-t border-slate-800/60 bg-[#0a0e17]">
         <div class="flex items-center gap-3 px-2 py-2 mb-3">
             <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/50 flex items-center justify-center font-bold text-xs shadow-sm">
                 A
             </div>
             <div>
-                <h4 id="adminName" class="font-semibold text-xs text-slate-200">Administrator</h4>
-                <p class="text-[10px] text-slate-505 font-medium">admin@techmart.com</p>
+                <h4 id="adminName" class="font-semibold text-[13px] text-slate-200">Administrator</h4>
+                <p class="text-[10px] text-slate-500 font-medium">admin@techmart.com</p>
             </div>
         </div>
-        <button onclick="handleLogout()" class="flex items-center justify-center w-full py-2 rounded-xl text-rose-400 hover:text-rose-350 hover:bg-rose-500/10 text-[11px] font-bold transition-all duration-200 cursor-pointer">
+        <button onclick="AuthUtils.logout()" class="flex items-center justify-center w-full py-2 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 text-[12px] font-semibold transition-all duration-200 cursor-pointer">
             Log Out
         </button>
     </div>
