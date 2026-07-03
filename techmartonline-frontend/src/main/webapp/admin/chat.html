@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Messages - TechMart Admin</title>
     
+    <!-- Tailwind CSS -->
     
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,7 +31,7 @@
 
     </style>
 </head>
-<body class="bg-slate-55 antialiased">
+<body class="bg-[#0b0f19] antialiased text-slate-200 overflow-hidden h-screen flex">
 
 <!-- Sidebar -->
 <!-- Sidebar -->
@@ -124,67 +125,109 @@
     </div>
 </aside>
 
-<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
+<div class="flex-1 flex flex-col h-full min-w-0 relative bg-[#0b0f19]">
+    
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm hidden transition-opacity lg:hidden" onclick="toggleSidebar()"></div>
 
-<!-- Content Wrapper -->
-<div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
-    <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
+    <!-- Header -->
+    <header class="h-16 bg-[#0d121f]/80 backdrop-blur-md border-b border-slate-800/50 px-4 md:px-6 flex items-center justify-between shadow-sm z-30 shrink-0">
         <div class="flex items-center gap-4">
-            <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            <button onclick="toggleSidebar()" class="md:hidden p-2 -ml-2 rounded-xl text-slate-400 hover:bg-slate-800/60 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
             </button>
-            <h1 class="text-sm font-bold text-slate-900">Communication Workspace</h1>
+            <div>
+                <h1 class="text-sm font-bold text-white leading-tight">Messages Workspace</h1>
+                <p class="text-[10px] text-slate-500 font-semibold hidden md:block">Manage customer and staff communications</p>
+            </div>
         </div>
-        <div class="flex items-center gap-2">
-            <span id="wsStatusDot" class="w-2 h-2 rounded-full bg-slate-300 animate-pulse"></span>
+        
+        <div class="flex items-center gap-3">
+            <span id="wsStatusDot" class="w-2 h-2 rounded-full bg-slate-500 animate-pulse"></span>
             <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">WebSocket Stream</span>
         </div>
     </header>
 
-    <main class="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden">
+    <!-- Chat Interface Container -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden bg-[#0b0f19] relative" id="chat-wrapper">
         
-        <!-- Left Panel -->
-        <div class="w-full md:w-80 bg-white border-r border-slate-200 flex flex-col h-full shrink-0">
-            <div class="p-4 border-b border-slate-100 space-y-3">
-                <div class="relative">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
-                    <input type="text" id="contactSearch" placeholder="Search contacts..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 font-semibold bg-slate-50" />
+        <div class="w-full md:w-80 lg:w-[350px] border-r border-slate-800/60 flex flex-col h-full shrink-0 chat-list-panel bg-[#0d121f]/40">
+            <!-- Search & Actions -->
+            <div class="p-4 space-y-3 bg-[#0d121f]/80 border-b border-slate-800/60">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-slate-500 group-focus-within:text-brand-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" id="contactSearch" placeholder="Search conversations..." class="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border border-slate-800 bg-[#0b0f19] text-slate-200 focus:outline-none focus:border-amber-400 font-medium transition-all" />
                 </div>
-                <button id="btnRoleBroadcast" class="w-full py-2.5 px-3 text-[11px] font-bold bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white rounded-xl transition-all cursor-pointer">
-                    📢 Broadcast to Role
+                <button id="btnRoleBroadcast" onclick="openBroadcastModal()" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-bold bg-slate-900 hover:bg-brand-400 hover:text-brand-950 text-white border border-slate-700/50 rounded-xl transition-all shadow-md shadow-brand-950/10 group cursor-pointer">
+                    <svg class="w-4 h-4 text-brand-400 group-hover:text-brand-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                    New Broadcast
                 </button>
             </div>
+
+            <!-- Contacts List -->
             <div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1" id="contactsList">
-                <div class="text-center py-8 text-xs text-slate-400 font-semibold">Loading contacts...</div>
+                <div class="text-center py-8 text-xs text-slate-500 font-semibold">Loading contacts list...</div>
             </div>
         </div>
 
-        <!-- Right Chat Panel -->
-        <div class="flex-1 bg-white flex flex-col h-full" id="chatArea">
-            <div id="welcomePanel" class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3">
-                <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl">💬</div>
-                <h3 class="text-base font-bold text-slate-900">TechMart Messaging Workspace</h3>
-                <p class="text-xs text-slate-400 max-w-sm font-semibold">Select a client contact to begin communication.</p>
+        <div class="flex-1 flex flex-col h-full bg-[#0b0f19] relative chat-area-panel animate-fade-in" id="chatArea">
+            
+            <!-- Empty State / Welcome Screen -->
+            <div id="welcomePanel" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#0d121f]/35 z-20">
+                <div class="w-24 h-24 mb-6 rounded-full bg-slate-900/60 border border-slate-800/80 flex items-center justify-center shadow-inner relative">
+                    <div class="absolute inset-0 bg-brand-400 rounded-full animate-ping opacity-10"></div>
+                    <svg class="w-10 h-10 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                </div>
+                <h3 class="text-base font-black text-white mb-2">Welcome to Messages</h3>
+                <p class="text-xs text-slate-400 max-w-sm font-medium leading-relaxed">Select a conversation from the left panel to start messaging with customers or staff members.</p>
             </div>
 
-            <div id="activeChatPanel" class="flex-1 flex flex-col h-full hidden">
-                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-200 to-slate-100 flex items-center justify-center font-bold text-xs" id="chatHeaderInitials">-</div>
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm" id="chatHeaderName">User Name</h4>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase" id="chatHeaderSub">Status</p>
+            <!-- Active Chat Interface -->
+            <div id="activeChatPanel" class="flex-1 flex flex-col h-full opacity-0 pointer-events-none transition-opacity duration-300">
+                
+                <!-- Chat Header -->
+                <div class="px-4 py-3 md:px-6 md:py-4 border-b border-slate-800/50 flex items-center justify-between bg-[#0d121f]/90 backdrop-blur z-10 shrink-0 shadow-sm">
+                    <div class="flex items-center gap-3 md:gap-4">
+                        <button onclick="closeMobileChat()" class="md:hidden p-2 -ml-2 rounded-lg text-slate-400 hover:bg-slate-800/60 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                        <div class="relative">
+                            <div id="activeChatAvatar" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-slate-900 border border-slate-850 flex items-center justify-center font-bold text-sm text-slate-200 uppercase">U</div>
+                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0d121f] rounded-full animate-pulse"></span>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-extrabold text-white text-sm md:text-base leading-tight" id="activeChatName">User Name</h4>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wider uppercase bg-slate-800 text-slate-400 border border-slate-700/40" id="activeChatRoleTag">Role</span>
+                                <span class="text-[10px] text-slate-500 font-semibold hidden md:inline">Online now</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4" id="messagesContainer"></div>
+                <!-- Messages Container -->
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 space-y-6 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiMzMzQxNTUiIGZpbGwtb3BhY2l0eT0iMC4yIi8+PC9zdmc+')] bg-repeat" id="messagesContainer">
+                    <!-- Javascript will populate this -->
+                </div>
 
-                <div class="p-4 border-t border-slate-100 bg-white">
-                    <form id="chatForm" class="flex items-center gap-3">
-                        <input type="text" id="messageInput" placeholder="Message..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 text-sm font-semibold" autocomplete="off" />
-                        <button type="submit" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white font-bold text-xs transition-all cursor-pointer">
-                            Send
+                <!-- Input Area -->
+                <div class="p-3 md:p-4 border-t border-slate-800/60 bg-[#0d121f] shrink-0">
+                    <form id="chatForm" class="flex items-end gap-2 max-w-5xl mx-auto">
+                        <button type="button" class="p-3 text-slate-500 hover:text-brand-400 hover:bg-slate-900/60 rounded-xl transition-colors shrink-0 focus:outline-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                        </button>
+                        
+                        <div class="flex-1 bg-[#0b0f19] border border-slate-800 rounded-2xl flex items-end focus-within:border-brand-400 transition-all overflow-hidden">
+                            <textarea id="messageInput" rows="1" placeholder="Type a message..." class="w-full max-h-32 px-4 py-3 bg-transparent focus:outline-none text-slate-200 text-xs font-semibold resize-none custom-scrollbar dark-scrollbar" oninput="this.style.height = ''; this.style.height = Math.min(this.scrollHeight, 120) + 'px'"></textarea>
+                            <button type="button" class="p-3 text-slate-500 hover:text-brand-400 transition-colors shrink-0 focus:outline-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </button>
+                        </div>
+
+                        <button type="submit" class="p-3.5 rounded-2xl bg-brand-400 hover:bg-brand-500 text-brand-950 shadow-md shadow-brand-400/20 transition-all shrink-0 focus:outline-none cursor-pointer">
+                            <svg class="w-5 h-5 transform rotate-45 -ml-1 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                         </button>
                     </form>
                 </div>
@@ -193,27 +236,41 @@
     </main>
 </div>
 
-<!-- Modal -->
-<div id="broadcastModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm hidden animate-fade-in p-4">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full p-6 space-y-5">
-        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-            <h3 class="font-black text-slate-900 text-sm uppercase tracking-wider">📢 Create Role Broadcast</h3>
-            <button id="btnCloseBroadcastModal" class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700">✕</button>
+<!-- Broadcast Modal -->
+<div id="broadcastModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm hidden p-4 transition-opacity duration-300 opacity-0">
+    <div class="bg-[#0d121f] rounded-3xl border border-slate-800 shadow-2xl max-w-md w-full overflow-hidden transform scale-95 transition-transform duration-300" id="broadcastModalContent">
+        <div class="px-6 py-4 bg-slate-900/60 border-b border-slate-800/60 flex justify-between items-center">
+            <h3 class="font-extrabold text-white text-xs uppercase tracking-wider flex items-center gap-2">
+                <span>📢</span> Create Broadcast
+            </h3>
+            <button onclick="closeBroadcastModal()" class="p-1.5 bg-slate-800 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors focus:outline-none">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
-        <form id="broadcastForm" class="space-y-4">
-            <div class="space-y-1 text-left">
-                <label class="text-[10px] font-bold text-slate-400 uppercase">Target Role</label>
-                <select id="broadcastRole" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold" required>
-                    <option value="CUSTOMER">CUSTOMERS</option>
-                    <option value="WAREHOUSE_STAFF">WAREHOUSE STAFF</option>
-                    <option value="ADMIN">ADMINS</option>
-                </select>
+        <form id="broadcastForm" class="p-6 space-y-5" onsubmit="handleBroadcast(event)">
+            <div class="space-y-1.5 text-left">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-wide">Target Audience</label>
+                <div class="relative">
+                    <select id="broadcastRole" class="w-full pl-4 pr-10 py-3 rounded-xl border border-slate-800 bg-[#0b0f19] text-xs font-bold text-slate-200 appearance-none focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 transition-all cursor-pointer" required>
+                        <option value="CUSTOMER">All Customers</option>
+                        <option value="WAREHOUSE_STAFF">Warehouse Staff</option>
+                        <option value="ADMIN">Administrators</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
             </div>
-            <div class="space-y-1 text-left">
-                <label class="text-[10px] font-bold text-slate-400 uppercase">Message</label>
-                <textarea id="broadcastMessage" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium" required></textarea>
+            <div class="space-y-1.5 text-left">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-wide">Message Content</label>
+                <textarea id="broadcastMessage" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-800 bg-[#0b0f19] text-xs font-medium text-slate-200 focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 transition-all resize-none" placeholder="Type your broadcast message here..." required></textarea>
             </div>
-            <button type="submit" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs rounded-xl transition-all cursor-pointer">Publish</button>
+            <div class="pt-2">
+                <button type="submit" class="w-full py-3.5 bg-brand-400 hover:bg-brand-500 text-brand-950 font-extrabold text-sm rounded-xl transition-all shadow-lg shadow-brand-400/20 flex items-center justify-center gap-2 cursor-pointer focus:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    Publish Broadcast
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -223,21 +280,32 @@
 <script src="../js/utils/helpers.js"></script>
 <script src="../js/admin/chat.js"></script>
 <script>
-    // Sidebar responsive toggle
-    const menuBtn = document.getElementById('menu-btn');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    if (menuBtn && sidebar && overlay) {
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        });
-        overlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        });
+    // Toggle Mobile Sidebar
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
     }
 
+    // Submenu Toggle
+    function toggleSubmenu(menuId, arrowId) {
+        const menu = document.getElementById(menuId);
+        const arrow = document.getElementById(arrowId);
+        if (menu && arrow) {
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    }
+</script>
+<script>
     function toggleWarehouseSubmenu() {
         const submenu = document.getElementById('warehouse-submenu');
         const arrow = document.getElementById('warehouse-arrow');
