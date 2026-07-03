@@ -43,6 +43,10 @@ async function loadRecentOrders() {
         const res = await fetch(`${API_CONFIG.BASE_URL}/orders`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        if (res.status === 401) {
+            AuthUtils.logout();
+            return;
+        }
         if (!res.ok) throw new Error("Failed to load recent orders");
         const json = await res.json();
         
@@ -163,6 +167,10 @@ async function loadLowStockAlerts() {
         const res = await fetch(`${API_CONFIG.BASE_URL}/inventory/low-stock`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        if (res.status === 401) {
+            AuthUtils.logout();
+            return;
+        }
         if (!res.ok) throw new Error("Failed to load low stock alerts");
         const json = await res.json();
         const alerts = json.data || [];
@@ -205,6 +213,10 @@ async function loadServerUptime() {
         const res = await fetch(`${API_CONFIG.BASE_URL}/performance/metrics`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        if (res.status === 401) {
+            AuthUtils.logout();
+            return;
+        }
         if (!res.ok) throw new Error("Metrics offline");
         const json = await res.json();
         const uptime = json.data ? json.data.uptime : 'N/A';
