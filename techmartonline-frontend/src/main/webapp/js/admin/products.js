@@ -88,10 +88,12 @@ function renderProducts(products) {
                 <td class="py-4 px-6 text-slate-350 font-semibold text-xs">${product.category || 'Uncategorized'}</td>
                 <td class="py-4 px-6 font-black text-white text-xs">$${product.price.toFixed(2)}</td>
                 <td class="py-4 px-6">
-                    <span class="font-bold text-slate-200 text-xs">
-                        ${product.blockQty || 0}
-                    </span>
-                    <span class="text-[10px] text-slate-500 font-medium block">Blocked</span>
+                    <div class="flex flex-col gap-0.5">
+                        <button onclick="showStockDistribution(${product.id}, '${product.name.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400 hover:text-amber-300 underline bg-transparent border-0 p-0 cursor-pointer focus:outline-none">
+                            ${product.stockQty || 0} Available
+                        </button>
+                        <span class="text-[10px] text-slate-500 font-medium block">Blocked: ${product.blockQty || 0}</span>
+                    </div>
                 </td>
                 <td class="py-4 px-6">
                     ${statusBadge}
@@ -161,4 +163,48 @@ function setupFilters() {
     if (searchInput) searchInput.oninput = applyFilters;
     if (categoryFilter) categoryFilter.onchange = applyFilters;
     if (statusFilter) statusFilter.onchange = applyFilters;
+}
+
+async function showStockDistribution(productId, productName) {
+    const modal = document.getElementById('stockDistributionModal');
+    const nameLabel = document.getElementById('distModalProductName');
+    const listContainer = document.getElementById('distModalList');
+    if (!modal || !listContainer) return;
+
+    nameLabel.textContent = productName;
+    listContainer.innerHTML = '<div class="text-center py-6 text-slate-400 text-xs font-semibold">Loading distribution...</div>';
+    modal.classList.remove('hidden');
+
+    try {
+        const token = AuthUtils.getToken();
+        const res = await fetch(`${API_CONFIG.BASE_URL}/inventory/product/${productId}/distribution`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to load warehouse stock distribution.");
+        const json = await res.json();
+        const dist = json.data || [];
+
+        if (dist.length === 0) {
+            listContainer.innerHTML = '<div class="text-center py-6 text-slate-400 text-xs font-semibold">⚠️ No stock allocated in any warehouse yet.</div>';
+            return;
+        }
+
+        listContainer.innerHTML = dist.map(d => `
+            <div class="flex justify-between items-center bg-slate-900/40 border border-slate-800/80 px-4 py-3 rounded-2xl">
+                <span class="text-white font-bold text-xs">🏢 ${d.warehouseName}</span>
+                <span class="px-2.5 py-1 text-xs font-extrabold rounded-lg bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                    ${d.stockQty} items
+                </span>
+            </div>
+        `).join('');
+    } catch (err) {
+        listContainer.innerHTML = `<div class="text-center py-6 text-rose-500 text-xs font-bold">Error: ${err.message}</div>`;
+    }
+}
+
+function closeStockDistributionModal() {
+    const modal = document.getElementById('stockDistributionModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
 }

@@ -20,6 +20,7 @@ public class ProductDTO implements Serializable {
     private String brand;
     private List<String> images;
     private int stockQty;
+    private int lowStockLimit;
 
     public ProductDTO() {}
 
@@ -133,5 +134,13 @@ public class ProductDTO implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public int getLowStockLimit() {
+        return lowStockLimit;
+    }
+
+    public void setLowStockLimit(int lowStockLimit) {
+        this.lowStockLimit = lowStockLimit;
     }
 }

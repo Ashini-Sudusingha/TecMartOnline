@@ -484,4 +484,90 @@ public class InventoryResource {
             return ResponseUtil.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, "Internal server error: " + e.getMessage());
         }
     }
+
+    @GET
+    @Path("/low-stock")
+    public Response getLowStockAlerts(@HeaderParam("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Missing or invalid Authorization header.");
+        }
+        String token = authHeader.substring(7);
+        if (JWTUtil.validateToken(token) == null) {
+            return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Token is invalid or expired.");
+        }
+
+        try {
+            String jpql = "SELECT i.warehouse.id, i.warehouse.name, p.id, p.name, p.category.name, SUM(i.stockQuantity), p.lowStockLimit " +
+                          "FROM Inventory i JOIN i.product p " +
+                          "WHERE p.isActive = true " +
+                          "GROUP BY i.warehouse.id, i.warehouse.name, p.id, p.name, p.category.name, p.lowStockLimit";
+
+            TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
+            List<Object[]> results = query.getResultList();
+
+            List<java.util.Map<String, Object>> alerts = new java.util.ArrayList<>();
+            for (Object[] r : results) {
+                Long warehouseId = (Long) r[0];
+                String warehouseName = (String) r[1];
+                Long productId = (Long) r[2];
+                String productName = (String) r[3];
+                String categoryName = (String) r[4];
+                Long stockQty = (Long) r[5];
+                Integer lowStockLimit = (Integer) r[6];
+
+                if (stockQty <= lowStockLimit) {
+                    java.util.Map<String, Object> alert = new java.util.HashMap<>();
+                    alert.put("warehouseId", warehouseId);
+                    alert.put("warehouseName", warehouseName);
+                    alert.put("productId", productId);
+                    alert.put("productName", productName);
+                    alert.put("categoryName", categoryName);
+                    alert.put("stockQty", stockQty);
+                    alert.put("lowStockLimit", lowStockLimit);
+                    alerts.add(alert);
+                }
+            }
+
+            return ResponseUtil.buildSuccessResponse("Low stock alerts retrieved", alerts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, "Database error: " + e.getMessage());
+        }
+    }
+
+    @GET
+    @Path("/product/{productId}/distribution")
+    public Response getProductStockDistribution(@HeaderParam("Authorization") String authHeader, @PathParam("productId") Long productId) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Missing or invalid Authorization header.");
+        }
+        String token = authHeader.substring(7);
+        if (JWTUtil.validateToken(token) == null) {
+            return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Token is invalid or expired.");
+        }
+
+        try {
+            String jpql = "SELECT i.warehouse.id, i.warehouse.name, SUM(i.stockQuantity) " +
+                          "FROM Inventory i " +
+                          "WHERE i.product.id = :productId " +
+                          "GROUP BY i.warehouse.id, i.warehouse.name";
+            TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
+            query.setParameter("productId", productId);
+            List<Object[]> results = query.getResultList();
+
+            List<java.util.Map<String, Object>> list = new java.util.ArrayList<>();
+            for (Object[] r : results) {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("warehouseId", r[0]);
+                map.put("warehouseName", r[1]);
+                map.put("stockQty", r[2]);
+                list.add(map);
+            }
+
+            return ResponseUtil.buildSuccessResponse("Product warehouse stock distribution retrieved", list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseUtil.buildErrorResponse(Status.INTERNAL_SERVER_ERROR, "Database error: " + e.getMessage());
+        }
+    }
 }

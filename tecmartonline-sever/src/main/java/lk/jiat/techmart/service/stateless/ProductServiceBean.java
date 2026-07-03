@@ -68,6 +68,7 @@ public class ProductServiceBean implements ProductServiceRemote {
             product.setBlockQty(0); // block_qty defaulted to 0 per user requirement
             product.setDimensions(dto.getDimensions());
             product.setIsActive(true);
+            product.setLowStockLimit(dto.getLowStockLimit());
             product.setCreatedAt(new Date());
 
             // Fetch or create Color
@@ -152,6 +153,7 @@ public class ProductServiceBean implements ProductServiceRemote {
             product.setBarcode(dto.getBarcode());
             product.setWeight(dto.getWeight());
             product.setDimensions(dto.getDimensions());
+            product.setLowStockLimit(dto.getLowStockLimit());
 
             // Update Color
             if (dto.getColor() != null) {
@@ -258,6 +260,7 @@ public class ProductServiceBean implements ProductServiceRemote {
         dto.setBlockQty(p.getBlockQty());
         dto.setDimensions(p.getDimensions());
         dto.setIsActive(p.isIsActive());
+        dto.setLowStockLimit(p.getLowStockLimit());
         dto.setColor(p.getColor().getColor());
         dto.setCategory(p.getCategory().getName());
         dto.setBrand(p.getBrand().getName());

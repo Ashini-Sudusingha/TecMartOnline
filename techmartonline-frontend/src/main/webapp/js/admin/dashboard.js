@@ -19,11 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     loadRecentOrders();
+    loadLowStockAlerts();
 
     // Live update when a new order arrives via WebSocket
     window.addEventListener('newOrder', () => {
         console.log("🔄 Live Order received: Refreshing Recent Orders dashboard...");
         loadRecentOrders();
+    });
+
+    window.addEventListener('inventoryUpdate', () => {
+        console.log("🔄 Inventory update: Refreshing low stock warnings...");
+        loadLowStockAlerts();
     });
 });
 
@@ -144,5 +150,47 @@ function closeDetailsModal() {
     const modal = document.getElementById('orderDetailsModal');
     if (modal) {
         modal.classList.add('hidden');
+    }
+}
+
+async function loadLowStockAlerts() {
+    const tbody = document.getElementById('lowStockAlertsTbody');
+    if (!tbody) return;
+
+    try {
+        const token = AuthUtils.getToken();
+        const res = await fetch(`${API_CONFIG.BASE_URL}/inventory/low-stock`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to load low stock alerts");
+        const json = await res.json();
+        const alerts = json.data || [];
+
+        if (alerts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 font-semibold">✅ All items are well stocked in all warehouses!</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = alerts.map(alert => {
+            return `
+                <tr class="hover:bg-slate-800/20 transition-all border-b border-slate-800/40 last:border-b-0">
+                    <td class="py-3.5 px-4 font-semibold text-white">
+                        <div>${alert.productName}</div>
+                        <div class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">${alert.warehouseName}</div>
+                    </td>
+                    <td class="py-3.5 px-4 text-slate-400">${alert.categoryName}</td>
+                    <td class="py-3.5 px-4">
+                        <span class="inline-flex px-2 py-0.5 text-[11px] font-bold rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                            ${alert.stockQty} left (Limit: ${alert.lowStockLimit})
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-right">
+                        <a href="inventory.html" class="text-[11px] font-bold text-amber-400 hover:bg-amber-400 hover:text-slate-950 border border-amber-400/20 px-2.5 py-1 rounded-lg transition-all">Restock</a>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-rose-500 font-semibold">Error: ${err.message}</td></tr>`;
     }
 }

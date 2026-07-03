@@ -38,6 +38,9 @@ public class Product implements Serializable {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
+    @Column(name = "low_stock_limit", nullable = false)
+    private int lowStockLimit;
+
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -169,5 +172,13 @@ public class Product implements Serializable {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public int getLowStockLimit() {
+        return lowStockLimit;
+    }
+
+    public void setLowStockLimit(int lowStockLimit) {
+        this.lowStockLimit = lowStockLimit;
     }
 }
