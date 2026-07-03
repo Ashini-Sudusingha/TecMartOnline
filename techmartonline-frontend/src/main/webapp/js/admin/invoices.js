@@ -239,6 +239,7 @@ async function saveAllTempItems() {
         
         // Refresh database logs list
         await loadInvoiceItems(invoiceId);
+        await loadInvoices();
         
         // Reload locations dropdown to update quantity counts
         const whId = document.getElementById('itemWarehouse').value;
@@ -300,7 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const dto = {
                 supplierId: parseInt(document.getElementById('invoiceSupplier').value),
-                totalAmount: parseFloat(document.getElementById('invoiceAmount').value)
+                totalAmount: parseFloat(document.getElementById('invoiceAmount').value || 0)
             };
 
             try {

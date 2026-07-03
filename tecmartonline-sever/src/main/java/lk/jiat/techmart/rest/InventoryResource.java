@@ -178,6 +178,22 @@ public class InventoryResource {
 
             em.persist(inv);
 
+            // Recalculate invoice total amount (Buying Price * Delivered Quantity)
+            double newTotal = 0.0;
+            try {
+                Double sum = em.createQuery(
+                    "SELECT SUM(i.buyingPrice * i.stockQuantity) FROM Inventory i WHERE i.invoice.id = :invoiceId", 
+                    Double.class
+                ).setParameter("invoiceId", invoiceId).getSingleResult();
+                if (sum != null) {
+                    newTotal = sum;
+                }
+            } catch (Exception exTotal) {
+                exTotal.printStackTrace();
+            }
+            invoice.setTotalAmount(newTotal);
+            em.merge(invoice);
+
             // Publish WebSocket notification message via JMS topic
             String notificationJson = String.format(
                 "{\"productId\": %d, \"productName\": \"%s\", \"replenishedQuantity\": %d, \"warehouseName\": \"%s\", \"locationName\": \"%s\", \"timestamp\": %d}",
@@ -301,6 +317,22 @@ public class InventoryResource {
                     status.getName()
                 ));
             }
+
+            // Recalculate invoice total amount (Buying Price * Delivered Quantity)
+            double newTotal = 0.0;
+            try {
+                Double sum = em.createQuery(
+                    "SELECT SUM(i.buyingPrice * i.stockQuantity) FROM Inventory i WHERE i.invoice.id = :invoiceId", 
+                    Double.class
+                ).setParameter("invoiceId", invoiceId).getSingleResult();
+                if (sum != null) {
+                    newTotal = sum;
+                }
+            } catch (Exception exTotal) {
+                exTotal.printStackTrace();
+            }
+            invoice.setTotalAmount(newTotal);
+            em.merge(invoice);
 
             return ResponseUtil.buildSuccessResponse("All items added to inventory successfully", savedDtos);
         } catch (Exception e) {
