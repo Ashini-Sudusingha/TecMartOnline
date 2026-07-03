@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Messages - TechMart Admin</title>
-    <link rel="stylesheet" href="../css/tailwind.css" />
     
-    
-
     
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,10 +30,8 @@
 
     </style>
 </head>
-<body class="bg-slate-50 antialiased">
+<body class="bg-slate-55 antialiased">
 
-<!-- Sidebar -->
-<!-- Sidebar -->
 <!-- Sidebar -->
 <!-- Sidebar -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -129,148 +124,103 @@
     </div>
 </aside>
 
-<!-- Sidebar Overlay for Mobile -->
 <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-slate-950/50 hidden transition-opacity duration-300 lg:hidden"></div>
 
 <!-- Content Wrapper -->
 <div class="lg:pl-64 min-h-screen bg-slate-50 flex flex-col">
-    <!-- Top Header -->
     <header class="sticky top-0 z-30 h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-4">
             <button id="menu-btn" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
-                <span class="text-xl">☰</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
             </button>
-            <h1 class="text-base font-bold text-slate-800">Messages & Broadcasts</h1>
+            <h1 class="text-sm font-bold text-slate-900">Communication Workspace</h1>
         </div>
-        <div class="flex items-center gap-4">
-            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
-                <span id="wsStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Chat Server
-            </span>
+        <div class="flex items-center gap-2">
+            <span id="wsStatusDot" class="w-2 h-2 rounded-full bg-slate-300 animate-pulse"></span>
+            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">WebSocket Stream</span>
         </div>
     </header>
 
-    <!-- Main Workspace -->
     <main class="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden">
-        
-        <!-- Left: Contacts & Channels Panel -->
+        <!-- Left Panel -->
         <div class="w-full md:w-80 bg-white border-r border-slate-200 flex flex-col h-full shrink-0">
-            <!-- Search & Actions -->
             <div class="p-4 border-b border-slate-100 space-y-3">
                 <div class="relative">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
-                    <input type="text" id="contactSearch" placeholder="Search contacts..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 font-semibold" />
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+                    <input type="text" id="contactSearch" placeholder="Search contacts..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 font-semibold bg-slate-55" />
                 </div>
-                
-                <div class="flex gap-2">
-                    <button id="btnRoleBroadcast" class="flex-1 py-2 px-3 text-[11px] font-bold bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white rounded-xl transition-all cursor-pointer">
-                        📢 Broadcast to Role
-                    </button>
-                </div>
+                <button id="btnRoleBroadcast" class="w-full py-2.5 px-3 text-[11px] font-bold bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white rounded-xl transition-all cursor-pointer">
+                    📢 Broadcast to Role
+                </button>
             </div>
-
-            <!-- Contacts List -->
             <div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1" id="contactsList">
                 <div class="text-center py-8 text-xs text-slate-400 font-semibold">Loading contacts...</div>
             </div>
         </div>
 
-        <!-- Right: Message Container -->
-        <div class="flex-1 bg-slate-50 flex flex-col h-full relative" id="chatArea">
-            
-            <!-- Default Welcome Panel (Shown when no chat selected) -->
-            <div id="welcomePanel" class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3 bg-white">
-                <div class="w-16 h-16 rounded-2xl bg-amber-400/10 text-amber-500 flex items-center justify-center text-3xl shadow-sm">
-                    💬
-                </div>
+        <!-- Right Chat Panel -->
+        <div class="flex-1 bg-white flex flex-col h-full" id="chatArea">
+            <div id="welcomePanel" class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3">
+                <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl">💬</div>
                 <h3 class="text-base font-bold text-slate-900">TechMart Messaging Workspace</h3>
-                <p class="text-xs text-slate-400 max-w-sm font-semibold">Select a client contact from the left list or launch a role broadcast announcement to initiate communication.</p>
+                <p class="text-xs text-slate-400 max-w-sm font-semibold">Select a client contact to begin communication.</p>
             </div>
 
-            <!-- Chat Active Panel (Hidden by default) -->
             <div id="activeChatPanel" class="flex-1 flex flex-col h-full hidden">
-                <!-- Chat Header -->
-                <div class="px-6 py-4 bg-white border-b border-slate-200 flex items-center justify-between shadow-sm">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 text-slate-950 flex items-center justify-center font-bold text-sm shadow-sm" id="chatHeaderInitials">
-                            -
-                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-200 to-slate-100 flex items-center justify-center font-bold text-xs" id="chatHeaderInitials">-</div>
                         <div>
-                            <h4 class="font-bold text-slate-900 text-sm leading-tight" id="chatHeaderName">Active Chat</h4>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-0.5" id="chatHeaderSub">Details</p>
+                            <h4 class="font-bold text-slate-900 text-sm" id="chatHeaderName">User Name</h4>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase" id="chatHeaderSub">Status</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Messages Log -->
-                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4" id="messagesContainer">
-                    <!-- Message bubbles load dynamically here -->
-                </div>
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4 font-semibold text-slate-700" id="messagesContainer"></div>
 
-                <!-- Message Input Footer -->
-                <div class="p-4 bg-white border-t border-slate-200 shadow-lg">
+                <div class="p-4 border-t border-slate-100 bg-white">
                     <form id="chatForm" class="flex items-center gap-3">
-                        <input type="text" id="messageInput" placeholder="Write your message here..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 text-sm font-semibold" autocomplete="off" />
-                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white font-bold text-sm transition-all shadow-md cursor-pointer">
-                            Send ➔
+                        <input type="text" id="messageInput" placeholder="Message..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 text-sm font-semibold" autocomplete="off" />
+                        <button type="submit" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white font-bold text-xs transition-all cursor-pointer">
+                            Send
                         </button>
                     </form>
                 </div>
             </div>
-
         </div>
-
     </main>
 </div>
 
-<!-- Role Broadcast Modal -->
-<div id="broadcastModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4 hidden animate-fade-in">
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl w-full max-w-md p-6 space-y-5 animate-scale-in">
+<!-- Modal -->
+<div id="broadcastModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 backdrop-blur-sm hidden animate-fade-in p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full p-6 space-y-5">
         <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-            <h3 class="font-extrabold text-slate-900 text-sm uppercase tracking-wider flex items-center gap-2">
-                📢 Create Role Broadcast
-            </h3>
-            <button id="btnCloseBroadcastModal" class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-all text-xs font-bold cursor-pointer">✕</button>
+            <h3 class="font-black text-slate-900 text-sm uppercase tracking-wider">📢 Create Role Broadcast</h3>
+            <button id="btnCloseBroadcastModal" class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-700">✕</button>
         </div>
-
         <form id="broadcastForm" class="space-y-4">
             <div class="space-y-1 text-left">
-                <label for="broadcastRole" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Target User Role *</label>
-                <select id="broadcastRole" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-bold text-slate-700 bg-white cursor-pointer" required>
-                    <option value="CUSTOMER">CUSTOMERS (All Shoppers)</option>
-                    <option value="WAREHOUSE_STAFF">WAREHOUSE STAFF (Logistics depots)</option>
-                    <option value="ADMIN">ADMINS (Management group)</option>
+                <label class="text-[10px] font-bold text-slate-500 uppercase">Target Role</label>
+                <select id="broadcastRole" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold" required>
+                    <option value="CUSTOMER">CUSTOMERS</option>
+                    <option value="WAREHOUSE_STAFF">WAREHOUSE STAFF</option>
+                    <option value="ADMIN">ADMINS</option>
                 </select>
             </div>
-            
             <div class="space-y-1 text-left">
-                <label for="broadcastMessage" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Announcement text *</label>
-                <textarea id="broadcastMessage" placeholder="Type the notification payload..." rows="4" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-amber-400 focus:outline-none text-xs font-medium text-slate-700" required></textarea>
+                <label class="text-[10px] font-bold text-slate-500 uppercase">Message</label>
+                <textarea id="broadcastMessage" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium" placeholder="Write broadcast message details..." required></textarea>
             </div>
-
-            <button type="submit" class="w-full py-2.5 bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white font-bold text-xs rounded-xl transition-all shadow-md cursor-pointer">
-                Publish Broadcast announcement
-            </button>
+            <button type="submit" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-slate-955 font-black text-xs rounded-xl transition-all cursor-pointer">Publish</button>
         </form>
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="../js/api/config.js"></script>
 <script src="../js/utils/auth.js"></script>
 <script src="../js/utils/helpers.js"></script>
-<script src="../js/api/admin.js"></script>
 <script src="../js/admin/chat.js"></script>
-
-<script>
-    // Set Admin details on load
-    document.addEventListener('DOMContentLoaded', () => {
-        const user = AuthUtils.getUser();
-        if (user) {
-            const adminName = document.getElementById('adminName');
-            if (adminName) adminName.textContent = `${user.firstName} ${user.lastName}`;
-        }
-    });
-</script>
 <script>
     function toggleWarehouseSubmenu() {
         const submenu = document.getElementById('warehouse-submenu');
