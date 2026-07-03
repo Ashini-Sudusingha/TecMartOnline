@@ -1,6 +1,6 @@
 const Helpers = {
     formatPrice(amount) {
-        return `$${parseFloat(amount).toFixed(2)}`;
+        return `Rs. ${parseFloat(amount).toFixed(2)}`;
     },
     formatDate(dateVal) {
         if (!dateVal) return 'N/A';
