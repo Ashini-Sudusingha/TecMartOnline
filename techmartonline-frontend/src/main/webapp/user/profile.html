@@ -248,6 +248,13 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Mark as Received Button Panel -->
+                    <div id="markReceivedPanel" class="hidden flex justify-end border-t border-slate-200/60 pt-3">
+                        <button onclick="confirmOrderReceived()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs transition-all shadow-md cursor-pointer flex items-center gap-1.5 focus:outline-none">
+                            ✅ Mark as Received
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Orders List Table -->
@@ -282,6 +289,28 @@
 <script src="../js/api/admin.js"></script>
 <script src="../js/pages/profile.js?v=1.0.3"></script>
 <script src="../js/pages/chat-widget.js"></script>
+
+<!-- Order Received Confirmation Modal -->
+<div id="confirmReceivedModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeConfirmReceivedModal()"></div>
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-3xl shadow-xl p-6 w-full max-w-sm mx-4 space-y-4 z-10 text-center border border-slate-100">
+        <div class="text-4xl">🎁</div>
+        <div class="space-y-1.5">
+            <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider">Confirm Order Receipt</h3>
+            <p class="text-xs text-slate-500 font-medium">Please confirm that you have safely received order <span id="confirmReceivedOrderLabel" class="font-bold text-slate-800">#ORD-10001</span>.</p>
+        </div>
+        <div class="flex gap-3 pt-2">
+            <button onclick="closeConfirmReceivedModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-650 font-bold text-xs transition-all cursor-pointer">
+                Cancel
+            </button>
+            <button onclick="submitOrderReceived()" class="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs transition-all shadow-md cursor-pointer">
+                Yes, Received
+            </button>
+        </div>
+    </div>
+</div>
 
 <script>
     function handleLogout() {

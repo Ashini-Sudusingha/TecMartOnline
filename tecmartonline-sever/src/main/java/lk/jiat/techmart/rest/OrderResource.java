@@ -153,6 +153,29 @@ public class OrderResource {
         }
     }
 
+    @jakarta.ws.rs.PUT
+    @Path("/{orderId}/status")
+    public Response updateOrderStatus(@HeaderParam("Authorization") String authHeader, @PathParam("orderId") Long orderId, @jakarta.ws.rs.QueryParam("status") String statusName) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Missing or invalid Authorization header.");
+        }
+        String token = authHeader.substring(7);
+        if (JWTUtil.validateToken(token) == null) {
+            return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Token is invalid or expired.");
+        }
+
+        if (statusName == null || statusName.trim().isEmpty()) {
+            return ResponseUtil.buildErrorResponse(Status.BAD_REQUEST, "Status parameter is required.");
+        }
+
+        boolean success = orderService.updateOrderStatus(orderId, statusName.trim());
+        if (success) {
+            return ResponseUtil.buildSuccessResponse("Order status updated successfully", null);
+        } else {
+            return ResponseUtil.buildErrorResponse(Status.NOT_FOUND, "Order not found or update failed.");
+        }
+    }
+
     private Response checkAuth(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseUtil.buildErrorResponse(Status.UNAUTHORIZED, "Missing or invalid Authorization header.");

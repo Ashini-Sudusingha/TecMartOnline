@@ -21,4 +21,5 @@ public interface OrderServiceRemote {
     List<PickListDTO> getAllPickLists();
     List<PackingItemDTO> getPackingDetails(Long picklistId);
     boolean packItem(PackItemRequestDTO request);
+    boolean updateOrderStatus(Long orderId, String statusName);
 }

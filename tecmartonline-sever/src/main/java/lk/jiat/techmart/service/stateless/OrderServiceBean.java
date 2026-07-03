@@ -557,4 +557,35 @@ public class OrderServiceBean implements OrderServiceRemote {
             return false;
         }
     }
+
+    @Override
+    @jakarta.transaction.Transactional
+    public boolean updateOrderStatus(Long orderId, String statusName) {
+        try {
+            lk.jiat.techmart.entity.Order order = em.find(lk.jiat.techmart.entity.Order.class, orderId);
+            if (order == null) return false;
+
+            TypedQuery<lk.jiat.techmart.entity.Status> statusQuery = em.createQuery(
+                "SELECT s FROM Status s WHERE s.name = :name", 
+                lk.jiat.techmart.entity.Status.class
+            );
+            statusQuery.setParameter("name", statusName);
+            List<lk.jiat.techmart.entity.Status> statuses = statusQuery.getResultList();
+            lk.jiat.techmart.entity.Status status;
+            if (!statuses.isEmpty()) {
+                status = statuses.get(0);
+            } else {
+                status = new lk.jiat.techmart.entity.Status();
+                status.setName(statusName);
+                em.persist(status);
+            }
+
+            order.setStatus(status);
+            em.merge(order);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

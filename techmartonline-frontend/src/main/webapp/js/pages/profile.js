@@ -1,6 +1,7 @@
 let allCities = [];
 let allAddresses = [];
 let allOrders = [];
+let activeTrackingOrderId = null;
 
 // Toggle showing address insertion form
 function toggleAddressForm() {
@@ -318,8 +319,70 @@ function trackOrder(orderId) {
         title4.className = "text-xs font-bold text-emerald-600";
     }
 
+    // Toggle Mark as Received button visibility based on delivery completion
+    const markPanel = document.getElementById('markReceivedPanel');
+    if (markPanel) {
+        if (status !== "DELIVERED") {
+            markPanel.classList.remove('hidden');
+        } else {
+            markPanel.classList.add('hidden');
+        }
+    }
+
     // Scroll to tracker smooth
+    activeTrackingOrderId = orderId;
     tracker.scrollIntoView({ behavior: 'smooth' });
+}
+
+function confirmOrderReceived() {
+    if (!activeTrackingOrderId) return;
+    const ord = allOrders.find(o => o.id === activeTrackingOrderId);
+    if (!ord) return;
+
+    const label = document.getElementById('confirmReceivedOrderLabel');
+    if (label) {
+        label.textContent = `#ORD-${10000 + ord.id}`;
+    }
+
+    const modal = document.getElementById('confirmReceivedModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeConfirmReceivedModal() {
+    const modal = document.getElementById('confirmReceivedModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+async function submitOrderReceived() {
+    if (!activeTrackingOrderId) return;
+
+    try {
+        const token = AuthUtils.getToken();
+        const res = await fetch(`${Config.BASE_URL}/orders/${activeTrackingOrderId}/status?status=Delivered`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!res.ok) {
+            const errJson = await res.json();
+            throw new Error(errJson.message || "Failed to update order status.");
+        }
+
+        closeConfirmReceivedModal();
+        alert('🎉 Thank you for confirming! Your order has been marked as Delivered.');
+        
+        // Reload history & refresh stepper
+        await loadOrdersHistory();
+        trackOrder(activeTrackingOrderId);
+    } catch (err) {
+        alert('❌ Error: ' + err.message);
+    }
 }
 
 // Initial triggers
