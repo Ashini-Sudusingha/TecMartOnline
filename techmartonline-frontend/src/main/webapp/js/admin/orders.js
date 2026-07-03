@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("🔄 Live Pick List assigned: Refreshing lists...");
         loadAdminOrders();
     });
+
+    const searchInput = document.getElementById('orderSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            renderActiveTab();
+        });
+    }
 });
 
 async function loadAdminOrders() {
@@ -105,6 +112,18 @@ function renderActiveTab() {
         } else {
             filteredOrders = currentOrders;
             if (checkboxHeader) checkboxHeader.classList.add('hidden');
+        }
+
+        // Apply dynamic search filtering
+        const searchInput = document.getElementById('orderSearchInput');
+        if (searchInput && searchInput.value.trim() !== "") {
+            const query = searchInput.value.toLowerCase().trim();
+            filteredOrders = filteredOrders.filter(o => {
+                const orderIdStr = `#ord-${10000 + o.id}`;
+                const customerName = (o.customerName || '').toLowerCase();
+                const status = (o.status || '').toLowerCase();
+                return orderIdStr.includes(query) || customerName.includes(query) || status.includes(query);
+            });
         }
 
         renderOrdersTable(filteredOrders);

@@ -28,6 +28,16 @@ public class PerformanceResource {
             data.put("cacheHits", tracker.getCacheHits());
             data.put("ordersProcessed", tracker.getOrdersProcessed());
             
+            // Calculate JVM server uptime
+            long uptimeMs = java.lang.management.ManagementFactory.getRuntimeMXBean().getUptime();
+            long seconds = uptimeMs / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            long days = hours / 24;
+            String uptimeStr = String.format("%dd %dh %dm", days, hours % 24, minutes % 60);
+            data.put("uptime", uptimeStr);
+            data.put("uptimeMs", uptimeMs);
+            
             // Mock connection pool and EJB pool statistics for UI presentation
             java.util.Map<String, Object> pool = new java.util.HashMap<>();
             pool.put("poolName", "TechMartPool");

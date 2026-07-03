@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadRecentOrders();
     loadLowStockAlerts();
+    loadServerUptime();
 
     // Live update when a new order arrives via WebSocket
     window.addEventListener('newOrder', () => {
@@ -192,5 +193,26 @@ async function loadLowStockAlerts() {
         }).join('');
     } catch (err) {
         tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-rose-500 font-semibold">Error: ${err.message}</td></tr>`;
+    }
+}
+
+async function loadServerUptime() {
+    const badge = document.getElementById('serverUptimeBadge');
+    if (!badge) return;
+
+    try {
+        const token = AuthUtils.getToken();
+        const res = await fetch(`${API_CONFIG.BASE_URL}/performance/metrics`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Metrics offline");
+        const json = await res.json();
+        const uptime = json.data ? json.data.uptime : 'N/A';
+        
+        badge.textContent = `Uptime: ${uptime}`;
+        badge.classList.remove('hidden');
+    } catch (err) {
+        console.warn("Uptime fetch error:", err);
+        badge.textContent = "Uptime: Offline";
     }
 }
