@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Warehouse Dashboard - TechMart</title>
     
-    
-
-    
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -34,7 +31,6 @@
 </head>
 <body class="text-slate-200 antialiased custom-scrollbar">
 
-<!-- Sidebar -->
 <!-- Sidebar -->
 <!-- Sidebar -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d121f] text-slate-200 flex flex-col justify-between border-r border-slate-800/60 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -166,7 +162,7 @@
                 <div class="text-left">
                     <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Global Storage</span>
                     <span class="text-lg font-bold text-white block mt-0.5">84,500 <span class="text-xs font-semibold text-slate-500">m³</span></span>
-                    <span class="text-[10px] text-emerald-400 font-bold block mt-0.5">3 active depots</span>
+                    <span class="text-[10px] text-emerald-400 font-bold block mt-0.5">Active Database Depots</span>
                 </div>
             </div>
             <div class="glass-card p-5 rounded-2xl transition-all duration-200 flex items-center gap-4 border border-slate-800 hover:border-slate-700/50">
@@ -175,8 +171,8 @@
                 </div>
                 <div class="text-left">
                     <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Daily Processed</span>
-                    <span class="text-lg font-bold text-white block mt-0.5" id="globalDailyCount">492 <span class="text-xs font-semibold text-slate-500">Orders</span></span>
-                    <span class="text-[10px] text-amber-400 font-bold block mt-0.5">↑ 14% vs yesterday</span>
+                    <span class="text-lg font-bold text-white block mt-0.5" id="globalDailyCount">Loading...</span>
+                    <span class="text-[10px] text-amber-400 font-bold block mt-0.5">Live Database stats</span>
                 </div>
             </div>
             <div class="glass-card p-5 rounded-2xl transition-all duration-200 flex items-center gap-4 border border-slate-800 hover:border-slate-700/50">
@@ -205,18 +201,17 @@
         <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800/60 pb-3 text-left">
                 <h3 class="text-sm font-bold text-white">Active Depot Status</h3>
-                <span class="text-[10px] text-slate-500 font-medium">Real-time parameters updated 30s ago</span>
+                <span class="text-[10px] text-slate-500 font-medium">Real-time parameters updated dynamically</span>
             </div>
             
             <div id="warehouseCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Sandbox fallback structure loaded here on load -->
                 <div class="col-span-full text-center py-12 text-slate-500 font-medium">
                     Initializing logistics interface...
                 </div>
             </div>
         </div>
 
-        <!-- Modern Warehouses Operational Analysis (Real-time load details) -->
+        <!-- Modern Warehouses Operational Analysis -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Pack Velocity graph/progress -->
             <div class="lg:col-span-2 glass-card rounded-2xl shadow-xl p-6 space-y-5">
@@ -310,174 +305,21 @@
 <script src="../js/utils/helpers.js"></script>
 <script src="../js/api/admin.js"></script>
 <script src="../js/admin/warehouse-dashboard.js"></script>
+<script>
+    function toggleWarehouseSubmenu() {
+        const submenu = document.getElementById('warehouse-submenu');
+        const arrow = document.getElementById('warehouse-arrow');
+        if (submenu.classList.contains('hidden')) {
+            submenu.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            submenu.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+</script>
 
 <script>
-    // Fallback sandbox preview mode if real JS fails or is missing
-    if (typeof AuthUtils === 'undefined' || !AuthUtils.getToken()) {
-        window.AuthUtils = {
-            getUser: () => ({ name: 'Administrator', email: 'admin@techmart.com', firstName: 'Admin', lastName: 'TechMart' }),
-            getToken: () => 'mock-sandbox-session-token',
-            checkAuth: () => true,
-            logout: () => {
-                showToast('Session ended. Sandbox simulated logout.');
-            }
-        };
-
-        // Render mock data
-        setTimeout(() => {
-            const grid = document.getElementById('warehouseCardsGrid');
-            if (grid && grid.innerHTML.includes('Initializing logistics interface...')) {
-                renderSandboxWarehouses();
-            }
-        }, 100);
-    }
-
-    function showToast(msg, isSuccess = true) {
-        const toast = document.createElement('div');
-        toast.className = `fixed bottom-4 right-4 z-50 p-4 rounded-xl text-xs font-bold transition-all shadow-xl backdrop-blur-md ${isSuccess ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400' : 'bg-rose-500/20 border border-rose-500/30 text-rose-400'}`;
-        toast.textContent = msg;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
-    }
-
-    // High fidelity Sandbox logistics database
-    let mockWarehouses = [
-        {
-            code: 'WH-A',
-            name: 'Depot Alpha',
-            locationType: 'West Regional Hub',
-            address: 'Industrial Zone A, Silicon Valley',
-            slotsUsed: 780,
-            slotsTotal: 1000,
-            dailyPacked: 245,
-            packSpeed: '1.2m/item',
-            activeHandlers: 18,
-            accuracy: '99.4%'
-        },
-        {
-            code: 'WH-B',
-            name: 'Depot Beta',
-            locationType: 'East Regional Hub',
-            address: 'Logistics Center 4, Tech Park',
-            slotsUsed: 420,
-            slotsTotal: 800,
-            dailyPacked: 154,
-            packSpeed: '1.5m/item',
-            activeHandlers: 12,
-            accuracy: '98.8%'
-        },
-        {
-            code: 'WH-C',
-            name: 'Global Sorting Facility',
-            locationType: 'Main Sorting & Cargo Center',
-            address: 'Aviation Way 12, Cargo Airport',
-            slotsUsed: 1420,
-            slotsTotal: 1500,
-            dailyPacked: 492,
-            packSpeed: '0.9m/item',
-            activeHandlers: 24,
-            accuracy: '99.6%'
-        }
-    ];
-
-    function renderSandboxWarehouses() {
-        const grid = document.getElementById('warehouseCardsGrid');
-        if (!grid) return;
-
-        grid.innerHTML = mockWarehouses.map(wh => {
-            const usagePercent = Math.round((wh.slotsUsed / wh.slotsTotal) * 100);
-            
-            // Generate progress bar colors
-            let barColor = 'bg-indigo-500';
-            if (usagePercent > 85) barColor = 'bg-rose-500';
-            else if (usagePercent > 60) barColor = 'bg-amber-500';
-
-            return `
-                <div class="glass-card rounded-2xl shadow-xl border border-slate-800/80 p-6 flex flex-col justify-between hover:border-slate-700/60 transition-all group">
-                    <div class="space-y-4">
-                        <!-- Top details -->
-                        <div class="flex items-start justify-between">
-                            <div class="text-left">
-                                <span class="px-2 py-0.5 rounded text-[9px] font-extrabold border border-amber-500/20 bg-amber-500/5 text-amber-400 tracking-wider uppercase block w-fit">
-                                    ${wh.code}
-                                </span>
-                                <h4 class="text-base font-bold text-white mt-1.5 tracking-tight">${wh.name}</h4>
-                                <p class="text-[10px] text-slate-500 font-semibold mt-0.5">${wh.locationType}</p>
-                            </div>
-                            
-                            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <!-- Slots details -->
-                        <div class="space-y-1.5 pt-2">
-                            <div class="flex justify-between items-center text-[10px] font-bold text-slate-500">
-                                <span class="uppercase tracking-wider">Storage Load</span>
-                                <span class="text-slate-300 font-bold">${usagePercent}% (${wh.slotsUsed}/${wh.slotsTotal} Slots)</span>
-                            </div>
-                            <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
-                                <div class="${barColor} h-1.5 rounded-full transition-all duration-1000" style="width: ${usagePercent}%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Real-time performance metrics -->
-                        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800/40 text-left">
-                            <div>
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Daily Processed</span>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span class="text-xs font-extrabold text-slate-200">${wh.dailyPacked} Orders</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Pack Speed</span>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span class="text-xs font-bold text-slate-200">${wh.packSpeed}</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Active Crew</span>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                    <span class="text-xs font-bold text-slate-200">${wh.activeHandlers} Staff</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Pack Accuracy</span>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                    </svg>
-                                    <span class="text-xs font-bold text-slate-200">${wh.accuracy}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom address -->
-                    <div class="mt-5 pt-3 border-t border-slate-800/60 text-[10px] text-slate-500 flex items-center justify-between">
-                        <span class="truncate pr-3">${wh.address}</span>
-                        <a href="warehouses.html" class="text-amber-400 hover:text-amber-300 font-bold whitespace-nowrap transition-colors flex items-center gap-1">
-                            Inspect slots
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-
-    // Sidebar responsive toggle
     const menuBtn = document.getElementById('menu-btn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
@@ -493,29 +335,6 @@
             overlay.classList.add('hidden');
         });
     }
-
-    // Toggle warehouse submenu display
-    function toggleWarehouseSubmenu() {
-        const submenu = document.getElementById('warehouse-submenu');
-        const arrow = document.getElementById('warehouse-arrow');
-        if (submenu.classList.contains('hidden')) {
-            submenu.classList.remove('hidden');
-            arrow.style.transform = 'rotate(180deg)';
-        } else {
-            submenu.classList.add('hidden');
-            arrow.style.transform = 'rotate(0deg)';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('warehouse-dashboard.html') || currentPath.includes('warehouses.html') || currentPath.includes('inventory.html') || currentPath.includes('warehouse-transfers.html')) {
-            const submenu = document.getElementById('warehouse-submenu');
-            const arrow = document.getElementById('warehouse-arrow');
-            if (submenu) submenu.classList.remove('hidden');
-            if (arrow) arrow.style.transform = 'rotate(180deg)';
-        }
-    });
 </script>
 
 </body>
