@@ -16,20 +16,23 @@ async function loadAnalyticsData() {
             AdminAPI.getSuppliers(token)
         ]);
 
+        if (ordersRes.status === 401) {
+            AuthUtils.logout();
+            return;
+        }
+
         if (!ordersRes.ok) throw new Error("Failed to load orders");
-        const ordersJson = await ordersRes.ok ? await ordersRes.json() : { data: [] };
+        const ordersJson = await ordersRes.json();
         allOrders = ordersJson.data || [];
         allWarehouses = warehouses || [];
         allSuppliers = suppliers || [];
 
         // 1. Calculate General Metrics
         let totalSalesVal = 0;
-        let totalUnits = 0;
+        let totalUnits = allOrders.length; // Count total dispatch orders packages
 
         allOrders.forEach(o => {
             totalSalesVal += o.totalAmount || 0;
-            // Let's assume each order has at least 1 unit if items count is empty
-            totalUnits += o.itemsCount || 1;
         });
 
         const grossValEl = document.getElementById('metricGrossVal');
@@ -39,22 +42,56 @@ async function loadAnalyticsData() {
             grossValEl.textContent = Helpers.formatPrice(totalSalesVal);
         }
         if (unitsEl) {
-            unitsEl.textContent = `${totalUnits} units`;
+            unitsEl.textContent = `${totalUnits} orders`;
         }
 
-        // 2. Category Sales Distribution
-        // Mock distribution based on real order counts or product catalogs
-        const sampleShare = { laptops: 55, audio: 30, accessories: 15 };
-        
-        // Let's bind UI shares
-        document.getElementById('catShareLaptops').textContent = `${sampleShare.laptops}%`;
-        document.getElementById('barShareLaptops').style.width = `${sampleShare.laptops}%`;
+        // 2. Category Sales Distribution (calculated dynamically from live products database)
+        let laptopsCount = 0;
+        let audioCount = 0;
+        let accessoriesCount = 0;
+        let totalProducts = 0;
 
-        document.getElementById('catShareAudio').textContent = `${sampleShare.audio}%`;
-        document.getElementById('barShareAudio').style.width = `${sampleShare.audio}%`;
+        try {
+            const products = await ProductsAPI.getAll();
+            products.forEach(p => {
+                const cat = (p.categoryName || (p.category ? p.category.name : '')).toLowerCase();
+                if (cat.includes('laptop') || cat.includes('computer')) {
+                    laptopsCount++;
+                } else if (cat.includes('audio') || cat.includes('sound') || cat.includes('acoustic')) {
+                    audioCount++;
+                } else {
+                    accessoriesCount++;
+                }
+                totalProducts++;
+            });
+        } catch (err) {
+            console.error("Failed to load products for category distribution", err);
+        }
 
-        document.getElementById('catShareAccessories').textContent = `${sampleShare.accessories}%`;
-        document.getElementById('barShareAccessories').style.width = `${sampleShare.accessories}%`;
+        const shareLaptops = totalProducts > 0 ? Math.round((laptopsCount / totalProducts) * 100) : 55;
+        const shareAudio = totalProducts > 0 ? Math.round((audioCount / totalProducts) * 100) : 30;
+        const shareAccessories = totalProducts > 0 ? (100 - shareLaptops - shareAudio) : 15;
+
+        const shareLaptopsEl = document.getElementById('catShareLaptops');
+        const barLaptopsEl = document.getElementById('barShareLaptops');
+        if (shareLaptopsEl && barLaptopsEl) {
+            shareLaptopsEl.textContent = `${shareLaptops}%`;
+            barLaptopsEl.style.width = `${shareLaptops}%`;
+        }
+
+        const shareAudioEl = document.getElementById('catShareAudio');
+        const barAudioEl = document.getElementById('barShareAudio');
+        if (shareAudioEl && barAudioEl) {
+            shareAudioEl.textContent = `${shareAudio}%`;
+            barAudioEl.style.width = `${shareAudio}%`;
+        }
+
+        const shareAccessoriesEl = document.getElementById('catShareAccessories');
+        const barAccessoriesEl = document.getElementById('barShareAccessories');
+        if (shareAccessoriesEl && barAccessoriesEl) {
+            shareAccessoriesEl.textContent = `${shareAccessories}%`;
+            barAccessoriesEl.style.width = `${shareAccessories}%`;
+        }
 
         // 3. Render SVG monthly graph
         drawRevenueTrendGraph();
@@ -76,20 +113,29 @@ function drawRevenueTrendGraph() {
 
     // Group sales by month
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    const monthlySales = [12450, 18290, 15400, 24150, 32900, 46140]; // Fallback values
+    const monthlySales = [0, 0, 0, 0, 0, 0];
     
     // Add real order aggregates to monthly values if present
     allOrders.forEach(ord => {
         const date = new Date(ord.createdAt);
         if (!isNaN(date.getTime())) {
             const mIdx = date.getMonth(); // 0-11
-            // Map last 6 months dynamically or map standard Jan-Jun
             if (mIdx >= 0 && mIdx < 6) {
-                // Scale up by a factor of 10 for presentation visibility
-                monthlySales[mIdx] += (ord.totalAmount / 100); 
+                monthlySales[mIdx] += ord.totalAmount; 
             }
         }
     });
+
+    // Fallback presentation benchmarks if no orders exist yet
+    const hasSales = monthlySales.some(v => v > 0);
+    if (!hasSales) {
+        monthlySales[0] = 12450;
+        monthlySales[1] = 18290;
+        monthlySales[2] = 15400;
+        monthlySales[3] = 24150;
+        monthlySales[4] = 32900;
+        monthlySales[5] = 46140;
+    }
 
     const width = svg.clientWidth || 600;
     const height = svg.clientHeight || 250;
@@ -100,7 +146,7 @@ function drawRevenueTrendGraph() {
     // Coordinate points mapping
     const points = monthlySales.map((val, i) => {
         const x = padding + (i / (monthlySales.length - 1)) * (width - padding * 2);
-        const y = height - padding - (val / maxVal) * (height - padding * 2);
+        const y = height - padding - (val / (maxVal || 1)) * (height - padding * 2);
         return { x, y, label: months[i], val };
     });
 
@@ -169,10 +215,10 @@ async function renderWarehouseMetrics(token) {
 
             rowsHtml += `
                 <tr class="hover:bg-slate-800/10">
-                    <td class="py-3.5 px-4 font-bold text-amber-400">WH-${wh.id}</td>
+                    <td class="py-3.5 px-4 font-bold text-amber-450">WH-${wh.id}</td>
                     <td class="py-3.5 px-4 text-white">${wh.name} (${wh.city})</td>
-                    <td class="py-3.5 px-4">${occupied} / ${capacity}</td>
-                    <td class="py-3.5 px-4">${loadPct}%</td>
+                    <td class="py-3.5 px-4 text-slate-300 font-semibold">${occupied} / ${capacity}</td>
+                    <td class="py-3.5 px-4 text-slate-300 font-bold">${loadPct}%</td>
                     <td class="py-3.5 px-4">${statusBadge}</td>
                 </tr>
             `;
@@ -198,8 +244,8 @@ function renderSupplierMetrics() {
             <tr class="hover:bg-slate-800/10">
                 <td class="py-3.5 px-4 font-bold text-white">${s.name}</td>
                 <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-indigo-500/5 text-indigo-400 border border-indigo-500/10">${s.brand || 'SUPPLIER'}</span></td>
-                <td class="py-3.5 px-4 text-slate-400">${s.category || 'General'}</td>
-                <td class="py-3.5 px-4">${support}</td>
+                <td class="py-3.5 px-4 text-slate-400 font-semibold">${s.category || 'General'}</td>
+                <td class="py-3.5 px-4 text-slate-450 font-semibold">${support}</td>
                 <td class="py-3.5 px-4">
                     <span class="px-2.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-500/5 text-emerald-400 border border-emerald-500/10">ACTIVE PARTNER</span>
                 </td>
