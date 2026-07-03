@@ -142,12 +142,13 @@
     </header>
 
     <main class="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden">
+        
         <!-- Left Panel -->
         <div class="w-full md:w-80 bg-white border-r border-slate-200 flex flex-col h-full shrink-0">
             <div class="p-4 border-b border-slate-100 space-y-3">
                 <div class="relative">
                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
-                    <input type="text" id="contactSearch" placeholder="Search contacts..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 font-semibold bg-slate-55" />
+                    <input type="text" id="contactSearch" placeholder="Search contacts..." class="w-full pl-9 pr-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-amber-400 font-semibold bg-slate-50" />
                 </div>
                 <button id="btnRoleBroadcast" class="w-full py-2.5 px-3 text-[11px] font-bold bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-white rounded-xl transition-all cursor-pointer">
                     📢 Broadcast to Role
@@ -177,7 +178,7 @@
                     </div>
                 </div>
 
-                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4 font-semibold text-slate-700" id="messagesContainer"></div>
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4" id="messagesContainer"></div>
 
                 <div class="p-4 border-t border-slate-100 bg-white">
                     <form id="chatForm" class="flex items-center gap-3">
@@ -201,7 +202,7 @@
         </div>
         <form id="broadcastForm" class="space-y-4">
             <div class="space-y-1 text-left">
-                <label class="text-[10px] font-bold text-slate-500 uppercase">Target Role</label>
+                <label class="text-[10px] font-bold text-slate-400 uppercase">Target Role</label>
                 <select id="broadcastRole" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold" required>
                     <option value="CUSTOMER">CUSTOMERS</option>
                     <option value="WAREHOUSE_STAFF">WAREHOUSE STAFF</option>
@@ -209,10 +210,10 @@
                 </select>
             </div>
             <div class="space-y-1 text-left">
-                <label class="text-[10px] font-bold text-slate-500 uppercase">Message</label>
-                <textarea id="broadcastMessage" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium" placeholder="Write broadcast message details..." required></textarea>
+                <label class="text-[10px] font-bold text-slate-400 uppercase">Message</label>
+                <textarea id="broadcastMessage" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-medium" required></textarea>
             </div>
-            <button type="submit" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-slate-955 font-black text-xs rounded-xl transition-all cursor-pointer">Publish</button>
+            <button type="submit" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs rounded-xl transition-all cursor-pointer">Publish</button>
         </form>
     </div>
 </div>
@@ -222,6 +223,21 @@
 <script src="../js/utils/helpers.js"></script>
 <script src="../js/admin/chat.js"></script>
 <script>
+    // Sidebar responsive toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        });
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+
     function toggleWarehouseSubmenu() {
         const submenu = document.getElementById('warehouse-submenu');
         const arrow = document.getElementById('warehouse-arrow');
@@ -234,24 +250,5 @@
         }
     }
 </script>
-
-<script>
-    const menuBtn = document.getElementById('menu-btn');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-
-    if (menuBtn && sidebar && overlay) {
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        });
-
-        overlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        });
-    }
-</script>
-
 </body>
 </html>
