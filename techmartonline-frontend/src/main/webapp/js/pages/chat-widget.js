@@ -159,11 +159,8 @@
 
     // Connect to WebSocket
     function connectWebSocket() {
-        const base = window.location.origin.replace(/^http/, 'ws');
-        // Derive contextual endpoint (e.g. ws://localhost:8080/tecmartonline-sever)
-        const path = window.location.pathname;
-        const contextRoot = path.substring(0, path.indexOf('/', 1)) || '/tecmartonline-sever';
-        const wsUrl = `${base}${contextRoot}/ws/chat/${myUserId}/${myRole}`;
+        const wsBase = API_CONFIG.BASE_URL.replace(/^http/, 'ws').replace(/\/api$/, '');
+        const wsUrl = `${wsBase}/ws/chat/${myUserId}/${myRole}`;
 
         ws = new WebSocket(wsUrl);
 
@@ -203,9 +200,7 @@
     // Load Chat History
     async function loadHistory() {
         try {
-            const path = window.location.pathname;
-            const contextRoot = path.substring(0, path.indexOf('/', 1)) || '/tecmartonline-sever';
-            const baseApiUrl = `${window.location.origin}${contextRoot}/api`;
+            const baseApiUrl = API_CONFIG.BASE_URL;
 
             const res = await fetch(`${baseApiUrl}/messages/direct/${adminId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
