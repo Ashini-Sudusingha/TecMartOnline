@@ -113,6 +113,7 @@ async function manageInvoiceItems(invoiceId, supplierName) {
     document.getElementById('itemProduct').value = '';
     document.getElementById('itemWarehouse').value = '';
     document.getElementById('itemLocation').innerHTML = '<option value="">Select Location</option>';
+    document.getElementById('itemLocation').disabled = true;
     document.getElementById('itemQty').value = '';
     document.getElementById('itemPrice').value = '';
 
@@ -161,6 +162,7 @@ async function loadLocationsForWarehouse(warehouseId) {
 
     if (!warehouseId) {
         locSelect.innerHTML = '<option value="">Select Location</option>';
+        locSelect.disabled = true;
         allWarehouseLocations = [];
         return;
     }
@@ -174,9 +176,11 @@ async function loadLocationsForWarehouse(warehouseId) {
                 const available = l.maxCapacity - l.quantity;
                 return `<option value="${l.id}">${l.location} (Avail: ${available}/${l.maxCapacity})</option>`;
             }).join('');
+        locSelect.disabled = false; // Enable dropdown after loading options
     } catch (err) {
         console.error('Error loading locations:', err);
         locSelect.innerHTML = '<option value="">Select Location</option>';
+        locSelect.disabled = true; // Keep disabled on error
         allWarehouseLocations = [];
     }
 }

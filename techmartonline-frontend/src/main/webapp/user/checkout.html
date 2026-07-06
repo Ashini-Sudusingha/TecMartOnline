@@ -167,8 +167,8 @@
 
         const user = AuthUtils.getUser();
         if (user) {
-            document.getElementById('fname').value = user.firstName || '';
-            document.getElementById('lname').value = user.lastName || '';
+            document.getElementById('fname').value = user.fname || user.firstName || '';
+            document.getElementById('lname').value = user.lname || user.lastName || '';
         }
 
         // Fetch customer addresses
@@ -295,6 +295,8 @@
             placeOrderBtn.disabled = false;
             placeOrderBtn.textContent = 'Place Order →';
         }
+    }
+
     function updateCartBadge() {
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const total = cart.reduce((sum, item) => sum + item.quantity, 0);

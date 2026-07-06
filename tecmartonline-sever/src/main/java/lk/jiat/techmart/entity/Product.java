@@ -17,7 +17,7 @@ public class Product implements Serializable {
     @Column(name = "name", nullable = false, length = 45)
     private String name;
 
-    @Column(name = "description", nullable = false, length = 500)
+    @Column(name = "description", nullable = false, length = 5000)
     private String description;
 
     @Column(name = "price", nullable = false)

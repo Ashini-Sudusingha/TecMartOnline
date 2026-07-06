@@ -93,15 +93,15 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between text-slate-500 font-semibold">
                         <span>Subtotal</span>
-                        <span id="summarySubtotal">$0.00</span>
+                        <span id="summarySubtotal">Rs. 0.00</span>
                     </div>
                     <div class="flex justify-between text-slate-500 font-semibold">
                         <span>Shipping Cost</span>
-                        <span id="summaryShipping">$10.00</span>
+                        <span id="summaryShipping">Rs. 10.00</span>
                     </div>
                     <div class="border-t border-slate-100 pt-3 flex justify-between font-black text-slate-900 text-lg">
                         <span>Total</span>
-                        <span id="summaryTotal">$0.00</span>
+                        <span id="summaryTotal">Rs. 0.00</span>
                     </div>
                 </div>
 
@@ -180,7 +180,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-900 leading-tight">${item.name}</h3>
-                            <span class="text-sm font-black text-amber-500 block mt-1">$${item.price.toFixed(2)}</span>
+                            <span class="text-sm font-black text-amber-500 block mt-1">Rs. ${item.price.toFixed(2)}</span>
                         </div>
                     </div>
 
@@ -196,7 +196,7 @@
                         <div class="flex items-center gap-4 text-right">
                             <div class="w-24">
                                 <span class="text-xs text-slate-400 font-semibold block">Total</span>
-                                <span class="font-black text-slate-900">$${itemTotal.toFixed(2)}</span>
+                                <span class="font-black text-slate-900">Rs. ${itemTotal.toFixed(2)}</span>
                             </div>
                             <button onclick="removeItem(${item.id})" class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-all cursor-pointer">
                                 🗑️
@@ -234,9 +234,9 @@
         const shipping = subtotal > 0 ? 10.00 : 0;
         const total = subtotal + shipping;
 
-        document.getElementById('summarySubtotal').textContent = `$${subtotal.toFixed(2)}`;
-        document.getElementById('summaryShipping').textContent = `$${shipping.toFixed(2)}`;
-        document.getElementById('summaryTotal').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('summarySubtotal').textContent = `Rs. ${subtotal.toFixed(2)}`;
+        document.getElementById('summaryShipping').textContent = `Rs. ${shipping.toFixed(2)}`;
+        document.getElementById('summaryTotal').textContent = `Rs. ${total.toFixed(2)}`;
     }
 
     function proceedToCheckout() {
