@@ -385,13 +385,16 @@
             }
 
             grid.innerHTML = latestProducts.map(prod => {
-                // Determine cover image
-                const imgUrl = prod.imagePath ? `${API_CONFIG.BASE_URL}/${prod.imagePath}` : 'https://placehold.co/300x200/f1f5f9/0f172a?text=Product';
+                const imageIcon = (prod.images && prod.images.length > 0) ? prod.images[0] : '📦';
+                const isUrl = imageIcon.startsWith('http://') || imageIcon.startsWith('https://') || imageIcon.startsWith('data:image/');
+                const imgElement = isUrl 
+                    ? `<img src="${imageIcon}" alt="${prod.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/300x200/f1f5f9/0f172a?text=Product'" />`
+                    : `<div class="w-full h-full flex items-center justify-center bg-slate-100 text-4xl">${imageIcon}</div>`;
 
                 return `
                     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between overflow-hidden hover:-translate-y-1 transition-all duration-300">
                         <div class="relative bg-slate-50 aspect-video overflow-hidden">
-                            <img src="${imgUrl}" alt="${prod.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/300x200/f1f5f9/0f172a?text=Product'" />
+                            ${imgElement}
                         </div>
                         <div class="p-5 flex flex-col justify-between flex-grow text-left">
                             <div class="space-y-1">
@@ -412,7 +415,7 @@
                                     <a href="user/products.html" class="py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[10px] rounded-xl border border-slate-200/60 transition-all text-center">
                                         View Detail
                                     </a>
-                                    <button onclick="addToCartQuick(${prod.id}, '${prod.name.replace(/'/g, "\\'")}', ${prod.price}, '${imgUrl}')" class="py-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-[10px] rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer">
+                                    <button onclick="addToCartQuick(${prod.id}, '${prod.name.replace(/'/g, "\\'")}', ${prod.price}, '${imageIcon.replace(/'/g, "\\'")}')" class="py-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-[10px] rounded-xl shadow-md transition-all flex items-center justify-center gap-1 cursor-pointer">
                                         Add Cart
                                     </button>
                                 </div>
